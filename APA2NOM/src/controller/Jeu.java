@@ -4,15 +4,18 @@ import java.beans.ExceptionListener;
 
 public class Jeu {
     private Pion plateau[][] = new Pion[7][9];
-    private int tour;
-    private int nb_et_noir;
-    private int nb_et_blanc;
-    private int jump;
-    private int[][] possible_jump;
-    private int[][] possible_move;
-    private byte has_jumped; // permet de savoir si un pion a deja saute un ennemi
-    private int[] selection = new int[2];
+    private int tour; // nombre de tours actuels, commence à 0
+    private int nb_et_noir; // nombre detoiles noir
+    private int nb_et_blanc; // idem blanc
+    private int jump; // nombre de jumps ennemis effectues <=> nombre de move de letoiles
+    
+    private int[][] possible_jump; // nombre de jump possible
+    private int[][] possible_move; // nombre de move possible
 
+    private byte has_jumped; // permet de savoir si un pion a deja saute un ennemi
+    private int[] selection = new int[2]; // pion selectionne
+
+    //constructeur par defaut
     public Jeu(){
         int i, j;
         // definition des variables de classe
@@ -203,6 +206,8 @@ public class Jeu {
         return 0;
     }
     public int[][] get_possibilities(Pion p, int posx, int posy){
+        
+
         selection[0] = posx;
         selection[1] = posy;
         if(plateau[posx][posy] instanceof Etoile){
@@ -211,7 +216,30 @@ public class Jeu {
             return get_possibilitiesFleche(plateau[posx][posy], posx, posy);
         
     }
+
+    // retourne 0 si cest vide
+    // retourne 1 si cest la même couleur
+    // retourne 2 si la couleur est differente
+    // retourne -1 si le pion est en dehors de la grille
+    private int check_specified_pawn(int posPionx, int posPiony, int posFinalx, int posFinaly){
+        // toutes les positions 
+        if(posPionx < 0 || posPionx >= 7 || posPiony < 0 || posPiony >= 9)
+            return -1;
+        if(posFinalx < 0 || posFinalx >= 7 || posFinaly < 0 || posFinaly >= 9)
+            return -1;
+        if(plateau[posFinalx][posFinaly] ==null)
+            return -1;
+        if(plateau[posFinalx][posFinaly].couleur == -1)
+            return 0;
+        if(plateau[posPionx][posPiony].couleur == plateau[posFinalx][posFinaly].couleur)
+            return 1;
+        return 2;
+        // check couleurs
+
+    }
+
     private int[][] get_possibilitiesEtoile(Pion p, int posx, int posy){
+
         ArrayList<int[]> arl=new ArrayList<int[]>();
         ArrayList<int[]> ar2=new ArrayList<int[]>();
         int[] liste_int = new int[2];
@@ -220,25 +248,30 @@ public class Jeu {
         int indexJump = 0;
         if (p.direction == 0){
             //jumps
-            if(posx-2 >= 0 && plateau[posx-1][posy].couleur != -1 && plateau[posx-2][posy].couleur == -1){ // pion P() -> 0
+            // != -1 -> > 0 && le ==-1 == 0
+            if(check_specified_pawn(posx, posy, posx-1, posy) >0  && check_specified_pawn(posx, posy, posx-2, posy) == 0){
+                // pion P() -> 0
                 tmp[0] = posx-2;
                 tmp[1] = posy;
                 ar2.add(indexJump++, tmp);                //debugage a enlever vitezef
                 plateau[posx-2][posy] = new debug();
             }
-            if(posx+2 < 7 && plateau[posx][posy+2].couleur == -1 && plateau[posx][posy+1].couleur != -1){
+            if(check_specified_pawn(posx, posy, posx+2, posy) == 0  && check_specified_pawn(posx, posy, posx+1, posy) > 0){
+            
                 tmp[0] = posx;
                 tmp[1] = posy+2;
                 ar2.add(indexJump++, tmp);                //debugage a enlever vitezef
                 plateau[posx][posy+2] = new debug();
             }
-            if(posy-2 >= 0 && plateau[posx][posy-2].couleur == -1 && plateau[posx][posy-1].couleur != -1){
+            if(check_specified_pawn(posx, posy, posx, posy-2) == 0  && check_specified_pawn(posx, posy, posx, posy-1) > 0){
+            
                 tmp[0] = posx;
                 tmp[1] = posy-2;
                 ar2.add(indexJump++, tmp);                //debugage a enlever vitezef
                 plateau[posx][posy-2] = new debug();
             }
-            if(posx-2 >= 0 && posy-2 >= 0 && plateau[posx-2][posy-2].couleur == -1 && plateau[posx-1][posy-1].couleur != -1){
+            if(check_specified_pawn(posx, posy, posx-2, posy-2) == 0  && check_specified_pawn(posx, posy, posx-1, posy-1) > 0){
+         
                 tmp[0] = posx-2;
                 tmp[1] = posy-2;
                 ar2.add(indexJump++, tmp);                //debugage a enlever vitezef
@@ -246,28 +279,29 @@ public class Jeu {
             }
             //move
             if(indexJump == 0){
-                if(posx-1 >= 0 && plateau[posx-1][posy].couleur == -1){ // pion P() -> 0
+                if(check_specified_pawn(posx, posy, posx-1, posy) == 0){
+                 // pion P() -> 0
                     tmp[0] = posx-1;
                     tmp[1] = posy;
                     arl.add(indexMove++,  tmp);
                     //debugage a enlever vitezef
                     plateau[posx-1][posy] = new debug();
                 }
-                if(posy+1 < 9 && plateau[posx][posy+1].couleur == -1){
+                if(check_specified_pawn(posx, posy, posx, posy+1) == 0){
                     tmp[0] = posx;
                     tmp[1] = posy+1;
                     arl.add(indexMove++, tmp);
                     //debugage a enlever vitezef
                     plateau[posx][posy+1] = new debug();
                 }
-                if(posy-1 >= 0 && plateau[posx][posy-1].couleur == -1){
+                if(check_specified_pawn(posx, posy, posx, posy-1) == 0){
                     tmp[0] = posx;
                     tmp[1] = posy-1;
                     arl.add(indexMove++, tmp);
                     //debugage a enlever vitezef
                     plateau[posx][posy-1] = new debug();
                 }
-                if(posy-1 >= 0 && posx-1 >= 0 &&plateau[posx-1][posy-1].couleur == -1){
+                if(check_specified_pawn(posx, posy, posx-1, posy-1) == 0){
                     tmp[0] = posx-1;
                     tmp[1] = posy-1;
                     arl.add(indexMove++, tmp);
@@ -278,28 +312,30 @@ public class Jeu {
         }
         else {
             //jumps
-            if(posx+2 < 7 && plateau[posx+2][posy].couleur == -1 && plateau[posx+1][posy].couleur != -1){ // pion P() -> 0
+            // != -1 -> > 0 && le ==-1 -> == 0
+            if(check_specified_pawn(posx, posy, posx+2, posy) == 0  && check_specified_pawn(posx, posy, posx+1, posy) > 0){
+             // pion P() -> 0
                 tmp[0] = posx+2;
                 tmp[1] = posy;
                 arl.add(indexMove++,  tmp);
                 //debugage a enlever vitezef
                 plateau[posx+2][posy] = new debug();
             }
-            if(posy-2 >= 0 && plateau[posx][posy-2].couleur == -1 && plateau[posx][posy-1].couleur != -1){
+            if(check_specified_pawn(posx, posy, posx, posy-2) == 0  && check_specified_pawn(posx, posy, posx, posy-1) > 0){
                 tmp[0] = posx;
                 tmp[1] = posy-2;
                 arl.add(indexMove++, tmp);
                 //debugage a enlever vitezef
                 plateau[posx][posy-2] = new debug();
             }
-            if(posy+2 <9 &&plateau[posx][posy+2].couleur == -1 && plateau[posx][posy+1].couleur != -1){
+            if(check_specified_pawn(posx, posy, posx, posy+2) == 0  && check_specified_pawn(posx, posy, posx, posy+1) > 0){
                 tmp[0] = posx;
                 tmp[1] = posy+2;
                 arl.add(indexMove++, tmp);
                 //debugage a enlever vitezef
                 plateau[posx][posy+2] = new debug();
             }
-            if(posy+2 <9 && posx+2 < 7 && plateau[posx+2][posy+2].couleur == -1 && plateau[posx+1][posy+1].couleur != -1){
+            if(check_specified_pawn(posx, posy, posx+2, posy+2) == 0  && check_specified_pawn(posx, posy, posx+1, posy+1) > 0){
                 tmp[0] = posx+2;
                 tmp[1] = posy+2;
                 arl.add(indexMove++, tmp);
@@ -308,28 +344,29 @@ public class Jeu {
             }
             //move
             if(indexJump == 0){
-                if(posx + 1 < 7 && plateau[posx+1][posy].couleur == -1){ // pion P() -> 0
+                if(check_specified_pawn(posx, posy, posx+1, posy) == 0){ // pion P() -> 0
                     tmp[0] = posx+1;
                     tmp[1] = posy;
                     arl.add(indexMove++,  tmp);
                     //debugage a enlever vitezef
                     plateau[posx+1][posy] = new debug();
                 }
-                if(posy-1 >=0 && plateau[posx][posy-1].couleur == -1){
+                if(check_specified_pawn(posx, posy, posx, posy-1) == 0){
                     tmp[0] = posx;
                     tmp[1] = posy-1;
                     arl.add(indexMove++, tmp);
                     //debugage a enlever vitezef
                     plateau[posx][posy-1] = new debug();
                 }
-                if(posy +1 < 9 && plateau[posx][posy+1].couleur == -1){
+                if(check_specified_pawn(posx, posy, posx, posy+1) == 0){
+                
                     tmp[0] = posx;
                     tmp[1] = posy+1;
                     arl.add(indexMove++, tmp);
                     //debugage a enlever vitezef
                     plateau[posx][posy+1] = new debug();
                 }
-                if(posx+1 < 7 && posy+1 < 9 && plateau[posx+1][posy+1].couleur == -1){
+                if(check_specified_pawn(posx, posy, posx+1, posy+1) == 0){
                     tmp[0] = posx+1;
                     tmp[1] = posy+1;
                     arl.add(indexMove++, tmp);
@@ -347,7 +384,7 @@ public class Jeu {
                 retour[i] = possible_move[i];
             }
             if(i>=indexMove && indexJump !=0){
-                retour[i] = possible_jump[i%indexMove];
+                retour[i] = possible_jump[i-indexMove];
             }
         }
         return retour;
@@ -360,44 +397,60 @@ public class Jeu {
         int[] tmp = new int[2];
         int indexMove = 0;
         int indexJump = 0;
+
+        int possibleEnemyJump =0; // est-ce que le pion peut jump un ennemi
+        //cest un flag
+        
         if (p.direction == 0){
             //jumps
-            if(posx -2 >= 0 && plateau[posx-1][posy].couleur != -1 && plateau[posx-2][posy].couleur == -1){ // pion P() -> 0
+            if(check_specified_pawn(posx, posy, posx-1, posy) > 0  && check_specified_pawn(posx, posy, posx-1, posy-1) == 0){// pion P() -> 0
                 tmp[0] = posx-2;
                 tmp[1] = posy;
                 ar2.add(indexJump++,  tmp);
                 //debugage a enlever vitezef
                 plateau[posx-2][posy] = new debug();
+                if(plateau[posx-1][posy].couleur != plateau[posx][posy].couleur){
+                    possibleEnemyJump = 1;
+                }
             }
-            if(posy +2 < 9 && plateau[posx][posy+2].couleur == -1 && plateau[posx][posy+1].couleur != -1 && has_jumped == (byte)1){
+            if(check_specified_pawn(posx, posy, posx, posy+2) == 0  && check_specified_pawn(posx, posy, posx, posy+1) > 0 && has_jumped == (byte)1){
                 tmp[0] = posx;
                 tmp[1] = posy+2;
                 ar2.add(indexJump++, tmp);
                 //debugage a enlever vitezef
                 plateau[posx][posy+2] = new debug();
+                if(plateau[posx][posy+1].couleur != plateau[posx][posy].couleur){
+                    possibleEnemyJump = 1;
+                }
             }
-            if(posy-2 >= 0 && plateau[posx][posy-2].couleur == -1 && plateau[posx][posy-1].couleur != -1 && has_jumped == (byte)1){
+            if(check_specified_pawn(posx, posy, posx, posy-2) == 0  && check_specified_pawn(posx, posy, posx, posy-1) > 0 && has_jumped == (byte)1){
                 tmp[0] = posx;
                 tmp[1] = posy-2;
                 ar2.add(indexJump++, tmp);                //debugage a enlever vitezef
                 plateau[posx][posy-2] = new debug();
+                if(plateau[posx][posy-1].couleur != plateau[posx][posy].couleur){
+                    possibleEnemyJump = 1;
+                }
             }
-            if(posx-2 >= 0 && posy-2 >= 0 && plateau[posx-2][posy-2].couleur == -1 && plateau[posx-1][posy-1].couleur != -1){
+            if(check_specified_pawn(posx, posy, posx-2, posy-2) == 0  && check_specified_pawn(posx, posy, posx-1, posy-1) > 0){
                 tmp[0] = posx-2;
                 tmp[1] = posy-2;
                 ar2.add(indexJump++, tmp);                //debugage a enlever vitezef
-                plateau[posx-2][posy-2] = new debug();            
+                plateau[posx-2][posy-2] = new debug();
+                if(plateau[posx-1][posy].couleur != plateau[posx][posy].couleur){
+                    possibleEnemyJump = 1;
+                }            
             }
             if(indexJump == 0){
             //move
-                if(posx-1 >= 0 &&plateau[posx-1][posy].couleur == -1){ // pion P() -> 0
+                if(check_specified_pawn(posx, posy, posx-1, posy) == 0){ // pion P() -> 0
                     tmp[0] = posx-1;
                     tmp[1] = posy;
                     arl.add(indexMove++,  tmp);
                     //debugage a enlever vitezef
                     plateau[posx-1][posy] = new debug();
                 }
-                if( posx-1 >= 0 &&posy-1 >= 0 &&plateau[posx-1][posy-1].couleur == -1){
+                if(check_specified_pawn(posx, posy, posx-1, posy-1) == 0){
                     tmp[0] = posx-1;
                     tmp[1] = posy-1;
                     arl.add(indexMove++, tmp);
@@ -408,25 +461,34 @@ public class Jeu {
         }
         else {
             //jumps
-            if(posx+2 < 7 && plateau[posx+2][posy].couleur == -1 && plateau[posx+1][posy].couleur != -1){ // pion P() -> 0
+            if(check_specified_pawn(posx, posy, posx+2, posy) == 0  && check_specified_pawn(posx, posy, posx+1, posy) > 0){ // pion P() -> 0
                 tmp[0] = posx+2;
                 tmp[1] = posy;
                 ar2.add(indexJump++, tmp);                //debugage a enlever vitezef
                 plateau[posx+2][posy] = new debug();
+                if(plateau[posx+1][posy].couleur != plateau[posx][posy].couleur){
+                    possibleEnemyJump = 1;
+                }
             }
-            if(posy-2 >= 0 && plateau[posx][posy-2].couleur == -1 && plateau[posx][posy-1].couleur != -1 && has_jumped == (byte)1){
+            if(check_specified_pawn(posx, posy, posx, posy-2) == 0  && check_specified_pawn(posx, posy, posx, posy-1) > 0 && has_jumped == (byte)1){
                 tmp[0] = posx;
                 tmp[1] = posy-2;
                 ar2.add(indexJump++, tmp);                //debugage a enlever vitezef
                 plateau[posx][posy-2] = new debug();
+                if(plateau[posx][posy-1].couleur != plateau[posx][posy].couleur){
+                    possibleEnemyJump = 1;
+                }
             }
-            if(posy+2 < 9 && plateau[posx][posy+2].couleur == -1 && plateau[posx][posy+1].couleur != -1 && has_jumped == (byte)1){
+            if(check_specified_pawn(posx, posy, posx, posy+2) == 0  && check_specified_pawn(posx, posy, posx, posy+1) > 0&& has_jumped == (byte)1){
                 tmp[0] = posx;
                 tmp[1] = posy+2;
                 ar2.add(indexJump++, tmp);                //debugage a enlever vitezef
                 plateau[posx][posy+2] = new debug();
+                if(plateau[posx][posy+1].couleur != plateau[posx][posy].couleur){
+                    possibleEnemyJump = 1;
+                }
             }
-            if(posy+2 < 9 && posx+2 < 7 && plateau[posx+2][posy+2].couleur == -1 && plateau[posx+1][posy+1].couleur != -1){
+            if(check_specified_pawn(posx, posy, posx+2, posy+2) == 0  && check_specified_pawn(posx, posy, posx+1, posy+1) > 0){
                 tmp[0] = posx+2;
                 tmp[1] = posy+2;
                 ar2.add(indexJump++, tmp);                //debugage a enlever vitezef
@@ -434,14 +496,14 @@ public class Jeu {
             }
             //move
             if(indexJump == 0){
-                if(posx+1 < 7 && plateau[posx+1][posy].couleur == -1){ // pion P() -> 0
+                if(check_specified_pawn(posx, posy, posx+1, posy) == 0){ // pion P() -> 0
                     tmp[0] = posx+1;
                     tmp[1] = posy;
                     arl.add(indexMove++,  tmp);
                     //debugage a enlever vitezef
                     plateau[posx+1][posy] = new debug();
                 }
-                if(posx+1 < 7 && posy+1 < 9 && plateau[posx+1][posy+1].couleur == -1){
+                if(check_specified_pawn(posx, posy, posx+1, posy+1) == 0){
                     tmp[0] = posx+1;
                     tmp[1] = posy+1;
                     arl.add(indexMove++, tmp);
@@ -465,15 +527,21 @@ public class Jeu {
         return retour;
     }
 
+
+    // fonction pour deplacer les pions
     public void move(int posx, int posy){
+        
+        // commence par s'il y a des jumps
         for(int i=0; i<possible_jump.length;i++){
             for(int j=0; j<possible_jump[i].length; j++){
                 if (possible_jump[i][0]==posx && possible_jump[i][1] == posy){
-                    if (plateau[posx][posy].get_couleur() != plateau[selection[0]][selection[1]].get_couleur(){
+                    int distanceX = (posx - selection[0]) / 2;
+                    int distanceY = (posy - selection[1]) / 2;
+                    if (plateau[distanceX + selection[0]][distanceY + selection[1]].get_couleur() != plateau[selection[0]][selection[1]].get_couleur()){
                         jump++;
                     }
                     has_jumped = (byte)1;
-                    plateau[posx][posy]=plateau[selection[0]][selection[1]]
+                    plateau[posx][posy]=plateau[selection[0]][selection[1]];
                     plateau[selection[0]][selection[1]]= new Pion();
                     possible_move = null;
                 }
