@@ -145,7 +145,12 @@ public class Jeu {
     public Pion get_pion (int posx, int posy){
         return plateau[posx][posy];
     }
-
+    public byte get_hasJumped(){
+        return has_jumped;
+    }
+    public int get_jump(){
+        return jump;
+    }
     public byte end_tour(){
         jump=0;
         possible_jump = null;
@@ -529,8 +534,14 @@ public class Jeu {
 
 
     // fonction pour deplacer les pions
-    public void move(int posx, int posy){
+    // return -1 si il a pas bougé
+    // return 0 si il  a bougé
+    public int move(int posx, int posy){
         
+        if(check_specified_pawn(posx, posy,selection[0], selection[1]) == -1){
+            System.err.println("Tried to move a non-existing pawn");
+            return -1;
+        }
         // commence par s'il y a des jumps
         for(int i=0; i<possible_jump.length;i++){
             for(int j=0; j<possible_jump[i].length; j++){
@@ -539,6 +550,14 @@ public class Jeu {
                     int distanceY = (posy - selection[1]) / 2;
                     if (plateau[distanceX + selection[0]][distanceY + selection[1]].get_couleur() != plateau[selection[0]][selection[1]].get_couleur()){
                         jump++;
+                    }
+                    if(plateau[posx][posy] instanceof Etoile){
+                        if(jump >0){
+                            jump--;
+                        }else{
+                            return -1;
+                        }
+                        
                     }
                     has_jumped = (byte)1;
                     plateau[posx][posy]=plateau[selection[0]][selection[1]];
@@ -550,6 +569,7 @@ public class Jeu {
                 }
             }
         }
+        return 1;
     }
 
 }
