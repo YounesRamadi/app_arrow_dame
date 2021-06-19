@@ -491,9 +491,7 @@ public class GameBoard {
             display[4][i] = gameboard[4][i];
             display[5][i] = gameboard[5][(i+1)%9];
             display[6][i] = gameboard[6][(i+1)%9];
-
         }
-
         return display;
     }
 }

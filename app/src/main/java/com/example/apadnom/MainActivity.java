@@ -22,7 +22,9 @@ public class MainActivity extends AppCompatActivity {
     private DisplayB display;
     private AbsoluteLayout myLayout;
     private Pion[][] display_mat = new Pion[7][9];
-    private long[] selected = new long[2];
+    private int[] selected = new int[2];
+    private int sx;
+    private int sy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,29 +40,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     public void setSelected(int a, int b) {
         this.selected[0] = a;
         this.selected[1] = b;
     }
 
-    public long[] getSelected(){
-        int ad = 0;
-        long tmp = selected[1];
-        if(selected[0] == 0){
-            ad = 7;
-            selected[1] = tmp + 4;
+    public int[] getSelected(){
+        selected[0] = sx;
+
+        if(sx == 0){
+            selected[1] =(sy -2) %9 ;
         }
-        if(selected[0] == 1){
-            selected[1] = Math.abs(selected[1] - 1) %9;
+        else if(selected[0] == 1){
+            selected[1] = (sy - 1) %9 ;
         }
-        if(selected[0] == 2){
-            selected[1] = Math.abs(selected[1] - 2) %9;
+        else if(selected[0] == 2) {
+            selected[1] = (sy - 1) % 9;
         }
-        if(selected[0] == 5){
-            selected[1] = (selected[1] + 1) % 9;
+        else if(selected[0] == 5){
+            selected[1] = (sy + 1) %9;
         }
-        if(selected[0] == 6){
-            selected[1] = (selected[1] + 1) % 9;
+        else if(selected[0] == 6){
+            selected[1] = (sy + 1) %9 ;
+        }
+        else{
+            selected[1] = sy;
         }
         return selected;
     }
@@ -86,7 +91,8 @@ public class MainActivity extends AppCompatActivity {
                 img.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        setSelected(finalI, finalJ);
+                        sx = finalI;
+                        sy = finalJ;
                         update();
                     }
                 });
@@ -101,7 +107,8 @@ public class MainActivity extends AppCompatActivity {
 
                 myLayout.addView(img);
 
-                String s = getSelected()[0]  + ":" + getSelected()[1];
+                getSelected();
+                String s = sx  + ":" + selected[1] ;
                 TextView t = (TextView) findViewById(R.id.selected);
                 t.setText(s);
             }
