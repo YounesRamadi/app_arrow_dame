@@ -1,7 +1,7 @@
 package controller;
 import java.util.ArrayList;
 import java.beans.ExceptionListener;
-
+import java.util.Random;
 public class Jeu {
     private Pion plateau[][] = new Pion[7][9];
     private int tour; // nombre de tours actuels, commence à 0
@@ -66,9 +66,18 @@ public class Jeu {
         for(i=0;i<63;i++) {
             tempPlateau[i] = 0;
         }
-        tempPlateau[40] = 4;
-        tempPlateau[57] = 2;
-        
+        /* 
+        // Debugage
+        Random r = new Random();
+        int indexDebug = r.nextInt(63);
+        int indexDebugBis = r.nextInt(63);
+        tempPlateau[indexDebug] = 2;
+        indexDebugBis = indexDebug +9;
+        tempPlateau[indexDebugBis] = 3;
+        int qDebug = indexDebug/9;
+        int rDebug = indexDebug % 9;
+        System.out.println(" Qdebug + " + qDebug + "  R debug :" + rDebug + " indexDebug" + indexDebug);
+        */
         int a =0;
         j = 0;
         for(i=0;i<63;i++,a++){
@@ -102,10 +111,8 @@ public class Jeu {
             }
         }
         define_nbNEt();
-        System.out.println("Nombre detoiles blanches : " + nb_et_blanc + ", noir : " +nb_et_noir);
         // fin de creation du plateau de pion
-        this.get_possibilities(plateau[6][3], 6, 3);
-        this.display();
+
 
     }
     private void define_nbNEt(){
@@ -274,7 +281,7 @@ public class Jeu {
                 ar2.add(indexJump++, tmp);                //debugage a enlever vitezef
                 plateau[posx-2][posy] = new debug();
             }
-            if(check_specified_pawn(posx, posy, posx+2, posy) == 0  && check_specified_pawn(posx, posy, posx+1, posy) > 0){
+            if(check_specified_pawn(posx, posy, posx, posy+2) == 0  && check_specified_pawn(posx, posy, posx, posy+1) > 0){
             
                 tmp[0] = posx;
                 tmp[1] = posy+2;
@@ -404,6 +411,9 @@ public class Jeu {
             if(i>=indexMove && indexJump !=0){
                 retour[i] = possible_jump[i-indexMove];
             }
+        }
+        if(indexJump + indexMove ==0 ){
+            return null;
         }
         return retour;
 
@@ -542,6 +552,9 @@ public class Jeu {
                 retour[i] = possible_jump[i-indexMove];
             }
         }
+        if(indexJump + indexMove ==0 ){
+            return null;
+        }
         return retour;
     }
 
@@ -584,14 +597,14 @@ public class Jeu {
             }
         }
         for(int i=0; i< possible_move.length;i++){
-            for(int j=0; j< possible_move[i].length;j++)[
+            for(int j=0; j< possible_move[i].length;j++){
                 if(possible_move[i][0] == posx && possible_move[i][1] == posy){
                     plateau[posx][posy] = plateau[selection[0]][selection[1]];
                     plateau[selection[0]][selection[1]] = new Pion();
                     possible_jump = null;
                     possible_move = null;
                 }
-            ]
+            }
         }
         return 1;
     }
