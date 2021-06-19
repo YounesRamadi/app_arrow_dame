@@ -40,9 +40,12 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 ImageView img = new ImageView(this);
-                img.setImageDrawable(getDrawable(R.drawable.hexagone));
+                img.setImageDrawable(getDrawable(disp[i][j].getImg()));
                 AbsoluteLayout.LayoutParams parms = new AbsoluteLayout.LayoutParams(100, 100, x, y);
-                img.setRotation(90);
+                if(disp[i][j].get_direction() == 0)
+                    img.setRotation(270);
+                else
+                    img.setRotation(90);
                 img.setLayoutParams(parms);
 
                 x += 100;
