@@ -14,7 +14,6 @@ public class Etoile extends Pion{
     }
 
     public Etoile(){
-
         super();
     }
 
