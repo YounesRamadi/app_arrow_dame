@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         sx = finalI;
                         sy = finalJ;
-                        display_possibilities(sx, sy);
+                        display_possibilities(getSelected()[0], getSelected()[1]);
                         update();
                     }
                 });
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             for (int[] p : pos
             ) {
                 int[] tmp = getrelative_position(p);
-                System.out.println("Test:" + pos[0].toString() + "|" +pos[1].toString() + "--" + tmp[0] + "|" + tmp[1]);
+                System.out.println("Test:" + p[0] + "|" +p[1] + "--" + tmp[0] + "|" + tmp[1]);
                 int y = 0;
                 int x = 0;
 
@@ -167,10 +167,7 @@ public class MainActivity extends AppCompatActivity {
             new_pos[1] = (pos[1] +8) %9 ;
         }
         else if(pos[0] == 2) {
-            new_pos[1] = (pos[1] + 8) %9;
-        }
-        else if(pos[0] == 4) {
-            new_pos[1] = (pos[1] +1) % 9;
+            new_pos[1] = (pos[1] + 1) %9;
         }
         else if(pos[0] == 5){
             new_pos[1] = (pos[1] +1) %9;

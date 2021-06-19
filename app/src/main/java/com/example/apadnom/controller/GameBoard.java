@@ -348,7 +348,7 @@ public class GameBoard {
     }
 
     public int[][] get_possibilities(Pion p, int x, int y){
-
+        System.out.println("init"+ x+"/"+y);
         selection[0] = x;
         selection[1] = y;
 
@@ -627,9 +627,12 @@ public class GameBoard {
         for(int i=0; i<indexJump+indexMove;i++){
             if(i<indexMove && indexMove != 0){
                 retour[i] = possible_move[i];
+                System.out.println(possible_move[i][0] +"."+ possible_move[i][1]);
             }
             if(i>=indexMove && indexJump !=0){
                 retour[i] = possible_jump[i-indexMove];
+                System.out.println(possible_jump[i][0] +"."+ possible_jump[i][1]);
+
             }
         }
         if(indexJump + indexMove ==0 ){
