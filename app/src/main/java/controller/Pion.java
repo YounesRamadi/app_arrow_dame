@@ -2,6 +2,8 @@ package controller;
 
 import android.graphics.drawable.Drawable;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,18 +15,26 @@ import android.widget.LinearLayout;
 
 import com.example.apadnom.R;
 
+import static com.google.android.material.resources.MaterialResources.getDrawable;
+
+
 public class Pion {
     protected byte color; // 1 noir 0 blanc
     protected byte direction; // 0 vers le nord / haut
 
-    private int img = R.drawable.hexagone;
+    private @DrawableRes int img = R.drawable.hexagone;
 
-    public int getImg() {
+    public @DrawableRes int getImg() {
         return img;
+    }
+
+    public void setImg(@DrawableRes int d){
+        img = d;
     }
 
     // 1 vers le sud / bas
     public Pion(){
+
         this.color = -1;
         this.direction = -1;
     }
