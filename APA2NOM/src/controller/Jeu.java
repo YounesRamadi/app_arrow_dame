@@ -184,13 +184,19 @@ public class Jeu {
     // check_selection permet de verifier que l'utilisateur puisse prendre la piece
     //honetement on sait pas ce qu'elle fait
     public int check_selection(int posx, int posy){
+        if(posx <0 || posx >= 7 || posy < 0 || posy >= 9){
+            System.err.println("Wtf args are you sending bruh ?");
+            return -1;
+        }
         if(plateau[posx][posy] == null || plateau[posx][posy].couleur == -1){
+            System.err.println("No target pawn");
             return -1;
         }
         int actual_color = plateau[posx][posy].get_couleur();
         //on commence par les blancs
         // tour % 2 == 0 -> blanc
         if(actual_color != tour%2){
+            System.err.println("Wrong target pawn's color");
             return -1;
         }
         get_possibilities(plateau[posx][posy], posx, posy);
@@ -201,8 +207,9 @@ public class Jeu {
             for(int j=0; j<9; j++){
                 if(plateau[i][j].get_couleur() == actual_color && !(i!= posx || j !=posy)){
                     get_possibilities(plateau[i][j], i, j);
-                    if(possible_jump != null){
+                    if(possible_jump != null && plateau[posx][posy] instanceof Fleche){
                         possible_jump = null;
+                        System.err.println("An other pawn can jump, impossible to move this arrow");
                         return -1;
                     }
                 }
@@ -228,12 +235,18 @@ public class Jeu {
     // retourne -1 si le pion est en dehors de la grille
     private int check_specified_pawn(int posPionx, int posPiony, int posFinalx, int posFinaly){
         // toutes les positions 
-        if(posPionx < 0 || posPionx >= 7 || posPiony < 0 || posPiony >= 9)
+        if(posPionx < 0 || posPionx >= 7 || posPiony < 0 || posPiony >= 9){
+            System.err.println("PositionX and Position Y of the target pawn is out of the board.");
             return -1;
-        if(posFinalx < 0 || posFinalx >= 7 || posFinaly < 0 || posFinaly >= 9)
+        }
+        if(posFinalx < 0 || posFinalx >= 7 || posFinaly < 0 || posFinaly >= 9){
+            System.err.println("PositionX and Position Y of the checked pawn is out of the board.");
             return -1;
-        if(plateau[posFinalx][posFinaly] ==null)
+        }
+        if(plateau[posFinalx][posFinaly] ==null){
+            System.err.println("Target pawn is out of the board but still in the array");
             return -1;
+        }
         if(plateau[posFinalx][posFinaly].couleur == -1)
             return 0;
         if(plateau[posPionx][posPiony].couleur == plateau[posFinalx][posFinaly].couleur)
@@ -283,37 +296,37 @@ public class Jeu {
                 plateau[posx-2][posy-2] = new debug();            
             }
             //move
-            if(indexJump == 0){
-                if(check_specified_pawn(posx, posy, posx-1, posy) == 0){
-                 // pion P() -> 0
-                    tmp[0] = posx-1;
-                    tmp[1] = posy;
-                    arl.add(indexMove++,  tmp);
-                    //debugage a enlever vitezef
-                    plateau[posx-1][posy] = new debug();
-                }
-                if(check_specified_pawn(posx, posy, posx, posy+1) == 0){
-                    tmp[0] = posx;
-                    tmp[1] = posy+1;
-                    arl.add(indexMove++, tmp);
-                    //debugage a enlever vitezef
-                    plateau[posx][posy+1] = new debug();
-                }
-                if(check_specified_pawn(posx, posy, posx, posy-1) == 0){
-                    tmp[0] = posx;
-                    tmp[1] = posy-1;
-                    arl.add(indexMove++, tmp);
-                    //debugage a enlever vitezef
-                    plateau[posx][posy-1] = new debug();
-                }
-                if(check_specified_pawn(posx, posy, posx-1, posy-1) == 0){
-                    tmp[0] = posx-1;
-                    tmp[1] = posy-1;
-                    arl.add(indexMove++, tmp);
-                    //debugage a enlever vitezef
-                    plateau[posx-1][posy-1] = new debug();            
-                }
+        
+            if(check_specified_pawn(posx, posy, posx-1, posy) == 0){
+                // pion P() -> 0
+                tmp[0] = posx-1;
+                tmp[1] = posy;
+                arl.add(indexMove++,  tmp);
+                //debugage a enlever vitezef
+                plateau[posx-1][posy] = new debug();
             }
+            if(check_specified_pawn(posx, posy, posx, posy+1) == 0){
+                tmp[0] = posx;
+                tmp[1] = posy+1;
+                arl.add(indexMove++, tmp);
+                //debugage a enlever vitezef
+                plateau[posx][posy+1] = new debug();
+            }
+            if(check_specified_pawn(posx, posy, posx, posy-1) == 0){
+                tmp[0] = posx;
+                tmp[1] = posy-1;
+                arl.add(indexMove++, tmp);
+                //debugage a enlever vitezef
+                plateau[posx][posy-1] = new debug();
+            }
+            if(check_specified_pawn(posx, posy, posx-1, posy-1) == 0){
+                tmp[0] = posx-1;
+                tmp[1] = posy-1;
+                arl.add(indexMove++, tmp);
+                //debugage a enlever vitezef
+                plateau[posx-1][posy-1] = new debug();            
+            }
+            
         }
         else {
             //jumps
@@ -348,37 +361,37 @@ public class Jeu {
                 plateau[posx+2][posy+2] = new debug();            
             }
             //move
-            if(indexJump == 0){
-                if(check_specified_pawn(posx, posy, posx+1, posy) == 0){ // pion P() -> 0
-                    tmp[0] = posx+1;
-                    tmp[1] = posy;
-                    arl.add(indexMove++,  tmp);
-                    //debugage a enlever vitezef
-                    plateau[posx+1][posy] = new debug();
-                }
-                if(check_specified_pawn(posx, posy, posx, posy-1) == 0){
-                    tmp[0] = posx;
-                    tmp[1] = posy-1;
-                    arl.add(indexMove++, tmp);
-                    //debugage a enlever vitezef
-                    plateau[posx][posy-1] = new debug();
-                }
-                if(check_specified_pawn(posx, posy, posx, posy+1) == 0){
-                
-                    tmp[0] = posx;
-                    tmp[1] = posy+1;
-                    arl.add(indexMove++, tmp);
-                    //debugage a enlever vitezef
-                    plateau[posx][posy+1] = new debug();
-                }
-                if(check_specified_pawn(posx, posy, posx+1, posy+1) == 0){
-                    tmp[0] = posx+1;
-                    tmp[1] = posy+1;
-                    arl.add(indexMove++, tmp);
-                    //debugage a enlever vitezef
-                    plateau[posx+1][posy+1] = new debug();            
-                }
+            
+            if(check_specified_pawn(posx, posy, posx+1, posy) == 0){ // pion P() -> 0
+                tmp[0] = posx+1;
+                tmp[1] = posy;
+                arl.add(indexMove++,  tmp);
+                //debugage a enlever vitezef
+                plateau[posx+1][posy] = new debug();
             }
+            if(check_specified_pawn(posx, posy, posx, posy-1) == 0){
+                tmp[0] = posx;
+                tmp[1] = posy-1;
+                arl.add(indexMove++, tmp);
+                //debugage a enlever vitezef
+                plateau[posx][posy-1] = new debug();
+            }
+            if(check_specified_pawn(posx, posy, posx, posy+1) == 0){
+            
+                tmp[0] = posx;
+                tmp[1] = posy+1;
+                arl.add(indexMove++, tmp);
+                //debugage a enlever vitezef
+                plateau[posx][posy+1] = new debug();
+            }
+            if(check_specified_pawn(posx, posy, posx+1, posy+1) == 0){
+                tmp[0] = posx+1;
+                tmp[1] = posy+1;
+                arl.add(indexMove++, tmp);
+                //debugage a enlever vitezef
+                plateau[posx+1][posy+1] = new debug();            
+            }
+        
         }
 
         possible_move= arl.toArray(new int[0][0]);
@@ -548,26 +561,37 @@ public class Jeu {
                 if (possible_jump[i][0]==posx && possible_jump[i][1] == posy){
                     int distanceX = (posx - selection[0]) / 2;
                     int distanceY = (posy - selection[1]) / 2;
-                    if (plateau[distanceX + selection[0]][distanceY + selection[1]].get_couleur() != plateau[selection[0]][selection[1]].get_couleur()){
-                        jump++;
-                    }
+
                     if(plateau[posx][posy] instanceof Etoile){
                         if(jump >0){
                             jump--;
                         }else{
+                            System.err.println("Star has 0 turn left");
                             return -1;
                         }
                         
+                    }else{
+                        if (plateau[distanceX + selection[0]][distanceY + selection[1]].get_couleur() != plateau[selection[0]][selection[1]].get_couleur()){
+                            jump++;
+                        }
                     }
                     has_jumped = (byte)1;
                     plateau[posx][posy]=plateau[selection[0]][selection[1]];
                     plateau[selection[0]][selection[1]]= new Pion();
                     possible_move = null;
                 }
-                if(possible_move[i][0]==posx && possible_jump[i][1] == posy){
-                    
-                }
+
             }
+        }
+        for(int i=0; i< possible_move.length;i++){
+            for(int j=0; j< possible_move[i].length;j++)[
+                if(possible_move[i][0] == posx && possible_move[i][1] == posy){
+                    plateau[posx][posy] = plateau[selection[0]][selection[1]];
+                    plateau[selection[0]][selection[1]] = new Pion();
+                    possible_jump = null;
+                    possible_move = null;
+                }
+            ]
         }
         return 1;
     }
