@@ -1,6 +1,5 @@
 package controller;
 public interface Jeu {
-    int[][] tableau=new int[7][9];
     public Pion[][] get_plateau();
     public int[][] get_possible_jump();
     public int[][] get_possible_move();

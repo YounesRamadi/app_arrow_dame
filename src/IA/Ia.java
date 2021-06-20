@@ -1,4 +1,4 @@
-package IA;
+package ia;
 import controller.Etoile;
 import controller.Jeu;
 import controller.Pion;
@@ -6,7 +6,8 @@ import controller.Pion;
 public class Ia {
 
     public int valuation(Jeu j,byte color) {
-        int fEtoile=3, score;
+        int fEtoile=3;
+        int score=0;
         if(j.get_nb_et_noir()==0 && color==1)
             return 500;
         else if(j.get_nb_et_noir()==0 && color==0)
@@ -17,7 +18,7 @@ public class Ia {
             return 0;
         for (int lig = 0; lig < 7; lig++) {
             for (int col = 0; col < 9; col++){
-                if(fEtoile==0)
+                if(fEtoile<0)
                     break;
                 if(j.get_plateau()[lig][col].get_color()==color && j.get_plateau()[lig][col] instanceof Etoile){
                     if(j.get_nb_et_noir()==1 && color==1){
@@ -29,11 +30,11 @@ public class Ia {
                         score+=6-lig;
                     }
                     else if(j.get_nb_et_noir()==2 && color==1){
-                        fEtoile=fEtoile-1.5;
+                        fEtoile=fEtoile-2;
                         score+=lig;
                     }
                     else if(j.get_nb_et_blanc()==2 && color==0){
-                        fEtoile=fEtoile-1.5;
+                        fEtoile=fEtoile-2;
                         score+=6-lig;
                     }
                     else if(j.get_nb_et_noir()==3 && color==1){
@@ -52,7 +53,9 @@ public class Ia {
 
     public int max(Jeu j, int ligne, int colonne, int lim){
         j.move(ligne, colonne);
-        int max=0, inter=0, obl=0;
+        int max=0;
+        int inter=0;
+        int obl=0;
         int[][] poss;
         if(j.get_hasJumped()==1){
             poss=j.get_possibilities(j.get_plateau()[ligne][colonne], ligne, colonne);
@@ -110,7 +113,7 @@ public class Ia {
                                     inter=max(j,j.get_possible_jump()[n][0],j.get_possible_jump()[n][1],lim);
                                     if(max<inter)
                                         max=inter;
-                                    n=1;
+                                    obl=1;
                                 }
                                 else if(obl==0){
                                     inter=max(j,j.get_possible_jump()[n][0],j.get_possible_jump()[n][1],lim);
@@ -136,7 +139,9 @@ public class Ia {
 
     public int min(Jeu j, int ligne, int colonne, int lim) {
         j.move(ligne, colonne);
-        int min=0, inter=0, obl=0;
+        int min=0;
+        int inter=0;
+        int obl=0;
         int[][] poss;
         if(j.get_hasJumped()==1){
             poss=j.get_possibilities(j.get_plateau()[ligne][colonne], ligne, colonne);
@@ -178,7 +183,7 @@ public class Ia {
             }
         }
         if(lim==0 || j.get_nb_et_blanc()==0 || j.get_nb_et_noir()==0){
-            return valuation(j, (byte)j.get_plateau()[ligne][colonne].get_color());
+            return valuation(j, j.get_plateau()[ligne][colonne].get_color());
         }
         if(j.get_jump()==0){
             j.set_hasJumped((byte) 0);
@@ -194,7 +199,7 @@ public class Ia {
                                     inter=min(j,j.get_possible_jump()[n][0],j.get_possible_jump()[n][1],lim);
                                     if(min>inter)
                                         min=inter;
-                                    n=1;
+                                    obl=1;
                                 }
                                 else if(obl==0){
                                     inter=min(j,j.get_possible_jump()[n][0],j.get_possible_jump()[n][1],lim);
@@ -218,19 +223,21 @@ public class Ia {
         return min;
     }
 
-    public int[] MinMax(byte couleur, Jeu j, int lim) {
+    public int[] minMax(byte couleur, Jeu j, int lim) {
         Pion[][] plateau = j.get_plateau();
-        int pos[]= {-1,-1};
-        int max=0, inter=0;
+        int[] pos= {-1,-1};
+        int max=0;
+        int inter=0;
         for (int ligne = 0; ligne < 7; ligne++) {
             for (int col = 0; col < 9; col++) {
                 if (plateau[ligne][col].get_color() == couleur) {
                     int[][] poss=j.get_possibilities(plateau[ligne][col],ligne,col);
                     for(int s=0; s<poss.length; s++){
                         inter=min(j,poss[s][0],poss[s][1],lim);
-                        if(max<inter)
+                        if(max<inter){
                             max=inter;
                             pos=poss[s];
+                        }
                     }
                 }
             }
