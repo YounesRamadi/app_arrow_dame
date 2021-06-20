@@ -10,4 +10,6 @@ public interface Jeu {
     public byte get_hasJumped();
     public int get_jump();
     public void set_hasJumped(byte hasJump);
+    public int get_nb_et_noir();
+    public int get_nb_et_blanc();
 }
