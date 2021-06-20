@@ -711,5 +711,4 @@ public class GameBoard {
         System.err.println("Destination not in possible move/jump");
         return -1;
     }
-
 }
