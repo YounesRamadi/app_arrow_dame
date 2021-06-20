@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -8,16 +9,16 @@
         android:id="@+id/bienvenue"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="5dp"
         android:layout_weight="1"
-        android:gravity="center"
-        android:text="Bienvenue !"
         android:textColor="@color/black"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:gravity="center"
+        android:text="Bienvenue !"/>
 
     <Button
         android:id="@+id/newgame"
@@ -25,10 +26,10 @@
         android:layout_height="0dp"
         android:layout_margin="5dp"
         android:layout_weight="1"
-        android:background="@color/white"
-        android:text="Nouvelle partie"
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:background="@color/white"
+        android:textSize="20sp"
+        android:text="Nouvelle partie"/>
 
     <Button
         android:id="@+id/tutoriel"
@@ -36,21 +37,10 @@
         android:layout_height="0dp"
         android:layout_margin="5dp"
         android:layout_weight="1"
-        android:background="@color/white"
-        android:text="Tutoriel"
         android:textColor="@color/black"
-        android:textSize="20sp" />
-
-    <Button
-        android:id="@+id/history"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="5dp"
-        android:layout_weight="1"
         android:background="@color/white"
-        android:text="Historique"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:text="Tutoriel"/>
 
     <Button
         android:id="@+id/options"
@@ -58,9 +48,20 @@
         android:layout_height="0dp"
         android:layout_margin="5dp"
         android:layout_weight="1"
-        android:background="@color/white"
-        android:text="Options"
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:background="@color/white"
+        android:textSize="20sp"
+        android:text="Options"/>
+
+    <Button
+        android:id="@+id/credits"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:textColor="@color/black"
+        android:background="@color/white"
+        android:textSize="20sp"
+        android:text="Credits"/>
 
 </LinearLayout>

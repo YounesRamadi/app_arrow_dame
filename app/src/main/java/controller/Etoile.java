@@ -2,23 +2,23 @@ package controller;
 
 import com.example.apadnom.R;
 
-public class Etoile extends Pion {
+public class Etoile extends Pion{
 
-    public Etoile(byte pCouleur, byte direction) {
+    public Etoile(byte pCouleur, byte direction){
 
         super(pCouleur, direction);
-        if (color == 0)
+        if(color == 0)
             super.setImg(R.drawable.blue_star);
         else
             super.setImg(R.drawable.red_star);
     }
 
-    public Etoile() {
+    public Etoile(){
         super();
     }
 
-    public String toString() {
-        if (this.color == 0) {
+    public String toString(){
+        if(this.color == 0){
             return "Eb";
         }
         return "En";
