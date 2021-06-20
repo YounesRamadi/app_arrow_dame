@@ -34,6 +34,7 @@
         android:layout_y="569dp"
         android:text="TextView" />
 
+        
     <TextView
         android:id="@+id/nb_jump_b"
         android:layout_width="wrap_content"
@@ -57,5 +58,13 @@
         android:layout_x="300dp"
         android:layout_y="600dp"
         android:text="restart" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="285dp"
+        android:layout_y="523dp"
+        android:text="Fin de Tour" />
 
 </AbsoluteLayout>

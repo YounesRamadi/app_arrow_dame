@@ -16,6 +16,7 @@ public class GameBoard {
     private  int[][] possible_move;
 
     private int[] selection = new int[2];
+    private int[] movedPawn = null;
 
     public Pion[][] getGameboard() {
         return gameboard;
@@ -25,7 +26,7 @@ public class GameBoard {
         // initGameBoard();
         String entree = "03b03a07b25o07d03c03d";
 
-        this.gameboard=makeGameBoard(entree);
+        this.gameboard = makeGameBoard(entree);
         setNb_B_stars();
         setNb_W_stars();
     }
@@ -208,7 +209,7 @@ public class GameBoard {
             }
         }
 
-        int a =0;
+        int a = 0;
         j = 0;
         for(i=0;i<63;i++,a++){
             if(a%9 == 0){
@@ -235,7 +236,7 @@ public class GameBoard {
                     tempgameboard[j][a] = new Pion();
                     break;
             }
-            if((i+1) %9 == 0){
+            if((i+1) % 9 == 0){
                 j++;
 
             }
@@ -264,8 +265,9 @@ public class GameBoard {
         jump=0;
         possible_jump = null;
         possible_move = null;
-        has_jumped = (byte)0;
-        selection = null;
+        has_jumped = (byte) 0;
+        selection = new int[2];
+        movedPawn = null;
         if (nb_B_stars == 0 || nb_W_stars == 0){
             return (byte)1;
         }
@@ -280,7 +282,7 @@ public class GameBoard {
     // check_selection permet de verifier que l'utilisateur puisse prendre la piece
     // honetement on sait pas ce qu'elle fait
     public int check_selection(int x, int y, int turn, int checkforjump) {
-
+        
         if(x <0 || x >= 7 || y < 0 || y >= 9){
             System.err.println("Wtf args are you sending bruh ?");
             return -1;
@@ -301,7 +303,12 @@ public class GameBoard {
         if(possible_jump != null){
             return 0;
         }
-
+        if(movedPawn != null && gameboard[x][y] instanceof Fleche){
+            if(x != movedPawn[0] || y != movedPawn[1]){
+                return -1;
+            }
+            return 0;
+        }
         if(jump==0 && gameboard[x][y] instanceof Etoile)
         {
             System.err.println("No jump available");
@@ -389,7 +396,7 @@ public class GameBoard {
                 ar2.add(indexJump++, tmp);
             }
             if(check_specified_pawn(x, y, x, y+2) == 0  && check_specified_pawn(x, y, x, y+1) > 0){
-
+                tmp = new int[2];
                 tmp[0] = x;
                 tmp[1] = y+2;
                 ar2.add(indexJump++, tmp);
@@ -518,7 +525,7 @@ public class GameBoard {
         int indexMove = 0;
         int indexJump = 0;
 
-        int possibleEnemyJump =0; // est-ce que le pion peut jump un ennemi
+        int possibleEnemyJump = 0; // est-ce que le pion peut jump un ennemi
         //cest un flag
 
         if (p.get_direction() == 0){
@@ -629,18 +636,18 @@ public class GameBoard {
             }
         }
 
-
+        if(has_jumped == (byte) 1){
+            indexMove = 0;
+        }
         possible_move= arl.toArray(new int[0][0]);
         possible_jump = ar2.toArray(new int[0][0]);
         int[][] retour = new int[indexJump+indexMove][2];
         for(int i=0; i<indexJump+indexMove;i++){
             if(i<indexMove && indexMove != 0){
                 retour[i] = possible_move[i];
-                System.out.println(possible_move[i][0] +"."+ possible_move[i][1]);
             }
             if(i>=indexMove && indexJump !=0){
                 retour[i] = possible_jump[i-indexMove];
-                System.out.println(possible_jump[i][0] +"."+ possible_jump[i][1]);
 
             }
         }
@@ -671,7 +678,6 @@ public class GameBoard {
     // return -1 si il a pas bougé
     // return 0 si il  a bougé
     public int move(int x, int y){
-
         if(check_specified_pawn(x, y,selection[0], selection[1]) == -1){
             System.err.println("Tried to move a non-existing pawn");
             return -1;
@@ -691,13 +697,16 @@ public class GameBoard {
                             System.err.println("Star has 0 turn left");
                             return -1;
                         }
-
+                        
                     }else{
+                        has_jumped = (byte)1;
                         if (gameboard[distanceX + selection[0]][distanceY + selection[1]].get_color() != gameboard[selection[0]][selection[1]].get_color()){
                             jump++;
                         }
                     }
-                    has_jumped = (byte)1;
+                    movedPawn = new int[2];
+                    movedPawn[0] = x;
+                    movedPawn[1] = y;
                     gameboard[x][y]=gameboard[selection[0]][selection[1]];
                     gameboard[selection[0]][selection[1]]= new Pion();
                     possible_move = null;
@@ -723,13 +732,14 @@ public class GameBoard {
         }
         if(possible_move != null){
             for(int i=0; i< possible_move.length;i++){
-
                 if(possible_move[i][0] == x && possible_move[i][1] == y){
                     gameboard[x][y] = gameboard[selection[0]][selection[1]];
                     gameboard[selection[0]][selection[1]] = new Pion();
                     possible_jump = null;
                     possible_move = null;
-
+                    if(gameboard[x][y] instanceof Etoile){
+                        jump --;
+                    }
                     if((x==0 && gameboard[x][y].get_direction()==0) || (x==6 && gameboard[x][y].get_direction()==1)){
                         if (gameboard[x][y] instanceof Etoile)
                         {
@@ -739,6 +749,7 @@ public class GameBoard {
                             gameboard[x][y].change_direction();
                         }
                     }
+                    return 1;
                 }
 
             }

@@ -48,6 +48,17 @@ public class DisplayBoardActivity extends AppCompatActivity {
                 update();
             }
         });
+        Button btn1 = new Button(this);
+        btn1 = (Button) findViewById(R.id.button2);
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                game.end_turn();
+                turn ++;
+                //myLayout.removeAllViews();
+                update();
+            }
+        });
 
         update();
 
@@ -110,6 +121,10 @@ public class DisplayBoardActivity extends AppCompatActivity {
                         public void onClick(View v) {
                             sx = finalI;
                             sy = finalJ;
+                            if(game.getHas_jumped() == 0) {
+                                turn++;
+                                game.end_turn();
+                            }
                             setSelected(sx, sy);
                             removeImages(layout);
                             display_possibilities(getSelected()[0], getSelected()[1]);
@@ -177,6 +192,10 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                         removeImages(myLayout);
                                         removeImages(myLayout);
                                         update();
+                                        if(game.getHas_jumped() == 0) {
+                                            turn++;
+                                            game.end_turn();
+                                        }
                                     }
                                 });
                                 layout.addView(img);
