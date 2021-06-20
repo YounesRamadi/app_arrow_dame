@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout
-    android:id="@+id/layout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
     tools:context=".MainActivity">
 
-<AbsoluteLayout
-    android:id="@+id/head"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"/>
+    <AbsoluteLayout
+        android:id="@+id/head"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+    </AbsoluteLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,6 +39,30 @@
         android:layout_height="wrap_content"
         android:layout_x="618dp"
         android:layout_y="119dp"
-        android:text="Move" />
+        android:text="restart" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="142dp"
+        android:layout_y="613dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="145dp"
+        android:layout_y="657dp"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="253dp"
+        android:layout_y="607dp"
+        android:text="Fin de Tour" />
 
 </AbsoluteLayout>
