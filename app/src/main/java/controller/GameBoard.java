@@ -6,7 +6,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class GameBoard {
+public class GameBoard{
     private Pion[][] gameboard;
     private int nb_W_stars;
     private int nb_B_stars;
@@ -30,6 +30,19 @@ public class GameBoard {
         return gameboard;
     }
 
+    public GameBoard(GameBoard g, Context context){
+        String entree = "03b03a07b25o07d03c03d";
+
+        this.context = context;
+        this.gameboard = makeGameBoard(entree);
+        for(int i = 0; i < 7; i++){
+            for(int j = 0; i < 0; j++){
+                this.gameboard[i][j] = g.gameboard[i][j];
+            }
+        }
+        this.nb_B_stars = g.getNb_B_stars();
+        this.nb_W_stars = g.getNb_W_stars();
+    }
     public GameBoard(Context context) {
         // initGameBoard();
         String entree = "03b03a07b25o07d03c03d";
@@ -49,10 +62,16 @@ public class GameBoard {
 
 
     public int[][] getPossible_move() {
+        if(possible_move == null){
+            return new int[0][0];
+        }
         return possible_move;
     }
 
     public int[][] getPossible_jump() {
+        if(possible_jump == null){
+            return new int[0][0];
+        }
         return possible_jump;
     }
 
@@ -148,6 +167,7 @@ public class GameBoard {
     }
 
     public int getNb_W_stars() {
+        System.out.println("b_stars :" +nb_B_stars);
         return nb_W_stars;
     }
 
@@ -262,6 +282,7 @@ public class GameBoard {
     }
 
     public int getNb_B_stars() {
+        System.out.println("b_stars :" +nb_B_stars);
         return nb_B_stars;
     }
 
@@ -373,7 +394,9 @@ public class GameBoard {
         }
         return 0;
     }
-
+    public void add_turn(){
+        turn++;
+    }
     // returnne 0 si cest vide
     // returnne 1 si cest la même color
     // returnne 2 si la color est differente
@@ -402,7 +425,6 @@ public class GameBoard {
     }
 
     public int[][] get_possibilities(Pion p, int x, int y){
-        System.out.println("init"+ x+"/"+y);
         selection[0] = x;
         selection[1] = y;
 
@@ -572,7 +594,6 @@ public class GameBoard {
 
         if (p.get_direction() == 0){
             //jumps
-            System.out.println("test:"+ x+y+lastPosition[0]+lastPosition[1]);
 
 
                 if (check_specified_pawn(x, y, x - 1, y) > 0 && check_specified_pawn(x, y, x - 2, y) == 0) {// pion P() -> 0
@@ -707,7 +728,7 @@ public class GameBoard {
         if(has_jumped == (byte) 1){
             indexMove = 0;
         }
-        System.out.println("index jump : " + indexJump);
+
         possible_move= arl.toArray(new int[0][0]);
         possible_jump = ar2.toArray(new int[0][0]);
         int[][] retour = new int[indexJump+indexMove][2];
@@ -741,16 +762,14 @@ public class GameBoard {
             }
         }
         if(gameboard[x][y].get_direction() == 1){
-            System.out.println("yo");
+
             // vers le bas
             if(check_specified_pawn(x, y, x + 2, y + 2) == 0){
-                System.out.println("yo");
                 if(check_specified_pawn(x, y, x + 1, y + 1 ) == 2){
                     return true;
                 }
             }
             if(check_specified_pawn(x, y, x + 2, y ) == 0){
-                System.out.println("yo");
                 if(check_specified_pawn(x, y, x + 1, y ) == 2){
                     return true;
                 }
@@ -787,12 +806,10 @@ public class GameBoard {
         // commence par s'il y a des jumps
         if(possible_jump != null){
             for(int i=0; i<possible_jump.length;i++){
-                System.out.println("possible jump :" + possible_jump.length + possible_jump[i][0] + possible_jump[i][1]);
 
                 if (possible_jump[i][0]==x && possible_jump[i][1] == y) {
                     int distanceX = (x - selection[0]) / 2;
                     int distanceY = (y - selection[1]) / 2;
-                    System.out.println("test");
                     if (gameboard[selection[0]][selection[1]] instanceof Etoile) {
                         has_jumped = (byte) 0;
                         jump--;
@@ -813,19 +830,14 @@ public class GameBoard {
                     lastPosition = new int[2];
                     lastPosition[0] = selection[0];
                     lastPosition[1] = selection[1];
-                    System.out.println("dans move depuis:" + selection[0] + selection[1] + "vers :" + x + y);
                     gameboard[x][y] = gameboard[selection[0]][selection[1]];
                     gameboard[selection[0]][selection[1]] = new Pion();
                     possible_move = null;
-                    System.out.println("zob");
                     if ((x == 0 && gameboard[x][y].get_direction() == 0) || (x == 6 && gameboard[x][y].get_direction() == 1)) {
                         if (gameboard[x][y] instanceof Etoile) {
-                            System.out.println("zob");
                             if (gameboard[x][y].get_color() == (byte)0) {
-                                System.out.println("zab");
                                 nb_W_stars-=1;
                             } else if (gameboard[x][y].get_color() == (byte)1) {
-                                System.out.println("zub");
                                 nb_B_stars-=1;
                             }
                             gameboard[x][y] = new Pion();
@@ -880,7 +892,6 @@ public class GameBoard {
 
     public boolean checkEndTurn(){
         if(gameboard[movedPawn[0]][movedPawn[1]] instanceof  Fleche){
-            System.out.println("fleche");
             if(has_jumped == (byte) 0){
                 return true ;
             }

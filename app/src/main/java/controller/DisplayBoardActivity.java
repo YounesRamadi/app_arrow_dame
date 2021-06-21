@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.apadnom.R;
 
+import ia.Ia;
+
 
 public class DisplayBoardActivity extends AppCompatActivity {
 
@@ -28,10 +30,15 @@ public class DisplayBoardActivity extends AppCompatActivity {
     private TextView nb_jump_b;
     private int turn=0;
 
+    private int[] iaMove = new int[4];
+    private Ia ia;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_board);
+
+        ia = new Ia();
 
         this.myLayout = (AbsoluteLayout) findViewById(R.id.layout);
         this.layout = (AbsoluteLayout) findViewById(R.id.head);
@@ -193,18 +200,29 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                         setSelected(finalI, finalJ);
                                         System.out.println("move depuis:" + getSelected()[0] + getSelected()[1] + "vers :" + finalI + finalJ);
                                         game.move(finalI, finalJ);
-
+                                        update();
                                         layout.removeAllViews();
                                         removeImages(myLayout);
                                         removeImages(myLayout);
                                         if(game.checkEndTurn()){
                                             System.out.println("fin de tour");
                                             turn ++;
-
+                                            update();
+                                            iaMove = ia.minMax((byte) (turn%2), new GameBoard(game, getApplicationContext()), 2);
+                                            game.setSelection(iaMove[0], iaMove[1]);
+                                            game.move(iaMove[2], iaMove[3]);
+                                            turn ++;
                                             System.out.println("white : " +game.getNb_B_stars()+ " black " +game.getNb_W_stars());
+                                            game.end_turn();
+                                            game.add_turn();
+                                            System.out.println("zobturn"+turn);
+                                            /*
                                             if(game.end_turn()==(byte)1) {
+                                                System.out.println("Test");
                                                 game.initGameBoard();
                                             }
+                                            */
+
                                             update();
                                         }
                                         update();
