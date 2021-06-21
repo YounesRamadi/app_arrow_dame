@@ -18,9 +18,18 @@ public class Ia {
             return 0;
         for (int lig = 0; lig < 7; lig++) {
             for (int col = 0; col < 9; col++){
-                if(fEtoile<0)
-                    break;
-                if(j.get_plateau()[lig][col].get_color()==color && j.get_plateau()[lig][col] instanceof Etoile){
+                j.get_possibilities(j.get_plateau()[lig][col], lig, col);
+                if(j.get_plateau()[lig][col].get_color()==color){
+                    score+=j.get_possible_jump().length*2;
+                    score+=j.get_possible_move().length;
+                }
+                else{
+                    score-=j.get_possible_jump().length*2;
+                    score-=j.get_possible_move().length;
+                }
+                if(j.get_plateau()[lig][col].get_color()!=j.get_plateau()[lig][col].get_direction() && j.get_plateau()[lig][col].get_color()==color)
+                    score+=20;
+                else if(j.get_plateau()[lig][col].get_color()==color && j.get_plateau()[lig][col] instanceof Etoile){
                     if(j.get_nb_et_noir()==1 && color==1){
                         fEtoile=0;
                         score+=lig;
