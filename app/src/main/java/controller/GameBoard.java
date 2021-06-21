@@ -830,11 +830,6 @@ public class GameBoard {
     }
 
     public boolean checkEndTurn(){
-        if(gameboard[movedPawn[0]][movedPawn[1]] instanceof  Etoile){
-            if(jump < 1){
-                return true;
-            }
-        }
         if(gameboard[movedPawn[0]][movedPawn[1]] instanceof  Fleche){
             System.out.println("fleche");
             if(has_jumped == (byte) 0){
@@ -845,6 +840,13 @@ public class GameBoard {
                 return true;
             }
         }
+        else{
+            if(jump < 1){
+                return true;
+            }
+        }
+
+
         return false;
     }
 
