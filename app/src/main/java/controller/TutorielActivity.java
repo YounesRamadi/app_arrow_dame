@@ -28,7 +28,7 @@ public class TutorielActivity extends AppCompatActivity {
     private int turn=0;
     private TextView tutoriel;
     private Button suivant;
-    private Button precedant;
+    private Button precedent;
     private int index = 0;
 
     @SuppressLint("SetTextI18n")
@@ -175,7 +175,7 @@ public class TutorielActivity extends AppCompatActivity {
     }
     @SuppressLint("SetTextI18n")
     private void jumpStar(){
-        tutoriel.setText("Vous pouvez aussi sautez avec les étoiles !");
+        tutoriel.setText("Vous pouvez aussi sauter avec les étoiles !");
         game = new GameBoard("16o02b06o01b01c01b24o");
         game.setHas_jumped((byte) 1);
         game.setJump(1);
@@ -187,7 +187,7 @@ public class TutorielActivity extends AppCompatActivity {
     }
     @SuppressLint("SetTextI18n")
     private void mustJumpTuto(){
-        tutoriel.setText("Si vous pouvez sauter avec une flèche vous ne pouvez pas juste bouger avec un autre");
+        tutoriel.setText("Si vous pouvez sauter avec une flèche, vous ne pouvez pas juste bouger avec une autre");
         game = new GameBoard("16o02b06o01b01d01b01o01d22o");
     }
     @SuppressLint("SetTextI18n")
