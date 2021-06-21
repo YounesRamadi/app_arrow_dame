@@ -54,6 +54,8 @@ public class DisplayBoardActivity extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("white : " +game.getNb_B_stars()+ " black " +game.getNb_W_stars());
+
                 game.end_turn();
                 turn ++;
                 //myLayout.removeAllViews();
@@ -196,7 +198,11 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                         if(game.checkEndTurn()){
                                             System.out.println("fin de tour");
                                             turn ++;
-                                            game.end_turn();
+
+                                            System.out.println("white : " +game.getNb_B_stars()+ " black " +game.getNb_W_stars());
+                                            if(game.end_turn()==(byte)1) {
+                                                game.initGameBoard();
+                                            }
                                             update();
                                         }
                                         update();

@@ -28,8 +28,7 @@ public class GameBoard {
         String entree = "03b03a07b25o07d03c03d";
 
         this.gameboard = makeGameBoard(entree);
-        setNb_B_stars();
-        setNb_W_stars();
+        setNb_stars();
     }
 
     public byte getHas_jumped(){
@@ -144,17 +143,26 @@ public class GameBoard {
         return nb_W_stars;
     }
 
-    public void setNb_W_stars() {
+    public void setNb_stars() {
         int n = 0;
+        int a = 0;
         Pion p;
 
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 9; j++) {
                 p = gameboard[i][j];
-                if ((p instanceof Etoile) && (p.get_color() == 0))
-                    n++;
+                if (p instanceof Etoile){
+                    if(p.get_color() == 0){
+                        n++;
+                    }else{
+                        a++;
+                    }
+                }
+
             }
         }
+        nb_W_stars = n;
+        nb_B_stars = a;
     }
 
     public int getJump(){
@@ -760,13 +768,16 @@ public class GameBoard {
                     gameboard[x][y] = gameboard[selection[0]][selection[1]];
                     gameboard[selection[0]][selection[1]] = new Pion();
                     possible_move = null;
-
+                    System.out.println("zob");
                     if ((x == 0 && gameboard[x][y].get_direction() == 0) || (x == 6 && gameboard[x][y].get_direction() == 1)) {
                         if (gameboard[x][y] instanceof Etoile) {
-                            if (gameboard[x][y].get_color() == 0) {
-                                nb_W_stars--;
-                            } else if (gameboard[x][y].get_color() == 1) {
-                                nb_B_stars--;
+                            System.out.println("zob");
+                            if (gameboard[x][y].get_color() == (byte)0) {
+                                System.out.println("zab");
+                                nb_W_stars-=1;
+                            } else if (gameboard[x][y].get_color() == (byte)1) {
+                                System.out.println("zub");
+                                nb_B_stars-=1;
                             }
                             gameboard[x][y] = new Pion();
                         } else if (gameboard[x][y] instanceof Fleche) {
@@ -796,6 +807,12 @@ public class GameBoard {
                     if((x==0 && gameboard[x][y].get_direction()==0) || (x==6 && gameboard[x][y].get_direction()==1)){
                         if (gameboard[x][y] instanceof Etoile)
                         {
+                            if (gameboard[x][y].get_color() == (byte)0) {
+                                nb_W_stars-=1;
+                            } else if (gameboard[x][y].get_color() == (byte)1) {
+                                nb_B_stars-=1;
+                            }
+
                             gameboard[x][y]=new Pion();
                         }
                         else if (gameboard[x][y] instanceof Fleche) {
