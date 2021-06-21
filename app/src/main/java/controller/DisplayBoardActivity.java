@@ -45,6 +45,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 game.initGameBoard();
                 //myLayout.removeAllViews();
+                turn = 0;
                 update();
             }
         });
@@ -90,6 +91,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public void update() {
+        System.out.println("turn:" + turn);
         // faudrait peut etre trouver autre chose
         removeImages(myLayout);
         removeImages(myLayout);
@@ -121,13 +123,11 @@ public class DisplayBoardActivity extends AppCompatActivity {
                         public void onClick(View v) {
                             sx = finalI;
                             sy = finalJ;
-                            if(game.getHas_jumped() == 0) {
-                                turn++;
-                                game.end_turn();
-                            }
                             setSelected(sx, sy);
                             removeImages(layout);
-                            display_possibilities(getSelected()[0], getSelected()[1]);
+                            if(game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
+                                display_possibilities(getSelected()[0], getSelected()[1]);
+                            }
                         }
                     });
                 }
@@ -187,15 +187,19 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View v) {
                                         setSelected(finalI, finalJ);
+                                        System.out.println("move depuis:" + getSelected()[0] + getSelected()[1] + "vers :" + finalI + finalJ);
                                         game.move(finalI, finalJ);
+
                                         layout.removeAllViews();
                                         removeImages(myLayout);
                                         removeImages(myLayout);
-                                        update();
-                                        if(game.getHas_jumped() == 0) {
-                                            turn++;
+                                        if(game.checkEndTurn()){
+                                            System.out.println("fin de tour");
+                                            turn ++;
                                             game.end_turn();
+                                            update();
                                         }
+                                        update();
                                     }
                                 });
                                 layout.addView(img);
