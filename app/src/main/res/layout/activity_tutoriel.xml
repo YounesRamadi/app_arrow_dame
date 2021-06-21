@@ -1,9 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<AbsoluteLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="controller.TutorielActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <AbsoluteLayout
+        android:id="@+id/head"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+    </AbsoluteLayout>
+
+    <TextView
+        android:id="@+id/selected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="147dp"
+        android:layout_y="569dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/tutoriel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_y="400dp"
+        android:textSize="30dp"
+        android:text="tuto"
+        android:gravity="center"/>
+
+
+    <TextView
+        android:id="@+id/nb_jump_b"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="187dp"
+        android:layout_y="654dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/nb_jump_w"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="185dp"
+        android:layout_y="606dp"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/suivant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="294dp"
+        android:layout_y="612dp"
+        android:text="Suivant" />
+
+    <Button
+        android:id="@+id/precedant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="38dp"
+        android:layout_y="614dp"
+        android:text="Precedant" />
+
+
+</AbsoluteLayout>

@@ -7,7 +7,7 @@ public class GameBoard {
     private Pion[][] gameboard = new Pion[7][9];
     private int nb_W_stars;
     private int nb_B_stars;
-    private int turn;
+    public int turn;
 
     private byte has_jumped;
     private int jump;
@@ -28,6 +28,11 @@ public class GameBoard {
         String entree = "03b03a07b25o07d03c03d";
 
         this.gameboard = makeGameBoard(entree);
+        setNb_stars();
+    }
+
+    public GameBoard(String ch) {
+        this.gameboard = makeGameBoard(ch);
         setNb_stars();
     }
 
@@ -167,6 +172,10 @@ public class GameBoard {
 
     public int getJump(){
         return jump;
+    }
+
+    public void setJump(int jump){
+        this.jump = jump;
     }
 
     public Pion[][] makeGameBoard(String ch){

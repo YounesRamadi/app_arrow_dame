@@ -26,15 +26,14 @@ public class MainActivity extends AppCompatActivity {
 
         mGameName = (TextView) findViewById(R.id.nomjeu);
         mLogo = (ImageView) findViewById(R.id.etoile);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable(){
             @Override
             public void run() {
-                startActivity(new Intent(MainActivity.this, DisplayBoardActivity.class));
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 finish();
             }
-        },1000);
+        },10);
     }
 }
