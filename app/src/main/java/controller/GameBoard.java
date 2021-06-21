@@ -1,13 +1,16 @@
 package controller;
 
 
+import android.content.Context;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 
 public class GameBoard {
-    private Pion[][] gameboard = new Pion[7][9];
+    private Pion[][] gameboard;
     private int nb_W_stars;
     private int nb_B_stars;
-    private int turn;
+    public int turn;
 
     private byte has_jumped;
     private int jump;
@@ -16,18 +19,29 @@ public class GameBoard {
     private  int[][] possible_move;
 
     private int[] selection = new int[2];
+    private int[] movedPawn = new int[2];
+    private int[] lastPosition = new int[2];
+    private int[][] jumpableEnnemies;
+
+    private Context context;
+    private Toast toast;
 
     public Pion[][] getGameboard() {
         return gameboard;
     }
 
-    public GameBoard() {
+    public GameBoard(Context context) {
         // initGameBoard();
         String entree = "03b03a07b25o07d03c03d";
 
-        this.gameboard=makeGameBoard(entree);
-        setNb_B_stars();
-        setNb_W_stars();
+        this.context = context;
+        this.gameboard = makeGameBoard(entree);
+        setNb_stars();
+    }
+
+    public GameBoard(String ch) {
+        this.gameboard = makeGameBoard(ch);
+        setNb_stars();
     }
 
     public byte getHas_jumped(){
@@ -142,21 +156,34 @@ public class GameBoard {
         return nb_W_stars;
     }
 
-    public void setNb_W_stars() {
+    public void setNb_stars() {
         int n = 0;
+        int a = 0;
         Pion p;
 
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 9; j++) {
                 p = gameboard[i][j];
-                if ((p instanceof Etoile) && (p.get_color() == 0))
-                    n++;
+                if (p instanceof Etoile){
+                    if(p.get_color() == 0){
+                        n++;
+                    }else{
+                        a++;
+                    }
+                }
+
             }
         }
+        nb_W_stars = n;
+        nb_B_stars = a;
     }
 
     public int getJump(){
         return jump;
+    }
+
+    public void setJump(int jump){
+        this.jump = jump;
     }
 
     public Pion[][] makeGameBoard(String ch){
@@ -208,7 +235,7 @@ public class GameBoard {
             }
         }
 
-        int a =0;
+        int a = 0;
         j = 0;
         for(i=0;i<63;i++,a++){
             if(a%9 == 0){
@@ -235,7 +262,7 @@ public class GameBoard {
                     tempgameboard[j][a] = new Pion();
                     break;
             }
-            if((i+1) %9 == 0){
+            if((i+1) % 9 == 0){
                 j++;
 
             }
@@ -264,8 +291,10 @@ public class GameBoard {
         jump=0;
         possible_jump = null;
         possible_move = null;
-        has_jumped = (byte)0;
-        selection = null;
+        has_jumped = (byte) 0;
+        selection = new int[2];
+        movedPawn = new int[2];
+        lastPosition = new int[2];
         if (nb_B_stars == 0 || nb_W_stars == 0){
             return (byte)1;
         }
@@ -282,40 +311,69 @@ public class GameBoard {
     public int check_selection(int x, int y, int turn, int checkforjump) {
 
         if(x <0 || x >= 7 || y < 0 || y >= 9){
+            toast = Toast.makeText(context, "Wtf args are you sending bruh ?", Toast.LENGTH_LONG );
+            toast.show();
             System.err.println("Wtf args are you sending bruh ?");
             return -1;
         }
-        if(gameboard[x][y] == null || gameboard[x][y].get_color() == -1){
-            System.err.println("No target pawn");
+
+        if(gameboard[x][y].get_color() != turn%2){
+            toast = Toast.makeText(context, "That's not your pawn!", Toast.LENGTH_LONG );
+            toast.show();
+            System.err.println("That's not your pawn!");
             return -1;
         }
+
+
         int actual_color = gameboard[x][y].get_color();
-        //on commence par les blancs
-        // turn % 2 == 0 -> blanc
-        if(actual_color != turn%2){
-            System.err.println("Wrong target pawn's color");
-            return -1;
-        }
-
-        get_possibilities(gameboard[x][y], x, y);
-        if(possible_jump != null){
-            return 0;
-        }
-
-        if(jump==0 && gameboard[x][y] instanceof Etoile)
-        {
-            System.err.println("No jump available");
-            return -1;
-        }
 
         if (checkforjump == 1){
             for(int i=0; i<7;i++){
                 for(int j=0; j<9; j++){
-                    if(gameboard[i][j].get_color() == actual_color && !(i!= x || j !=y)){
-                        get_possibilities(gameboard[i][j], i, j);
-                        if(possible_jump != null && gameboard[x][y] instanceof Fleche){
-                            possible_jump = null;
-                            System.err.println("An other pawn can jump, impossible to move this arrow");
+                    if(gameboard[i][j] == null){
+                        continue;
+                    }
+                    if(gameboard[i][j].get_color() == actual_color){
+                        if(!(i== x && j ==y)) {
+                            if(canJumpEnnemy(i, j)){
+                                System.err.println("An other pawn can jump, impossible to move this arrow");
+                                return -1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if(gameboard[x][y] instanceof Etoile){
+            if(jump < 1){
+                toast = Toast.makeText(context, "You can't move this star!", Toast.LENGTH_LONG );
+                toast.show();
+                System.err.println("You can't move this star!");
+                return -1;
+            }
+            return 0;
+        }
+        else{
+            if(movedPawn != null){
+                if(gameboard[movedPawn[0]][movedPawn[1]] instanceof Etoile) {
+                    toast = Toast.makeText(context, "You can't move this arrow! ( you just moved a star )", Toast.LENGTH_LONG );
+                    toast.show();
+                    System.err.println("You can't move this arrow! ( you just moved a star )");
+                    return -1;
+                }
+                else{
+                    if(has_jumped == (byte) 0){
+                        return 0;
+                    }
+                    else{
+                        if((x == movedPawn[0]) && (y == movedPawn[1])){
+                            return 0;
+                        }
+                        else{
+                            toast = Toast.makeText(context, "That's not the arrow you just moved!", Toast.LENGTH_LONG );
+                            toast.show();
+                            System.err.println("That's not the arrow you just moved!");
                             return -1;
                         }
                     }
@@ -389,7 +447,7 @@ public class GameBoard {
                 ar2.add(indexJump++, tmp);
             }
             if(check_specified_pawn(x, y, x, y+2) == 0  && check_specified_pawn(x, y, x, y+1) > 0){
-
+                tmp = new int[2];
                 tmp[0] = x;
                 tmp[1] = y+2;
                 ar2.add(indexJump++, tmp);
@@ -518,102 +576,128 @@ public class GameBoard {
         int indexMove = 0;
         int indexJump = 0;
 
-        int possibleEnemyJump =0; // est-ce que le pion peut jump un ennemi
+        int possibleEnemyJump = 0; // est-ce que le pion peut jump un ennemi
         //cest un flag
 
         if (p.get_direction() == 0){
             //jumps
-            if(check_specified_pawn(x, y, x-1, y) > 0  && check_specified_pawn(x, y, x-2, y) == 0){// pion P() -> 0
-                tmp = new int[2];
-                tmp[0] = x-2;
-                tmp[1] = y;
-                ar2.add(indexJump++,  tmp);
-                if(gameboard[x-1][y].get_color() != gameboard[x][y].get_color()){
-                    possibleEnemyJump = 1;
+            System.out.println("test:"+ x+y+lastPosition[0]+lastPosition[1]);
+
+
+                if (check_specified_pawn(x, y, x - 1, y) > 0 && check_specified_pawn(x, y, x - 2, y) == 0) {// pion P() -> 0
+                    if(!((x-2 == lastPosition[0]) && (y == lastPosition[1]))) {
+                        tmp = new int[2];
+                        tmp[0] = x - 2;
+                        tmp[1] = y;
+                        ar2.add(indexJump++, tmp);
+
+                        if(check_specified_pawn(x,y,x-1,y) == 2){
+                            possibleEnemyJump++;
+                        }
+                    }
                 }
-            }
-            if(check_specified_pawn(x, y, x, y+2) == 0  && check_specified_pawn(x, y, x, y+1) > 0 && has_jumped == (byte)1){
-                tmp = new int[2];
-                tmp[0] = x;
-                tmp[1] = y+2;
-                ar2.add(indexJump++, tmp);
-                if(gameboard[x][y+1].get_color() != gameboard[x][y].get_color()){
-                    possibleEnemyJump = 1;
+                if (check_specified_pawn(x, y, x, y + 2) == 0 && check_specified_pawn(x, y, x, y + 1) > 0 && has_jumped == (byte) 1) {
+                    if(!((x == lastPosition[0]) && (y+2 == lastPosition[1]))) {
+                        tmp = new int[2];
+                        tmp[0] = x;
+                        tmp[1] = y + 2;
+                        ar2.add(indexJump++, tmp);
+                        if(check_specified_pawn(x,y,x,y+1) == 2){
+                            possibleEnemyJump++;
+                        }
+                    }
                 }
-            }
-            if(check_specified_pawn(x, y, x, y-2) == 0  && check_specified_pawn(x, y, x, y-1) > 0 && has_jumped == (byte)1){
-                tmp = new int[2];
-                tmp[0] = x;
-                tmp[1] = y-2;
-                if(gameboard[x][y-1].get_color() != gameboard[x][y].get_color()){
-                    possibleEnemyJump = 1;
+                if (check_specified_pawn(x, y, x, y - 2) == 0 && check_specified_pawn(x, y, x, y - 1) > 0 && has_jumped == (byte) 1) {
+                    if(!((x == lastPosition[0]) && (y-2 == lastPosition[1]))) {
+                        tmp = new int[2];
+                        tmp[0] = x;
+                        tmp[1] = y - 2;
+                        ar2.add(indexJump++, tmp);
+                        if(check_specified_pawn(x,y,x,y-1) == 2){
+                            possibleEnemyJump++;
+                        }
+                    }
                 }
-            }
-            if(check_specified_pawn(x, y, x-2, y-2) == 0  && check_specified_pawn(x, y, x-1, y-1) > 0){
-                tmp = new int[2];
-                tmp[0] = x-2;
-                tmp[1] = y-2;
-                ar2.add(indexJump++, tmp);
-                if(gameboard[x-1][y].get_color() != gameboard[x][y].get_color()){
-                    possibleEnemyJump = 1;
+                if (check_specified_pawn(x, y, x - 2, y - 2) == 0 && check_specified_pawn(x, y, x - 1, y - 1) > 0) {
+                    if(!((x-2 == lastPosition[0]) && (y-2 == lastPosition[1]))) {
+                        tmp = new int[2];
+                        tmp[0] = x - 2;
+                        tmp[1] = y - 2;
+                        ar2.add(indexJump++, tmp);
+                        if(check_specified_pawn(x,y,x-1,y-1) == 2){
+                            possibleEnemyJump++;
+                        }
+                    }
                 }
-            }
-            if(indexJump == 0){
-                //move
-                if(check_specified_pawn(x, y, x-1, y) == 0){ // pion P() -> 0
-                    tmp = new int[2];
-                    tmp[0] = x-1;
-                    tmp[1] = y;
-                    arl.add(indexMove,  tmp);
-                    indexMove+=1;
-                }
-                if(check_specified_pawn(x, y, x-1, y-1) == 0){
-                    tmp = new int[2];
-                    tmp[0] = x-1;
-                    tmp[1] = y-1;
-                    arl.add(indexMove,tmp);
-                    indexMove+=1;
-                }
+                if (possibleEnemyJump == 0) {
+                    //move
+                    if (check_specified_pawn(x, y, x - 1, y) == 0) { // pion P() -> 0
+                        tmp = new int[2];
+                        tmp[0] = x - 1;
+                        tmp[1] = y;
+                        arl.add(indexMove, tmp);
+                        indexMove += 1;
+                    }
+                    if (check_specified_pawn(x, y, x - 1, y - 1) == 0) {
+                        tmp = new int[2];
+                        tmp[0] = x - 1;
+                        tmp[1] = y - 1;
+                        arl.add(indexMove, tmp);
+                        indexMove += 1;
+
+                    }
+
             }
         }
 
         else {
             //jumps
             if(check_specified_pawn(x, y, x+2, y) == 0  && check_specified_pawn(x, y, x+1, y) > 0){ // pion P() -> 0
-                tmp = new int[2];
-                tmp[0] = x+2;
-                tmp[1] = y;
-                ar2.add(indexJump++, tmp);
-                if(gameboard[x+1][y].get_color() != gameboard[x][y].get_color()){
-                    possibleEnemyJump = 1;
+                if(!((x+2 == lastPosition[0]) && (y == lastPosition[1]))) {
+                    tmp = new int[2];
+                    tmp[0] = x + 2;
+                    tmp[1] = y;
+                    ar2.add(indexJump++, tmp);
+                    if(check_specified_pawn(x,y,x+1,y) == 2){
+                        possibleEnemyJump++;
+                    }
                 }
             }
             if(check_specified_pawn(x, y, x, y-2) == 0  && check_specified_pawn(x, y, x, y-1) > 0 && has_jumped == (byte)1){
-                tmp = new int[2];
-                tmp[0] = x;
-                tmp[1] = y-2;
-                ar2.add(indexJump++, tmp);
-                if(gameboard[x][y-1].get_color() != gameboard[x][y].get_color()){
-                    possibleEnemyJump = 1;
+                if(!((x == lastPosition[0]) && (y-2 == lastPosition[1]))) {
+                    tmp = new int[2];
+                    tmp[0] = x;
+                    tmp[1] = y-2;
+                    ar2.add(indexJump++, tmp);
+                    if(check_specified_pawn(x,y,x,y-1) == 2){
+                        possibleEnemyJump++;
+                    }
                 }
             }
             if(check_specified_pawn(x, y, x, y+2) == 0  && check_specified_pawn(x, y, x, y+1) > 0 && has_jumped == (byte)1){
-                tmp = new int[2];
-                tmp[0] = x;
-                tmp[1] = y+2;
-                ar2.add(indexJump++, tmp);
-                if(gameboard[x][y+1].get_color() != gameboard[x][y].get_color()){
-                    possibleEnemyJump = 1;
+                if(!((x == lastPosition[0]) && (y+2 == lastPosition[1]))) {
+                    tmp = new int[2];
+                    tmp[0] = x;
+                    tmp[1] = y + 2;
+                    ar2.add(indexJump++, tmp);
+                    if(check_specified_pawn(x,y,x,y+1) == 2){
+                        possibleEnemyJump++;
+                    }
                 }
             }
             if(check_specified_pawn(x, y, x+2, y+2) == 0  && check_specified_pawn(x, y, x+1, y+1) > 0){
-                tmp = new int[2];
-                tmp[0] = x+2;
-                tmp[1] = y+2;
-                ar2.add(indexJump++, tmp);
+                if(!((x+2 == lastPosition[0]) && (y+2 == lastPosition[1]))) {
+                    tmp = new int[2];
+                    tmp[0] = x + 2;
+                    tmp[1] = y + 2;
+                    ar2.add(indexJump++, tmp);
+                    if(check_specified_pawn(x,y,x+1,y+1) == 2){
+                        possibleEnemyJump++;
+                    }
+                }
             }
             //move
-            if(indexJump == 0){
+            if(possibleEnemyJump == 0){
                 if(check_specified_pawn(x, y, x+1, y) == 0){ // pion P() -> 0
                     tmp = new int[2];
                     tmp[0] = x+1;
@@ -629,18 +713,19 @@ public class GameBoard {
             }
         }
 
-
+        if(has_jumped == (byte) 1){
+            indexMove = 0;
+        }
+        System.out.println("index jump : " + indexJump);
         possible_move= arl.toArray(new int[0][0]);
         possible_jump = ar2.toArray(new int[0][0]);
         int[][] retour = new int[indexJump+indexMove][2];
         for(int i=0; i<indexJump+indexMove;i++){
             if(i<indexMove && indexMove != 0){
                 retour[i] = possible_move[i];
-                System.out.println(possible_move[i][0] +"."+ possible_move[i][1]);
             }
             if(i>=indexMove && indexJump !=0){
                 retour[i] = possible_jump[i-indexMove];
-                System.out.println(possible_jump[i][0] +"."+ possible_jump[i][1]);
 
             }
         }
@@ -650,6 +735,38 @@ public class GameBoard {
         return retour;
     }
 
+    public boolean canJumpEnnemy(int x, int y){
+        if(gameboard[x][y].get_direction() == 0){
+            // vers le haut
+            if(check_specified_pawn(x, y, x -2, y - 2) == 0){
+                if(check_specified_pawn(x, y, x -1, y - 1) == 2){
+                    return true;
+                }
+            }
+            if(check_specified_pawn(x, y, x - 2, y ) == 0){
+                if(check_specified_pawn(x, y, x - 1, y ) == 2){
+                    return true;
+                }
+            }
+        }
+        if(gameboard[x][y].get_direction() == 1){
+            System.out.println("yo");
+            // vers le bas
+            if(check_specified_pawn(x, y, x + 2, y + 2) == 0){
+                System.out.println("yo");
+                if(check_specified_pawn(x, y, x + 1, y + 1 ) == 2){
+                    return true;
+                }
+            }
+            if(check_specified_pawn(x, y, x + 2, y ) == 0){
+                System.out.println("yo");
+                if(check_specified_pawn(x, y, x + 1, y ) == 2){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     public Pion[][] display(){
         Pion[][] display = new Pion[7][9];
 
@@ -679,66 +796,88 @@ public class GameBoard {
         // commence par s'il y a des jumps
         if(possible_jump != null){
             for(int i=0; i<possible_jump.length;i++){
+                System.out.println("possible jump :" + possible_jump.length + possible_jump[i][0] + possible_jump[i][1]);
 
-                if (possible_jump[i][0]==x && possible_jump[i][1] == y){
+                if (possible_jump[i][0]==x && possible_jump[i][1] == y) {
                     int distanceX = (x - selection[0]) / 2;
                     int distanceY = (y - selection[1]) / 2;
-
-                    if(gameboard[selection[0]][selection[1]] instanceof Etoile){
-                        has_jumped = (byte)0;
+                    System.out.println("test");
+                    if (gameboard[selection[0]][selection[1]] instanceof Etoile) {
+                        has_jumped = (byte) 0;
                         jump--;
-                        if(jump <= -1){
+                        if (jump <= -1) {
                             System.err.println("Star has 0 turn left");
                             return -1;
                         }
 
-                    }else{
-                        if (gameboard[distanceX + selection[0]][distanceY + selection[1]].get_color() != gameboard[selection[0]][selection[1]].get_color()){
+                    } else {
+                        has_jumped = (byte) 1;
+                        if (gameboard[distanceX + selection[0]][distanceY + selection[1]].get_color() != gameboard[selection[0]][selection[1]].get_color()) {
                             jump++;
                         }
                     }
-                    has_jumped = (byte)1;
-                    gameboard[x][y]=gameboard[selection[0]][selection[1]];
-                    gameboard[selection[0]][selection[1]]= new Pion();
+                    movedPawn = new int[2];
+                    movedPawn[0] = x;
+                    movedPawn[1] = y;
+                    lastPosition = new int[2];
+                    lastPosition[0] = selection[0];
+                    lastPosition[1] = selection[1];
+                    System.out.println("dans move depuis:" + selection[0] + selection[1] + "vers :" + x + y);
+                    gameboard[x][y] = gameboard[selection[0]][selection[1]];
+                    gameboard[selection[0]][selection[1]] = new Pion();
                     possible_move = null;
-
-                    if((x==0 && gameboard[x][y].get_direction()==0) || (x==6 && gameboard[x][y].get_direction()==1)){
-                        if (gameboard[x][y] instanceof Etoile)
-                        {
-                            if(gameboard[x][y].get_color()==0){
-                                nb_W_stars--;
+                    System.out.println("zob");
+                    if ((x == 0 && gameboard[x][y].get_direction() == 0) || (x == 6 && gameboard[x][y].get_direction() == 1)) {
+                        if (gameboard[x][y] instanceof Etoile) {
+                            System.out.println("zob");
+                            if (gameboard[x][y].get_color() == (byte)0) {
+                                System.out.println("zab");
+                                nb_W_stars-=1;
+                            } else if (gameboard[x][y].get_color() == (byte)1) {
+                                System.out.println("zub");
+                                nb_B_stars-=1;
                             }
-                            else if (gameboard[x][y].get_color()==1){
-                                nb_B_stars--;
-                            }
-                            gameboard[x][y]=new Pion();
-                        }
-                        else if (gameboard[x][y] instanceof Fleche) {
+                            gameboard[x][y] = new Pion();
+                        } else if (gameboard[x][y] instanceof Fleche) {
                             gameboard[x][y].change_direction();
                         }
                     }
+                    return 1;
                 }
-                return 1;
             }
         }
         if(possible_move != null){
             for(int i=0; i< possible_move.length;i++){
-
                 if(possible_move[i][0] == x && possible_move[i][1] == y){
                     gameboard[x][y] = gameboard[selection[0]][selection[1]];
+                    movedPawn = new int[2];
+                    movedPawn[0] = x;
+                    movedPawn[1] = y;
+                    lastPosition = new int[2];
+                    lastPosition[0] = selection[0];
+                    lastPosition[1] = selection[1];
                     gameboard[selection[0]][selection[1]] = new Pion();
                     possible_jump = null;
                     possible_move = null;
-
+                    if(gameboard[x][y] instanceof Etoile){
+                        jump --;
+                    }
                     if((x==0 && gameboard[x][y].get_direction()==0) || (x==6 && gameboard[x][y].get_direction()==1)){
                         if (gameboard[x][y] instanceof Etoile)
                         {
+                            if (gameboard[x][y].get_color() == (byte)0) {
+                                nb_W_stars-=1;
+                            } else if (gameboard[x][y].get_color() == (byte)1) {
+                                nb_B_stars-=1;
+                            }
+
                             gameboard[x][y]=new Pion();
                         }
                         else if (gameboard[x][y] instanceof Fleche) {
                             gameboard[x][y].change_direction();
                         }
                     }
+                    return 1;
                 }
 
             }
@@ -746,6 +885,25 @@ public class GameBoard {
         }
         System.err.println("Destination not in possible move/jump");
         return -1;
+    }
+
+    public boolean checkEndTurn(){
+        if(gameboard[movedPawn[0]][movedPawn[1]] instanceof  Fleche){
+            System.out.println("fleche");
+            if(has_jumped == (byte) 0){
+                return true ;
+            }
+            int[][] tmp = get_possibilitiesArrow(gameboard[movedPawn[0]][movedPawn[1]], movedPawn[0], movedPawn[1]);
+            if((jump < 1) && (tmp == null)){
+                return true;
+            }
+        }
+        else{
+            if(jump < 1){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

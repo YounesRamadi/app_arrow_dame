@@ -23,6 +23,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
     private int sx;
     private int sy;
     private Button btn;
+    private TextView player;
     private TextView nb_jump_w;
     private TextView nb_jump_b;
     private int turn=0;
@@ -34,7 +35,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
 
         this.myLayout = (AbsoluteLayout) findViewById(R.id.layout);
         this.layout = (AbsoluteLayout) findViewById(R.id.head);
-        game = new GameBoard();
+        game = new GameBoard(getApplicationContext());
 
         nb_jump_w = (TextView) findViewById(R.id.nb_jump_w);
         nb_jump_b = (TextView) findViewById(R.id.nb_jump_b);
@@ -49,6 +50,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
             }
         });
 
+        player = (TextView) findViewById(R.id.playerTurn);
         update();
 
     }
