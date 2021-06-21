@@ -568,7 +568,7 @@ public class GameBoard {
                         tmp[0] = x;
                         tmp[1] = y + 2;
                         ar2.add(indexJump++, tmp);
-                        if(check_specified_pawn(x,y,x-1,y) == 2){
+                        if(check_specified_pawn(x,y,x,y+1) == 2){
                             possibleEnemyJump++;
                         }
                     }
@@ -579,7 +579,7 @@ public class GameBoard {
                         tmp[0] = x;
                         tmp[1] = y - 2;
                         ar2.add(indexJump++, tmp);
-                        if(check_specified_pawn(x,y,x-1,y) == 2){
+                        if(check_specified_pawn(x,y,x,y-1) == 2){
                             possibleEnemyJump++;
                         }
                     }
@@ -590,7 +590,7 @@ public class GameBoard {
                         tmp[0] = x - 2;
                         tmp[1] = y - 2;
                         ar2.add(indexJump++, tmp);
-                        if(check_specified_pawn(x,y,x-1,y) == 2){
+                        if(check_specified_pawn(x,y,x-1,y-1) == 2){
                             possibleEnemyJump++;
                         }
                     }
@@ -624,7 +624,7 @@ public class GameBoard {
                     tmp[0] = x + 2;
                     tmp[1] = y;
                     ar2.add(indexJump++, tmp);
-                    if(check_specified_pawn(x,y,x-1,y) == 2){
+                    if(check_specified_pawn(x,y,x+1,y) == 2){
                         possibleEnemyJump++;
                     }
                 }
@@ -635,7 +635,7 @@ public class GameBoard {
                     tmp[0] = x;
                     tmp[1] = y-2;
                     ar2.add(indexJump++, tmp);
-                    if(check_specified_pawn(x,y,x-1,y) == 2){
+                    if(check_specified_pawn(x,y,x,y-1) == 2){
                         possibleEnemyJump++;
                     }
                 }
@@ -646,7 +646,7 @@ public class GameBoard {
                     tmp[0] = x;
                     tmp[1] = y + 2;
                     ar2.add(indexJump++, tmp);
-                    if(check_specified_pawn(x,y,x-1,y) == 2){
+                    if(check_specified_pawn(x,y,x,y+1) == 2){
                         possibleEnemyJump++;
                     }
                 }
@@ -657,7 +657,7 @@ public class GameBoard {
                     tmp[0] = x + 2;
                     tmp[1] = y + 2;
                     ar2.add(indexJump++, tmp);
-                    if(check_specified_pawn(x,y,x-1,y) == 2){
+                    if(check_specified_pawn(x,y,x+1,y+1) == 2){
                         possibleEnemyJump++;
                     }
                 }
