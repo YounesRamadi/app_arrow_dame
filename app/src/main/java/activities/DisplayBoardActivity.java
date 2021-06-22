@@ -1,4 +1,4 @@
-package activities;
+package controller;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -12,13 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.apadnom.R;
 
-<<<<<<<< HEAD:app/src/main/java/activities/DisplayBoardActivity.java
-import controller.GameBoard;
-import controller.Pion;
 import ia.Ia;
 
-========
->>>>>>>> 006391e (merge branches ia et antonin):app/src/main/java/controller/DisplayBoardActivity.java
 
 public class DisplayBoardActivity extends AppCompatActivity {
 
@@ -33,12 +28,17 @@ public class DisplayBoardActivity extends AppCompatActivity {
     private TextView player;
     private TextView nb_jump_w;
     private TextView nb_jump_b;
-    private int turn = 0;
+    private int turn=0;
+
+    private int[] iaMove = new int[4];
+    private Ia ia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_board);
+
+        ia = new Ia();
 
         this.myLayout = (AbsoluteLayout) findViewById(R.id.layout);
         this.layout = (AbsoluteLayout) findViewById(R.id.head);
@@ -53,7 +53,6 @@ public class DisplayBoardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 game.initGameBoard();
                 //myLayout.removeAllViews();
-<<<<<<<< HEAD:app/src/main/java/activities/DisplayBoardActivity.java
                 turn = 0;
                 update();
             }
@@ -63,13 +62,11 @@ public class DisplayBoardActivity extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
+                System.out.println("white : " +game.getNb_B_stars()+ " black " +game.getNb_W_stars());
 
                 game.end_turn();
-                turn++;
+                turn ++;
                 //myLayout.removeAllViews();
-========
->>>>>>>> 006391e (merge branches ia et antonin):app/src/main/java/controller/DisplayBoardActivity.java
                 update();
             }
         });
@@ -105,6 +102,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public void update() {
+        System.out.println("turn:" + turn);
         // faudrait peut etre trouver autre chose
         removeImages(myLayout);
         removeImages(myLayout);
@@ -130,7 +128,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
                 AbsoluteLayout.LayoutParams parms = new AbsoluteLayout.LayoutParams(100, 100, x, y);
                 int finalI = i;
                 int finalJ = j;
-                if (display_mat[i][j].get_color() != -1) {
+                if(display_mat[i][j].get_color() != -1) {
                     img.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -138,13 +136,9 @@ public class DisplayBoardActivity extends AppCompatActivity {
                             sy = finalJ;
                             setSelected(sx, sy);
                             removeImages(layout);
-<<<<<<<< HEAD:app/src/main/java/activities/DisplayBoardActivity.java
-                            if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
+                            if(game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
                                 display_possibilities(getSelected()[0], getSelected()[1]);
                             }
-========
-                            display_possibilities(getSelected()[0], getSelected()[1]);
->>>>>>>> 006391e (merge branches ia et antonin):app/src/main/java/controller/DisplayBoardActivity.java
                         }
                     });
                 }
@@ -164,10 +158,11 @@ public class DisplayBoardActivity extends AppCompatActivity {
                 t.setText(s);
             }
         }
-        if ((turn % 2) == 0) {
+        if((turn %2) == 0){
             nb_jump_b.setText("0");
             nb_jump_w.setText(String.valueOf(game.getJump()));
-        } else if ((turn % 2) == 1) {
+        }
+        else if((turn %2) == 1){
             nb_jump_w.setText("0");
             nb_jump_b.setText(String.valueOf(game.getJump()));
         }
@@ -178,10 +173,10 @@ public class DisplayBoardActivity extends AppCompatActivity {
         layout.removeAllViews();
         if (game.getGameboard()[px][py] != null && game.getGameboard()[px][py].get_color() != -1) {
             int[][] pos = null;
-            if (game.check_selection(px, py, turn, 1) != -1) {
+            if(game.check_selection(px, py, turn, 1) != -1) {
                 pos = game.get_possibilities(game.getCell(px, py), px, py);
             }
-            if (pos != null) {
+            if(pos != null) {
                 for (int[] p : pos
                 ) {
                     int[] tmp = getrelative_position(p);
@@ -203,34 +198,46 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View v) {
                                         setSelected(finalI, finalJ);
+                                        System.out.println("move depuis:" + getSelected()[0] + getSelected()[1] + "vers :" + finalI + finalJ);
                                         game.move(finalI, finalJ);
+                                        update();
                                         layout.removeAllViews();
                                         removeImages(myLayout);
                                         removeImages(myLayout);
-<<<<<<<< HEAD:app/src/main/java/activities/DisplayBoardActivity.java
-                                        if (game.checkEndTurn()) {
+                                        if(game.checkEndTurn()){
                                             System.out.println("fin de tour");
-                                            turn++;
+                                            turn ++;
                                             update();
-                                            iaMove = ia.minMax((byte) (turn % 2), new GameBoard(game, getApplicationContext()), 2);
+
+                                            iaMove = ia.minMax((byte) (turn%2), game.copy(), 2);
+                                            System.out.println("Taking " + iaMove[0] + " : " + iaMove[1]);
+                                            System.out.println("Going in " + iaMove[2] + " : " + iaMove[3]);
                                             game.setSelection(iaMove[0], iaMove[1]);
-                                            game.move(iaMove[2], iaMove[3]);
-                                            turn++;
-                                            System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
+
+                                            int[][] setterjump = new int[1][2];
+                                            setterjump[0][0] = iaMove[2];
+                                            setterjump[0][1] = iaMove[3];
+                                            game.setPossible_jump(setterjump);
+                                            int[][] settermove =new int[1][2];
+                                            settermove[0][0] = iaMove[2];
+                                            settermove[0][1] = iaMove[3];
+                                            game.setPossible_move(settermove);
+
+                                            System.out.println("Moving : "+game.move(iaMove[2], iaMove[3]));
+                                            turn ++;
                                             game.end_turn();
-                                            game.add_turn();
-                                            System.out.println("zobturn" + turn);
-                                            /*
+                                            //game.add_turn();
+
+
                                             if(game.end_turn()==(byte)1) {
                                                 System.out.println("Test");
-                                                game.initGameBoard();
+                                                game = new GameBoard(getApplicationContext());
+                                                //game.initGameBoard();
                                             }
-                                            */
+
 
                                             update();
                                         }
-========
->>>>>>>> 006391e (merge branches ia et antonin):app/src/main/java/controller/DisplayBoardActivity.java
                                         update();
                                     }
                                 });
@@ -264,7 +271,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
         return new_pos;
     }
 
-    public void removeImages(AbsoluteLayout layout) {
+    public void removeImages(AbsoluteLayout layout){
         for (int pos = 0; pos < layout.getChildCount(); pos++) {
             if (layout.getChildAt(pos) instanceof ImageView) {
                 layout.removeView(layout.getChildAt(pos));
