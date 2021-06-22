@@ -29,11 +29,28 @@ public class GameBoard{
     public Pion[][] getGameboard() {
         return gameboard;
     }
-
+    public void setGameboard(Pion[][] p){
+        this.gameboard = p;
+    }
     public Context getContext() {
         return context;
     }
-
+    public GameBoard copy(){
+        GameBoard retour = new GameBoard(this.context);
+        Pion[][] p= new Pion[7][9];
+        for(int i=0; i<gameboard.length;i++){
+            for(int j=0;j<gameboard[i].length;j++){
+                p[i][j] = gameboard[i][j];
+            }
+        }
+        retour.setHas_jumped(has_jumped);
+        retour.setNb_B_stars(nb_B_stars);
+        retour.setNb_W_stars(nb_W_stars);
+        retour.setJump(jump);
+        retour.setGameboard(p);
+        retour.setSelection(this.selection[0], this.selection[1]);
+        return retour;
+    }
     public GameBoard(GameBoard g, Context context){
         String entree = "03b03a07b25o07d03c03d";
 
@@ -63,7 +80,9 @@ public class GameBoard{
     public void setHas_jumped(byte j){
         has_jumped = j;
     }
-
+    public void setJump(int pJump){
+        this.jump = pJump;
+    }
 
     public int[][] getPossible_move() {
         if(possible_move == null){
@@ -171,7 +190,7 @@ public class GameBoard{
     }
 
     public int getNb_W_stars() {
-        System.out.println("b_stars :" +nb_B_stars);
+
         return nb_W_stars;
     }
 
@@ -286,21 +305,12 @@ public class GameBoard{
     }
 
     public int getNb_B_stars() {
-        System.out.println("b_stars :" +nb_B_stars);
+
         return nb_B_stars;
     }
 
-    public void setNb_B_stars() {
-        int n = 0;
-        Pion p;
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 9; j++) {
-                p = gameboard[i][j];
-                if ((p instanceof Etoile) && (p.get_color() == 1))
-                    n++;
-            }
-        }
-        nb_B_stars = n;
+    public void setNb_B_stars(int nb_B_stars) {
+        this.nb_B_stars = nb_B_stars;
     }
 
     public byte end_turn(){
@@ -342,8 +352,8 @@ public class GameBoard{
 
 
         int actual_color = gameboard[x][y].get_color();
-
-        if (checkforjump == 1){
+        get_possibilities(gameboard[x][y],x,y);
+        if (checkforjump == 1 && gameboard[x][y] instanceof Fleche){
             for(int i=0; i<7;i++){
                 for(int j=0; j<9; j++){
                     if(gameboard[i][j] == null){
@@ -351,7 +361,7 @@ public class GameBoard{
                     }
                     if(gameboard[i][j].get_color() == actual_color){
                         if(!(i== x && j ==y)) {
-                            if(canJumpEnnemy(i, j)){
+                            if(gameboard[i][j] instanceof Fleche &&canJumpEnnemy(i, j)  && !canJumpEnnemy(x,y)){
                                 System.err.println("An other pawn can jump, impossible to move this arrow");
                                 return -1;
                             }
@@ -770,12 +780,14 @@ public class GameBoard{
             // vers le bas
             if(check_specified_pawn(x, y, x + 2, y + 2) == 0){
                 if(check_specified_pawn(x, y, x + 1, y + 1 ) == 2){
-                    return true;
+                    if(!(x+2==lastPosition[0]&& y+2== lastPosition[1]))
+                        return true;
                 }
             }
             if(check_specified_pawn(x, y, x + 2, y ) == 0){
                 if(check_specified_pawn(x, y, x + 1, y ) == 2){
-                    return true;
+                    if(!(x+2==lastPosition[0]&& y== lastPosition[1]))
+                        return true;
                 }
             }
         }

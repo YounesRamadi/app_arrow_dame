@@ -208,20 +208,33 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                             System.out.println("fin de tour");
                                             turn ++;
                                             update();
-                                            iaMove = ia.minMax((byte) (turn%2), new GameBoard(game, getApplicationContext()), 2);
+
+                                            iaMove = ia.minMax((byte) (turn%2), game.copy(), 2);
+                                            System.out.println("Taking " + iaMove[0] + " : " + iaMove[1]);
+                                            System.out.println("Going in " + iaMove[2] + " : " + iaMove[3]);
                                             game.setSelection(iaMove[0], iaMove[1]);
-                                            game.move(iaMove[2], iaMove[3]);
+
+                                            int[][] setterjump = new int[1][2];
+                                            setterjump[0][0] = iaMove[2];
+                                            setterjump[0][1] = iaMove[3];
+                                            game.setPossible_jump(setterjump);
+                                            int[][] settermove =new int[1][2];
+                                            settermove[0][0] = iaMove[2];
+                                            settermove[0][1] = iaMove[3];
+                                            game.setPossible_move(settermove);
+
+                                            System.out.println("Moving : "+game.move(iaMove[2], iaMove[3]));
                                             turn ++;
-                                            System.out.println("white : " +game.getNb_B_stars()+ " black " +game.getNb_W_stars());
                                             game.end_turn();
-                                            game.add_turn();
-                                            System.out.println("zobturn"+turn);
-                                            /*
+                                            //game.add_turn();
+
+
                                             if(game.end_turn()==(byte)1) {
                                                 System.out.println("Test");
-                                                game.initGameBoard();
+                                                game = new GameBoard(getApplicationContext());
+                                                //game.initGameBoard();
                                             }
-                                            */
+
 
                                             update();
                                         }
