@@ -17,6 +17,10 @@ public class GameBoard {
     private int[][] possible_jump;
     private int[][] possible_move;
 
+    public int[] getSelection() {
+        return selection;
+    }
+
     private int[] selection = new int[2];
     private int[] movedPawn = new int[2];
     private int[] lastPosition = new int[2];

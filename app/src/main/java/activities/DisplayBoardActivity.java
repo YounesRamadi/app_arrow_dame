@@ -244,6 +244,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
         }
     }
 
+
     public int[] getrelative_position(int[] pos) {
         int[] new_pos = new int[2];
         new_pos[0] = pos[0];
