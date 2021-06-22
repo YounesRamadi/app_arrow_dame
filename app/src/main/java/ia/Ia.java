@@ -349,8 +349,7 @@ public class Ia {
 
                                 for (int i = 0; i < poss.length; i++) {
                                     System.out.println("nul3"+poss[i][0]+poss[i][1]);
-                                    inter = max(j.copy(), poss[i][0], poss[i][1], lim, true);
-
+                                    inter = min(j.copy(), poss[i][0], poss[i][1], lim-1, false);
                                     if (max < inter) {
                                         System.out.println("nul4");
                                         max = inter;
