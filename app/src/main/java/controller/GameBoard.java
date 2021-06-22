@@ -1,3 +1,8 @@
+/**
+ * @author Sisirpz
+ * @version 0.2.1
+ */
+
 package controller;
 
 
@@ -28,7 +33,8 @@ public class GameBoard{
     private int[][] jumpableEnnemies;
 
     private Context context;
-    private Toast toast;
+    private Toast toast; // pour faire des bons aperos
+    // il faut des bons toasts
 
     public Pion[][] getGameboard() {
         return gameboard;
@@ -39,22 +45,10 @@ public class GameBoard{
     public Context getContext() {
         return context;
     }
-    public GameBoard copy(){
-        GameBoard retour = new GameBoard(this.context);
-        Pion[][] p= new Pion[7][9];
-        for(int i=0; i<gameboard.length;i++){
-            for(int j=0;j<gameboard[i].length;j++){
-                p[i][j] = gameboard[i][j];
-            }
-        }
-        retour.setHas_jumped(has_jumped);
-        retour.setNb_B_stars(nb_B_stars);
-        retour.setNb_W_stars(nb_W_stars);
-        retour.setJump(jump);
-        retour.setGameboard(p);
-        retour.setSelection(this.selection[0], this.selection[1]);
-        return retour;
-    }
+
+    //eviter les conflits de jeu
+    // utile pour l'IA
+
     public GameBoard(GameBoard g, Context context){
         String entree = "03b03a07b25o07d03c03d";
 
@@ -76,51 +70,22 @@ public class GameBoard{
         this.gameboard = makeGameBoard(entree);
         setNb_stars();
     }
-
-    public byte getHas_jumped(){
-        return has_jumped;
-    }
-
-    public void setHas_jumped(byte j){
-        has_jumped = j;
-    }
-    public void setJump(int pJump){
-        this.jump = pJump;
-    }
-
-    public int[][] getPossible_move() {
-        if(possible_move == null){
-            return new int[0][0];
+    public GameBoard copy(){
+        GameBoard retour = new GameBoard(this.context);
+        Pion[][] p= new Pion[7][9];
+        for(int i=0; i<gameboard.length;i++){
+            for(int j=0;j<gameboard[i].length;j++){
+                p[i][j] = gameboard[i][j];
+            }
         }
-        return possible_move;
+        retour.setHas_jumped(has_jumped);
+        retour.setNb_B_stars(nb_B_stars);
+        retour.setNb_W_stars(nb_W_stars);
+        retour.setJump(jump);
+        retour.setGameboard(p);
+        retour.setSelection(this.selection[0], this.selection[1]);
+        return retour;
     }
-
-    public int[][] getPossible_jump() {
-        if(possible_jump == null){
-            return new int[0][0];
-        }
-        return possible_jump;
-    }
-
-    public void setPossible_jump(int[][] possible_jump) {
-        this.possible_jump = possible_jump;
-    }
-
-    public void setPossible_move(int[][] possible_move) {
-        this.possible_move = possible_move;
-    }
-
-    public void setNb_W_stars(int nb_W_stars) {
-        this.nb_W_stars = nb_W_stars;
-    }
-    public int[] getSelection(){
-        return this.selection;
-    }
-    public void setSelection(int x, int y){
-        selection[0] = x;
-        selection[1] = y;
-    }
-
     public void initGameBoard() {
         int[] tempgameboard = new int[63];
 
@@ -190,41 +155,7 @@ public class GameBoard{
         }
     }
 
-    public void setCell(int x, int y, Pion p) {
-        if(p != null)
-            gameboard[x][y] = p;
-    }
 
-    public int getNb_W_stars() {
-
-        return nb_W_stars;
-    }
-
-    public void setNb_stars() {
-        int n = 0;
-        int a = 0;
-        Pion p;
-
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 9; j++) {
-                p = gameboard[i][j];
-                if (p instanceof Etoile){
-                    if(p.get_color() == 0){
-                        n++;
-                    }else{
-                        a++;
-                    }
-                }
-
-            }
-        }
-        nb_W_stars = n;
-        nb_B_stars = a;
-    }
-
-    public int getJump(){
-        return jump;
-    }
 
     // lors de la creation d'une partie
     // on cree un plateau en fonction d'une chaine de caracteres
@@ -312,33 +243,49 @@ public class GameBoard{
         return tempgameboard;
     }
 
-    public int getNb_B_stars() {
+    //initialise automatique le nombre d'etoiles
+    public void setNb_stars() {
+        int n = 0;
+        int a = 0;
+        Pion p;
 
-        return nb_B_stars;
-    }
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 9; j++) {
+                p = gameboard[i][j];
+                if (p instanceof Etoile){
+                    if(p.get_color() == 0){
+                        n++;
+                    }else{
+                        a++;
+                    }
+                }
 
-    public void setNb_B_stars(int nb_B_stars) {
-        this.nb_B_stars = nb_B_stars;
-    }
-
-    public byte end_turn(){
-        jump=0;
-        possible_jump = null;
-        possible_move = null;
-        has_jumped = (byte) 0;
-        selection = new int[2];
-        movedPawn = new int[2];
-        lastPosition = new int[2];
-        if (nb_B_stars == 0 || nb_W_stars == 0){
-            return (byte)1;
+            }
         }
-        turn++;
-        return (byte)0;
+        nb_W_stars = n;
+        nb_B_stars = a;
     }
 
-    public Pion getCell(int x, int y) {
-        return this.gameboard[x][y];
+    //fonction pour l'affichage graphique
+    public Pion[][] display(){
+        Pion[][] display = new Pion[7][9];
+
+        for(int i = 0; i < 9; i++){
+            display[0][i] = gameboard[0][(i+7)%9];
+            display[1][i] = gameboard[1][(i+8)%9];
+            display[2][i] = gameboard[2][(i+8)%9];
+
+            display[3][i] = gameboard[3][i];
+
+            display[4][i] = gameboard[4][i];
+            display[5][i] = gameboard[5][(i+1)%9];
+            display[6][i] = gameboard[6][(i+1)%9];
+        }
+        return display;
     }
+
+
+
 
     // check_selection permet de verifier que l'utilisateur puisse prendre la piece
     // honetement on sait pas ce qu'elle fait
@@ -428,16 +375,14 @@ public class GameBoard{
         }
         return 0;
     }
-    public void add_turn(){
-        turn++;
-    }
+
 
 
     // retuorne 0 si cest vide
     // retourne 1 si cest la même color
     // retourne 2 si la color est differente
     // retourne -1 si le pion est en dehors de la grille
-    public int check_specified_pawn(int posPionx, int posPiony, int posFinalx, int posFinaly){
+    private int check_specified_pawn(int posPionx, int posPiony, int posFinalx, int posFinaly){
         // toutes les positions sont dans le tableau ?
         if(posPionx < 0 || posPionx >= 7 || posPiony < 0 || posPiony >= 9){
             System.err.println("PositionX and Position Y of the target pawn is out of the board.");
@@ -463,10 +408,14 @@ public class GameBoard{
 
     }
 
+    //fonction qui retourne l'ensemble des possibilites d'un pion
     public int[][] get_possibilities(Pion p, int x, int y){
+
+        //on garde en memoire le pion selectionne
         selection[0] = x;
         selection[1] = y;
-
+        //en fonction du pion on appelle une fonction differente
+        // les mouvements sont differents
         if(gameboard[x][y] instanceof Etoile){
             return get_possibilitiesStar(gameboard[x][y], x, y);
         }else if(gameboard[x][y] instanceof Fleche){
@@ -786,16 +735,17 @@ public class GameBoard{
         return retour;
     }
 
-    public boolean canJumpEnnemy(int x, int y){
-        if(gameboard[x][y].get_direction() == 0){
+    // permet de savoir lorsque qu'un pion peut jump un ennemi ou non
+    private boolean canJumpEnnemy(int x, int y){
+        if(gameboard[x][y].get_direction() == 0) {
             // vers le haut
-            if(check_specified_pawn(x, y, x -2, y - 2) == 0){
-                if(check_specified_pawn(x, y, x -1, y - 1) == 2){
+            if (check_specified_pawn(x, y, x - 2, y - 2) == 0) {
+                if (check_specified_pawn(x, y, x - 1, y - 1) == 2) {
                     return true;
                 }
             }
-            if(check_specified_pawn(x, y, x - 2, y ) == 0){
-                if(check_specified_pawn(x, y, x - 1, y ) == 2){
+            if (check_specified_pawn(x, y, x - 2, y) == 0) {
+                if (check_specified_pawn(x, y, x - 1, y) == 2) {
                     return true;
                 }
             }
@@ -805,34 +755,20 @@ public class GameBoard{
             // vers le bas
             if(check_specified_pawn(x, y, x + 2, y + 2) == 0){
                 if(check_specified_pawn(x, y, x + 1, y + 1 ) == 2){
+                    //on verifie que ce n'est pas un rejump
                     if(!(x+2==lastPosition[0]&& y+2== lastPosition[1]))
                         return true;
                 }
             }
             if(check_specified_pawn(x, y, x + 2, y ) == 0){
                 if(check_specified_pawn(x, y, x + 1, y ) == 2){
+                    //on verifie que ce n'est pas un rejump
                     if(!(x+2==lastPosition[0]&& y== lastPosition[1]))
                         return true;
                 }
             }
         }
         return false;
-    }
-    public Pion[][] display(){
-        Pion[][] display = new Pion[7][9];
-
-        for(int i = 0; i < 9; i++){
-            display[0][i] = gameboard[0][(i+7)%9];
-            display[1][i] = gameboard[1][(i+8)%9];
-            display[2][i] = gameboard[2][(i+8)%9];
-
-            display[3][i] = gameboard[3][i];
-
-            display[4][i] = gameboard[4][i];
-            display[5][i] = gameboard[5][(i+1)%9];
-            display[6][i] = gameboard[6][(i+1)%9];
-        }
-        return display;
     }
 
     // fonction pour deplacer les pions
@@ -931,8 +867,11 @@ public class GameBoard{
         return -1;
     }
 
+    //verifie si cest la fin du tour
     public boolean checkEndTurn(){
+        // lorsque l'on est avec une fleche
         if(gameboard[movedPawn[0]][movedPawn[1]] instanceof  Fleche){
+            // si il a fait un deplacement on arrete le tour
             if(has_jumped == (byte) 0){
                 return true ;
             }
@@ -941,12 +880,103 @@ public class GameBoard{
                 return true;
             }
         }
+        // si on a bouge une etoile
         else{
-            if(jump < 1){
+            // on regarde le nombre de saut restant
+            if(jump <= 0){
                 return true;
             }
         }
         return false;
+    }
+
+    public byte end_turn(){
+        jump=0;
+        possible_jump = null;
+        possible_move = null;
+        has_jumped = (byte) 0;
+        selection = new int[2];
+        movedPawn = new int[2];
+        lastPosition = new int[2];
+        if (nb_B_stars == 0 || nb_W_stars == 0){
+            return (byte)1;
+        }
+        turn++;
+        return (byte)0;
+    }
+
+    public void add_turn(){
+        turn++;
+    }
+
+    // getters and setters
+    public byte getHas_jumped(){
+        return has_jumped;
+    }
+
+    public void setHas_jumped(byte j){
+        has_jumped = j;
+    }
+
+    public void setJump(int pJump){
+        this.jump = pJump;
+    }
+    public int getJump(){
+        return jump;
+    }
+
+    public int[][] getPossible_move() {
+        if(possible_move == null){
+            return new int[0][0];
+        }
+        return possible_move;
+    }
+    public void setPossible_move(int[][] possible_move) {
+        this.possible_move = possible_move;
+    }
+
+    public int[][] getPossible_jump() {
+        if(possible_jump == null){
+            return new int[0][0];
+        }
+        return possible_jump;
+    }
+    public void setPossible_jump(int[][] possible_jump) {
+        this.possible_jump = possible_jump;
+    }
+
+
+    public void setNb_W_stars(int nb_W_stars) {
+        this.nb_W_stars = nb_W_stars;
+    }
+    public int getNb_W_stars() {
+
+        return nb_W_stars;
+    }
+
+    public void setSelection(int x, int y){
+        selection[0] = x;
+        selection[1] = y;
+    }
+
+    public void setCell(int x, int y, Pion p) {
+        if(p != null)
+            gameboard[x][y] = p;
+    }
+    public Pion getCell(int x, int y) {
+        return this.gameboard[x][y];
+    }
+
+
+
+
+
+    public int getNb_B_stars() {
+
+        return nb_B_stars;
+    }
+    public void setNb_B_stars(int nb_B_stars) {
+        this.nb_B_stars = nb_B_stars;
     }
 
 }
