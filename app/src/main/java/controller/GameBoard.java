@@ -1,3 +1,9 @@
+/**
+ * Classe de Gestion d'une partie d'Apadnom
+ * @author Sisirpz
+ * @version 0.2.1
+ */
+
 package controller;
 
 
@@ -7,6 +13,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class GameBoard{
+
     private Pion[][] gameboard;
     private int nb_W_stars;
     private int nb_B_stars;
@@ -22,39 +29,24 @@ public class GameBoard{
         return selection;
     }
 
-    private int[] selection = new int[2];
-    private int[] movedPawn = new int[2];
+    private int[] selection = new int[2]; // le pion selectionne
+    private int[] movedPawn = new int[2]; // le dernier pion
     private int[] lastPosition = new int[2];
     private int[][] jumpableEnnemies;
 
     private Context context;
-    private Toast toast;
+    private Toast toast; // pour faire des bons aperos
+    // il faut des bons toasts
 
-    public Pion[][] getGameboard() {
-        return gameboard;
-    }
-    public void setGameboard(Pion[][] p){
-        this.gameboard = p;
-    }
+
+
     public Context getContext() {
         return context;
     }
-    public GameBoard copy(){
-        GameBoard retour = new GameBoard(this.context);
-        Pion[][] p= new Pion[7][9];
-        for(int i=0; i<gameboard.length;i++){
-            for(int j=0;j<gameboard[i].length;j++){
-                p[i][j] = gameboard[i][j];
-            }
-        }
-        retour.setHas_jumped(has_jumped);
-        retour.setNb_B_stars(nb_B_stars);
-        retour.setNb_W_stars(nb_W_stars);
-        retour.setJump(jump);
-        retour.setGameboard(p);
-        retour.setSelection(this.selection[0], this.selection[1]);
-        return retour;
-    }
+
+    //eviter les conflits de jeu
+    // utile pour l'IA
+
     public GameBoard(GameBoard g, Context context){
         String entree = "03b03a07b25o07d03c03d";
 
@@ -76,49 +68,22 @@ public class GameBoard{
         this.gameboard = makeGameBoard(entree);
         setNb_stars();
     }
-
-    public byte getHas_jumped(){
-        return has_jumped;
-    }
-
-    public void setHas_jumped(byte j){
-        has_jumped = j;
-    }
-    public void setJump(int pJump){
-        this.jump = pJump;
-    }
-
-    public int[][] getPossible_move() {
-        if(possible_move == null){
-            return new int[0][0];
+    public GameBoard copy(){
+        GameBoard retour = new GameBoard(this.context);
+        Pion[][] p= new Pion[7][9];
+        for(int i=0; i<gameboard.length;i++){
+            for(int j=0;j<gameboard[i].length;j++){
+                p[i][j] = gameboard[i][j];
+            }
         }
-        return possible_move;
+        retour.setHas_jumped(has_jumped);
+        retour.setNb_B_stars(nb_B_stars);
+        retour.setNb_W_stars(nb_W_stars);
+        retour.setJump(jump);
+        retour.setGameboard(p);
+        retour.setSelection(this.selection[0], this.selection[1]);
+        return retour;
     }
-
-    public int[][] getPossible_jump() {
-        if(possible_jump == null){
-            return new int[0][0];
-        }
-        return possible_jump;
-    }
-
-    public void setPossible_jump(int[][] possible_jump) {
-        this.possible_jump = possible_jump;
-    }
-
-    public void setPossible_move(int[][] possible_move) {
-        this.possible_move = possible_move;
-    }
-
-    public void setNb_W_stars(int nb_W_stars) {
-        this.nb_W_stars = nb_W_stars;
-    }
-
-    public void setSelection(int x, int y){
-        selection[0] = x;
-        selection[1] = y;
-    }
-
     public void initGameBoard() {
         int[] tempgameboard = new int[63];
 
@@ -188,42 +153,10 @@ public class GameBoard{
         }
     }
 
-    public void setCell(int x, int y, Pion p) {
-        if(p != null)
-            gameboard[x][y] = p;
-    }
 
-    public int getNb_W_stars() {
 
-        return nb_W_stars;
-    }
-
-    public void setNb_stars() {
-        int n = 0;
-        int a = 0;
-        Pion p;
-
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 9; j++) {
-                p = gameboard[i][j];
-                if (p instanceof Etoile){
-                    if(p.get_color() == 0){
-                        n++;
-                    }else{
-                        a++;
-                    }
-                }
-
-            }
-        }
-        nb_W_stars = n;
-        nb_B_stars = a;
-    }
-
-    public int getJump(){
-        return jump;
-    }
-
+    // lors de la creation d'une partie
+    // on cree un plateau en fonction d'une chaine de caracteres
     public Pion[][] makeGameBoard(String ch){
         int[] tab = new int[63];
         int i=0;
@@ -308,45 +241,70 @@ public class GameBoard{
         return tempgameboard;
     }
 
-    public int getNb_B_stars() {
+    //initialise automatique le nombre d'etoiles
+    public void setNb_stars() {
+        int n = 0;
+        int a = 0;
+        Pion p;
 
-        return nb_B_stars;
-    }
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 9; j++) {
+                p = gameboard[i][j];
+                if (p instanceof Etoile){
+                    if(p.get_color() == 0){
+                        n++;
+                    }else{
+                        a++;
+                    }
+                }
 
-    public void setNb_B_stars(int nb_B_stars) {
-        this.nb_B_stars = nb_B_stars;
-    }
-
-    public byte end_turn(){
-        jump=0;
-        possible_jump = null;
-        possible_move = null;
-        has_jumped = (byte) 0;
-        selection = new int[2];
-        movedPawn = new int[2];
-        lastPosition = new int[2];
-        if (nb_B_stars == 0 || nb_W_stars == 0){
-            return (byte)1;
+            }
         }
-        turn++;
-        return (byte)0;
+        nb_W_stars = n;
+        nb_B_stars = a;
     }
 
-    public Pion getCell(int x, int y) {
-        return this.gameboard[x][y];
+    //fonction pour l'affichage graphique
+    public Pion[][] display(){
+        Pion[][] display = new Pion[7][9];
+
+        for(int i = 0; i < 9; i++){
+            display[0][i] = gameboard[0][(i+7)%9];
+            display[1][i] = gameboard[1][(i+8)%9];
+            display[2][i] = gameboard[2][(i+8)%9];
+
+            display[3][i] = gameboard[3][i];
+
+            display[4][i] = gameboard[4][i];
+            display[5][i] = gameboard[5][(i+1)%9];
+            display[6][i] = gameboard[6][(i+1)%9];
+        }
+        return display;
     }
+
+
+
 
     // check_selection permet de verifier que l'utilisateur puisse prendre la piece
     // honetement on sait pas ce qu'elle fait
-    public int check_selection(int x, int y, int turn, int checkforjump) {
 
+    /**
+     *
+     * @param x position en x du pion
+     * @param y position en Y du pion
+     * @param turn numero du tour actuel
+     * @param checkforjump flag (toujours mettre a 1)
+     * @return
+     */
+    public int check_selection(int x, int y, int turn, int checkforjump) {
+        // on commence par regarder que les donnes envoyees sont bonnes
         if(x <0 || x >= 7 || y < 0 || y >= 9){
             toast = Toast.makeText(context, "Wtf args are you sending bruh ?", Toast.LENGTH_LONG );
             toast.show();
             System.err.println("Wtf args are you sending bruh ?");
             return -1;
         }
-
+        // est ce que le pion choisi est de la bonne couleur
         if(gameboard[x][y].get_color() != turn%2){
             toast = Toast.makeText(context, "That's not your pawn!", Toast.LENGTH_LONG );
             toast.show();
@@ -357,14 +315,25 @@ public class GameBoard{
 
         int actual_color = gameboard[x][y].get_color();
         get_possibilities(gameboard[x][y],x,y);
+
+        // flag checkforjump inutile
+
+        //on regarde si lorsque l'on choisit une fleche
+        // et que celle-ci ne peut pas sauter
+        // qu'aucune autre fleche ne peut sauter
         if (checkforjump == 1 && gameboard[x][y] instanceof Fleche){
             for(int i=0; i<7;i++){
                 for(int j=0; j<9; j++){
+
                     if(gameboard[i][j] == null){
                         continue;
                     }
+                    // si le pion est de la couleur de la fleche
                     if(gameboard[i][j].get_color() == actual_color){
+                        // et que le pion n'est pas le pion teste
                         if(!(i== x && j ==y)) {
+
+                            // on regarde si il peut jump un ennemi et que cest une fleche
                             if(gameboard[i][j] instanceof Fleche &&canJumpEnnemy(i, j)  && !canJumpEnnemy(x,y)){
                                 System.err.println("An other pawn can jump, impossible to move this arrow");
                                 return -1;
@@ -374,7 +343,8 @@ public class GameBoard{
                 }
             }
         }
-
+        // si cest une etoile
+        // on verifie juste son
         if(gameboard[x][y] instanceof Etoile){
             if(jump < 1){
                 toast = Toast.makeText(context, "You can't move this star!", Toast.LENGTH_LONG );
@@ -412,15 +382,24 @@ public class GameBoard{
         }
         return 0;
     }
-    public void add_turn(){
-        turn++;
-    }
-    // returnne 0 si cest vide
-    // returnne 1 si cest la même color
-    // returnne 2 si la color est differente
-    // returnne -1 si le pion est en dehors de la grille
-    public int check_specified_pawn(int posPionx, int posPiony, int posFinalx, int posFinaly){
-        // toutes les positions
+
+
+
+    // retuorne 0 si cest vide
+    // retourne 1 si cest la même color
+    // retourne 2 si la color est differente
+    // retourne -1 si le pion est en dehors de la grille
+
+    /**
+     * Compare 2 pions en fonction de leurs couleurs
+     * @param posPionx position en x du pion A
+     * @param posPiony position en y du pion A
+     * @param posFinalx position en x du pion B
+     * @param posFinaly position en y du pion B
+     * @return 0 si une des cases Pion est vide, 1 si c'est la meme couleur, 2 si elle est differente et -1 en cas d'erreur
+     */
+    private int check_specified_pawn(int posPionx, int posPiony, int posFinalx, int posFinaly){
+        // toutes les positions sont dans le tableau ?
         if(posPionx < 0 || posPionx >= 7 || posPiony < 0 || posPiony >= 9){
             System.err.println("PositionX and Position Y of the target pawn is out of the board.");
             return -1;
@@ -429,12 +408,15 @@ public class GameBoard{
             System.err.println("PositionX and Position Y of the checked pawn is out of the board.");
             return -1;
         }
+        // si le pion choisi ne correspond pas à une case cachée
         if(gameboard[posFinalx][posFinaly] ==null || gameboard[posPionx][posPiony] ==null){
             System.err.println("Target pawn is out of the board but still in the array");
             return -1;
         }
-        if(gameboard[posFinalx][posFinaly].get_color() == -1)
+        //si la case choisit est une case vide
+        if(gameboard[posFinalx][posFinaly].get_color() == -1 ||gameboard[posPionx][posPiony].get_color()==-1)
             return 0;
+        // on compare les couleurs des deux pions
         if(gameboard[posPionx][posPiony].get_color() == gameboard[posFinalx][posFinaly].get_color())
             return 1;
         return 2;
@@ -442,10 +424,21 @@ public class GameBoard{
 
     }
 
+
+    /**
+     * Permet d'obtenir la liste des possibilites de mouvement d'un Pion
+     * @param p Fleche a verifier
+     * @param x sa position en x
+     * @param y sa position en y
+     * @return liste de possibilites de mouvement (null si aucun mouvement)
+     */
     public int[][] get_possibilities(Pion p, int x, int y){
+
+        //on garde en memoire le pion selectionne
         selection[0] = x;
         selection[1] = y;
-
+        //en fonction du pion on appelle une fonction differente
+        // les mouvements sont differents
         if(gameboard[x][y] instanceof Etoile){
             return get_possibilitiesStar(gameboard[x][y], x, y);
         }else if(gameboard[x][y] instanceof Fleche){
@@ -454,7 +447,13 @@ public class GameBoard{
         return null;
 
     }
-
+    /**
+     * Permet d'obtenir la liste des possibilites de mouvement d'une étoile
+     * @param p Etoile à verifier
+     * @param x sa position en x
+     * @param y sa position en y
+     * @return liste de possibilites de mouvement
+     */
     private int[][] get_possibilitiesStar(Pion p, int x, int y){
 
         if (jump ==0){
@@ -599,6 +598,13 @@ public class GameBoard{
 
     }
 
+    /**
+     * Permet d'obtenir la liste des possibilites de mouvement d'une fleche
+     * @param p Fleche a verifier
+     * @param x sa position en x
+     * @param y sa position en y
+     * @return liste de possibilites de mouvement
+     */
     private int[][] get_possibilitiesArrow(Pion p, int x, int y){
         ArrayList<int[]> arl=new ArrayList<int[]>(); // moves
         ArrayList<int[]> ar2=new ArrayList<int[]>(); //jump
@@ -765,16 +771,24 @@ public class GameBoard{
         return retour;
     }
 
-    public boolean canJumpEnnemy(int x, int y){
-        if(gameboard[x][y].get_direction() == 0){
+    // permet de savoir lorsque qu'un pion peut jump un ennemi ou non
+
+    /**
+     * Verfie si une fleche peut sauter un ennemi
+     * @param x position en X du pion
+     * @param y position en Y du pion
+     * @return vrai si il peut jump un ennemi 0 sinon
+     */
+    private boolean canJumpEnnemy(int x, int y){
+        if(gameboard[x][y].get_direction() == 0) {
             // vers le haut
-            if(check_specified_pawn(x, y, x -2, y - 2) == 0){
-                if(check_specified_pawn(x, y, x -1, y - 1) == 2){
+            if (check_specified_pawn(x, y, x - 2, y - 2) == 0) {
+                if (check_specified_pawn(x, y, x - 1, y - 1) == 2) {
                     return true;
                 }
             }
-            if(check_specified_pawn(x, y, x - 2, y ) == 0){
-                if(check_specified_pawn(x, y, x - 1, y ) == 2){
+            if (check_specified_pawn(x, y, x - 2, y) == 0) {
+                if (check_specified_pawn(x, y, x - 1, y) == 2) {
                     return true;
                 }
             }
@@ -784,12 +798,14 @@ public class GameBoard{
             // vers le bas
             if(check_specified_pawn(x, y, x + 2, y + 2) == 0){
                 if(check_specified_pawn(x, y, x + 1, y + 1 ) == 2){
+                    //on verifie que ce n'est pas un rejump
                     if(!(x+2==lastPosition[0]&& y+2== lastPosition[1]))
                         return true;
                 }
             }
             if(check_specified_pawn(x, y, x + 2, y ) == 0){
                 if(check_specified_pawn(x, y, x + 1, y ) == 2){
+                    //on verifie que ce n'est pas un rejump
                     if(!(x+2==lastPosition[0]&& y== lastPosition[1]))
                         return true;
                 }
@@ -797,26 +813,17 @@ public class GameBoard{
         }
         return false;
     }
-    public Pion[][] display(){
-        Pion[][] display = new Pion[7][9];
-
-        for(int i = 0; i < 9; i++){
-            display[0][i] = gameboard[0][(i+7)%9];
-            display[1][i] = gameboard[1][(i+8)%9];
-            display[2][i] = gameboard[2][(i+8)%9];
-
-            display[3][i] = gameboard[3][i];
-
-            display[4][i] = gameboard[4][i];
-            display[5][i] = gameboard[5][(i+1)%9];
-            display[6][i] = gameboard[6][(i+1)%9];
-        }
-        return display;
-    }
 
     // fonction pour deplacer les pions
     // return -1 si il a pas bougé
     // return 0 si il  a bougé
+
+    /**
+     * Fonction de deplacement d'un pion (met a jour has_jumped, jump, selection et movedPawn)
+     * @param x Position en x du pion
+     * @param y Position en y du pion
+     * @return Renvoi 1 ou 0 si il a bougé -1 sinon
+     */
     public int move(int x, int y){
 
         if(check_specified_pawn(x, y,selection[0], selection[1]) == -1){
@@ -841,6 +848,7 @@ public class GameBoard{
                     } else {
                         has_jumped = (byte) 1;
                         if (gameboard[distanceX + selection[0]][distanceY + selection[1]].get_color() != gameboard[selection[0]][selection[1]].get_color()) {
+                            System.out.println("zob");
                             jump++;
                         }
                     }
@@ -910,8 +918,16 @@ public class GameBoard{
         return -1;
     }
 
+
+
+    /**
+     * Verfie si c'est la fin du tour
+     * @return vrai si c'est la fin du tour, au sinon
+     */
     public boolean checkEndTurn(){
+        // lorsque l'on est avec une fleche
         if(gameboard[movedPawn[0]][movedPawn[1]] instanceof  Fleche){
+            // si il a fait un deplacement on arrete le tour
             if(has_jumped == (byte) 0){
                 return true ;
             }
@@ -920,12 +936,120 @@ public class GameBoard{
                 return true;
             }
         }
+        // si on a bouge une etoile
         else{
-            if(jump < 1){
+            // on regarde le nombre de saut restant
+            if(jump <= 0){
                 return true;
             }
         }
         return false;
     }
 
+    /**
+     * Permet de finir un tour et de savoir si c'est la fin de la partie
+     * @return 1 si c'est la fin de la partie 0 sinon
+     */
+    public byte end_turn(){
+        jump=0;
+        possible_jump = null;
+        possible_move = null;
+        has_jumped = (byte) 0;
+        selection = new int[2];
+        movedPawn = new int[2];
+        lastPosition = new int[2];
+        if (nb_B_stars == 0 || nb_W_stars == 0){
+            return (byte)1;
+        }
+        turn++;
+        return (byte)0;
+    }
+
+    public void add_turn(){
+        turn++;
+    }
+
+    // getters and setters
+    public Pion[][] getGameboard() {
+        return gameboard;
+    }
+    public void setGameboard(Pion[][] p){
+        this.gameboard = p;
+    }
+
+    public byte getHas_jumped(){
+        return has_jumped;
+    }
+    public void setHas_jumped(byte j){
+        has_jumped = j;
+    }
+
+    public void setJump(int pJump){
+        this.jump = pJump;
+    }
+    public int getJump(){
+        return jump;
+    }
+
+    public int[][] getPossible_move() {
+        if(possible_move == null){
+            return new int[0][0];
+        }
+        return possible_move;
+    }
+    public void setPossible_move(int[][] possible_move) {
+        this.possible_move = possible_move;
+    }
+
+    public int[][] getPossible_jump() {
+        if(possible_jump == null){
+            return new int[0][0];
+        }
+        return possible_jump;
+    }
+    public void setPossible_jump(int[][] possible_jump) {
+        this.possible_jump = possible_jump;
+    }
+
+
+    public void setNb_W_stars(int nb_W_stars) {
+        this.nb_W_stars = nb_W_stars;
+    }
+    public int getNb_W_stars() {
+
+        return nb_W_stars;
+    }
+
+    public void setSelection(int x, int y){
+        selection[0] = x;
+        selection[1] = y;
+    }
+
+    public void setCell(int x, int y, Pion p) {
+        if(p != null)
+            gameboard[x][y] = p;
+    }
+    public Pion getCell(int x, int y) {
+        return this.gameboard[x][y];
+    }
+
+
+
+
+
+    public int getNb_B_stars() {
+
+        return nb_B_stars;
+    }
+    public void setNb_B_stars(int nb_B_stars) {
+        this.nb_B_stars = nb_B_stars;
+    }
+
+    public int[] get_movedPawn(){
+        return this.movedPawn;
+    }
+    public void set_movedPawn(int x, int y){
+        this.movedPawn[0] = x;
+        this.movedPawn[1] =y;
+    }
 }

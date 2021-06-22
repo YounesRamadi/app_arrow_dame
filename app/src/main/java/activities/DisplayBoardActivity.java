@@ -206,24 +206,34 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                         removeImages(myLayout);
                                         if(game.checkEndTurn()){
                                             System.out.println("fin de tour");
+                                            game.end_turn();
                                             turn ++;
                                             update();
+                                            do {
+                                                iaMove = ia.minMax((byte) (1), game.copy(), 1);
+                                                System.out.println("Taking " + iaMove[0] + " : " + iaMove[1]);
+                                                System.out.println("Going in " + iaMove[2] + " : " + iaMove[3]);
+                                                game.setSelection(iaMove[0], iaMove[1]);
 
-                                            iaMove = ia.minMax((byte) (turn%2), game.copy(), 2);
-                                            System.out.println("Taking " + iaMove[0] + " : " + iaMove[1]);
-                                            System.out.println("Going in " + iaMove[2] + " : " + iaMove[3]);
-                                            game.setSelection(iaMove[0], iaMove[1]);
+                                                int[][] setterjump = new int[1][2];
+                                                setterjump[0][0] = iaMove[2];
+                                                setterjump[0][1] = iaMove[3];
 
-                                            int[][] setterjump = new int[1][2];
-                                            setterjump[0][0] = iaMove[2];
-                                            setterjump[0][1] = iaMove[3];
-                                            game.setPossible_jump(setterjump);
-                                            int[][] settermove =new int[1][2];
-                                            settermove[0][0] = iaMove[2];
-                                            settermove[0][1] = iaMove[3];
-                                            game.setPossible_move(settermove);
+                                                int[][] settermove = new int[1][2];
+                                                settermove[0][0] = iaMove[2];
+                                                settermove[0][1] = iaMove[3];
 
-                                            System.out.println("Moving : "+game.move(iaMove[2], iaMove[3]));
+                                                game.setHas_jumped((byte) iaMove[4]);
+                                                game.setJump((byte) iaMove[5]);
+                                                game.setPossible_jump(setterjump);
+                                                game.setPossible_move(settermove);
+
+                                                System.out.println("Moving : " + game.move(iaMove[2], iaMove[3]));
+                                                System.out.println("Flags h_j :" + iaMove[4] + "/ j :" + iaMove[5]);
+                                                update();
+
+                                            }while(iaMove[5] >= 1 || iaMove[4] == (byte)1);
+
                                             turn ++;
                                             game.end_turn();
                                             //game.add_turn();
