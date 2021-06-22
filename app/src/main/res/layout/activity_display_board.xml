@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="controller.DisplayBoardActivity">
+    tools:context="activities.DisplayBoardActivity">
 
-    <AbsoluteLayout
+    <RelativeLayout
         android:id="@+id/head"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        >
-    </AbsoluteLayout>
+        android:layout_height="wrap_content"></RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -75,4 +72,4 @@
         android:layout_y="652dp"
         android:text="TextView" />
 
-</AbsoluteLayout>
+</RelativeLayout>

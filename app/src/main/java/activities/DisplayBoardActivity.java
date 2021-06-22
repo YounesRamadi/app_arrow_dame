@@ -18,7 +18,7 @@ import controller.Pion;
 import ia.Ia;
 
 ========
->>>>>>>> ae12517 (merge branches ia et antonin):app/src/main/java/controller/DisplayBoardActivity.java
+>>>>>>>> 006391e (merge branches ia et antonin):app/src/main/java/controller/DisplayBoardActivity.java
 
 public class DisplayBoardActivity extends AppCompatActivity {
 
@@ -69,7 +69,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
                 turn++;
                 //myLayout.removeAllViews();
 ========
->>>>>>>> ae12517 (merge branches ia et antonin):app/src/main/java/controller/DisplayBoardActivity.java
+>>>>>>>> 006391e (merge branches ia et antonin):app/src/main/java/controller/DisplayBoardActivity.java
                 update();
             }
         });
@@ -144,7 +144,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
                             }
 ========
                             display_possibilities(getSelected()[0], getSelected()[1]);
->>>>>>>> ae12517 (merge branches ia et antonin):app/src/main/java/controller/DisplayBoardActivity.java
+>>>>>>>> 006391e (merge branches ia et antonin):app/src/main/java/controller/DisplayBoardActivity.java
                         }
                     });
                 }
@@ -225,11 +225,12 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                                 System.out.println("Test");
                                                 game.initGameBoard();
                                             }
+                                            */
 
                                             update();
                                         }
 ========
->>>>>>>> ae12517 (merge branches ia et antonin):app/src/main/java/controller/DisplayBoardActivity.java
+>>>>>>>> 006391e (merge branches ia et antonin):app/src/main/java/controller/DisplayBoardActivity.java
                                         update();
                                     }
                                 });
@@ -242,7 +243,6 @@ public class DisplayBoardActivity extends AppCompatActivity {
             }
         }
     }
-
 
     public int[] getrelative_position(int[] pos) {
         int[] new_pos = new int[2];
