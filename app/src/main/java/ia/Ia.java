@@ -273,8 +273,6 @@ public class Ia {
     public int[] minMax(byte couleur, GameBoard j, int lim) {
         Pion[][] plateau = j.getGameboard();
         int[] pos= {-1,-1,-1,-1,0,0};
-        int[][] possible_jump = {{-1,-1}};
-        int[][] possible_move = {{-1,-1}};
         int[][] poss;
         int max=0;
         int inter=0;
@@ -289,8 +287,6 @@ public class Ia {
                         pos[1] = j.getMovedPawn()[1];
                         pos[2] = poss[i][0];
                         pos[3] = poss[i][1];
-                        possible_move = j.getPossible_move();
-                        possible_jump = j.getPossible_jump();
                     }
                     inter=max(j.copy(),poss[i][0],poss[i][1],lim, false);
                     if (max < inter) {
@@ -299,8 +295,6 @@ public class Ia {
                         pos[1] = j.getMovedPawn()[1];
                         pos[2] = poss[i][0];
                         pos[3] = poss[i][1];
-                        possible_move = j.getPossible_move();
-                        possible_jump = j.getPossible_jump();
                     }
                 }
             }
@@ -309,6 +303,7 @@ public class Ia {
             for (int col = 0; col < 9; col++) {
                 if (plateau[ligne][col] != null) {
                     if (plateau[ligne][col].get_color() == couleur) {
+
                         poss = j.get_possibilities(plateau[ligne][col], ligne, col);
                         if(poss!=null){
                             for (int s = 0; s < poss.length; s++) {
@@ -319,31 +314,16 @@ public class Ia {
                                     pos[1] = col;
                                     pos[2] = poss[s][0];
                                     pos[3] = poss[s][1];
-                                    possible_jump = j.getPossible_jump();
-                                    possible_move = j.getPossible_move();
                                 }
-                                inter = max(j.copy(), poss[s][0], poss[s][1], lim,true);
-                                if (max < inter) {
-                                    max = inter;
-                                    pos[0] = ligne;
-                                    pos[1] = col;
-                                    pos[2] = poss[s][0];
-                                    pos[3] = poss[s][1];
-                                    possible_move = j.getPossible_move();
-                                    possible_jump = j.getPossible_jump();
-                                }
-                            }
 
+                            }
                         }
                     }
                 }
             }
         }
-        j.setPossible_move(possible_move);
-        j.setPossible_jump(possible_jump);
         j.setSelection(pos[0],pos[1]);
-
-        System.out.println("Mverenvoi : " +j.move(pos[2],pos[3]));
+        j.move(pos[2],pos[3]);
         pos[4]=j.getHas_jumped();
         pos[5]=j.getJump();
         return pos;
