@@ -1,7 +1,9 @@
 package ia;
+
 import controller.Etoile;
 import controller.GameBoard;
 import controller.Pion;
+
 
 public class Ia {
     public int valuation(GameBoard j,byte color) {
@@ -69,7 +71,7 @@ public class Ia {
             if(poss!=null){
                 System.out.println("zob"+poss.length);
                 for(int i=0; i<poss.length; i++){
-                    inter=max(j,poss[i][0],poss[i][1],lim);
+                    inter=max(new GameBoard(j, j.getContext()),poss[i][0],poss[i][1],lim);
                     if(max<inter){
                         max=inter;
                     }
@@ -84,7 +86,7 @@ public class Ia {
                             poss = j.get_possibilities(j.getGameboard()[lig][col], lig, col);
                             if(poss!=null) {
                                 for (int i = 0; i < poss.length; i++) {
-                                    inter = max(j, poss[i][0], poss[i][1], lim);
+                                    inter = max(new GameBoard(j, j.getContext()), poss[i][0], poss[i][1], lim);
                                     if (max < inter)
                                         max = inter;
                                 }
@@ -102,7 +104,7 @@ public class Ia {
                             poss = j.get_possibilities(j.getGameboard()[lig][col], lig, col);
                             if(poss!=null) {
                                 for (int i = 0; i < poss.length; i++) {
-                                    inter = min(j, poss[i][0], poss[i][1], lim);
+                                    inter = min(new GameBoard(j, j.getContext()), poss[i][0], poss[i][1], lim);
                                     if (max < inter)
                                         max = inter;
                                 }
@@ -127,12 +129,12 @@ public class Ia {
                                     if ((j.getGameboard()[lig + (j.getPossible_jump()[n][0] - lig) / 2][col + (j.getPossible_jump()[n][1] - col) / 2].get_color()) != j.getGameboard()[lig][col].get_color()) {
                                         if (obl == 0)
                                             max = 0;
-                                        inter = max(j, j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim);
+                                        inter = max(new GameBoard(j, j.getContext()), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim);
                                         if (max < inter)
                                             max = inter;
                                         obl = 1;
                                     } else if (obl == 0) {
-                                        inter = max(j, j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim);
+                                        inter = max(new GameBoard(j, j.getContext()), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim);
                                         if (max < inter)
                                             max = inter;
                                     }
@@ -141,7 +143,7 @@ public class Ia {
                         }
                         if (j.getPossible_move() != null && obl == 0) {
                             for (int n = 0; n < j.getPossible_move().length; n++) {
-                                inter = min(j, j.getPossible_move()[n][0], j.getPossible_move()[n][0], lim - 1);
+                                inter = min(new GameBoard(j, j.getContext()), j.getPossible_move()[n][0], j.getPossible_move()[n][0], lim - 1);
                                 if (max < inter)
                                     max = inter;
                             }
@@ -163,10 +165,10 @@ public class Ia {
             poss=j.get_possibilities(j.getGameboard()[ligne][colonne], ligne, colonne);
             if(poss!=null){
                 for(int i=0; i<poss.length; i++){
-                    /*inter=min(j,poss[i][0],poss[i][1],lim);
+                    inter=min(new GameBoard(j, j.getContext()),poss[i][0],poss[i][1],lim);
                     if(min>inter){
                         min=inter;
-                    }*/
+                    }
                 }
             }
         }
@@ -178,7 +180,7 @@ public class Ia {
                             poss = j.get_possibilities(j.getGameboard()[lig][col], lig, col);
                             if(poss!=null) {
                                 for (int i = 0; i < poss.length; i++) {
-                                    inter = min(j, poss[i][0], poss[i][1], lim);
+                                    inter = min(new GameBoard(j, j.getContext()), poss[i][0], poss[i][1], lim);
                                     if (min > inter)
                                         min = inter;
                                 }
@@ -196,7 +198,7 @@ public class Ia {
                             poss = j.get_possibilities(j.getGameboard()[lig][col], lig, col);
                             if(poss!=null) {
                                 for (int i = 0; i < poss.length; i++) {
-                                    inter = max(j, poss[i][0], poss[i][1], lim);
+                                    inter = max(new GameBoard(j, j.getContext()), poss[i][0], poss[i][1], lim);
                                     if (min > inter)
                                         min = inter;
                                 }
@@ -221,12 +223,13 @@ public class Ia {
                                     if ((j.getGameboard()[lig + (j.getPossible_jump()[n][0] - lig) / 2][col + (j.getPossible_jump()[n][1] - col) / 2].get_color()) != j.getGameboard()[lig][col].get_color() && (j.getGameboard()[lig + (j.getPossible_jump()[n][0] - lig) / 2][col + (j.getPossible_jump()[n][1] - col) / 2].get_color()) != -1) {
                                         if (obl == 0)
                                             min = 0;
-                                        inter = min(j, j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim);
+                                        inter = min(new GameBoard(j, j.getContext()), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim);
                                         if (min > inter)
                                             min = inter;
                                         obl = 1;
                                     } else if (obl == 0) {
-                                        inter = min(j, j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim);
+                                        System.out.println("la ligne "+ lig +" la colonne "+ col+" [0]: "+j.getPossible_jump()[n][0] +" ||  et [1]"+ j.getPossible_jump()[n][1]);
+                                        inter = min(new GameBoard(j, j.getContext()), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim);
                                         if (min > inter)
                                             min = inter;
                                     }
@@ -235,7 +238,7 @@ public class Ia {
                         }
                         if (j.getPossible_move() != null && obl == 0) {
                             for (int n = 0; n < j.getPossible_move().length; n++) {
-                                inter = max(j, j.getPossible_move()[n][0], j.getPossible_move()[n][0], lim - 1);
+                                inter = max(new GameBoard(j, j.getContext()), j.getPossible_move()[n][0], j.getPossible_move()[n][0], lim - 1);
                                 if (min > inter)
                                     min = inter;
                             }
@@ -260,7 +263,7 @@ public class Ia {
                         int[][] poss = j.get_possibilities(plateau[ligne][col], ligne, col);
                         if(poss!=null){
                             for (int s = 0; s < poss.length; s++) {
-                                inter = min(j, poss[s][0], poss[s][1], lim);
+                                inter = min(new GameBoard(j, j.getContext()), poss[s][0], poss[s][1], lim);
                                 if (max < inter) {
                                     max = inter;
                                     pos[0] = ligne;
