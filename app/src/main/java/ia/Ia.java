@@ -61,19 +61,22 @@ public class Ia {
         }
         return score;
     }
-    public int max(GameBoard j, int ligne, int colonne, int lim){
+    public int max(GameBoard j, int ligne, int colonne, int lim, boolean sameColor){
         j.move(ligne, colonne);
         int max=0;
         int inter=0;
         int obl=0;
         int[][] poss;
-        if(j.getHas_jumped()==1){
+        if(j.getHas_jumped()==1 && sameColor){
 
             poss=j.get_possibilities(j.getGameboard()[ligne][colonne], ligne, colonne);
             if(poss!=null){
-                System.out.println("zob"+poss.length);
                 for(int i=0; i<poss.length; i++){
-                    inter=max(j.copy(),poss[i][0],poss[i][1],lim);
+                    inter=max(j.copy(),poss[i][0],poss[i][1],lim, true);
+                    if(max<inter){
+                        max=inter;
+                    }
+                    inter=max(j.copy(),poss[i][0],poss[i][1],lim, false);
                     if(max<inter){
                         max=inter;
                     }
@@ -88,7 +91,7 @@ public class Ia {
                             poss = j.get_possibilities(j.getGameboard()[lig][col], lig, col);
                             if(poss!=null) {
                                 for (int i = 0; i < poss.length; i++) {
-                                    inter = max(j.copy(), poss[i][0], poss[i][1], lim);
+                                    inter = max(j.copy(), poss[i][0], poss[i][1], lim, true);
 
                                     if (max < inter)
                                         max = inter;
@@ -108,7 +111,7 @@ public class Ia {
                             poss = j.get_possibilities(j.getGameboard()[lig][col], lig, col);
                             if(poss!=null) {
                                 for (int i = 0; i < poss.length; i++) {
-                                    inter = min(j.copy(), poss[i][0], poss[i][1], lim - 1 );
+                                    inter = min(j.copy(), poss[i][0], poss[i][1], lim - 1, false);
                                     if (max < inter)
                                         max = inter;
                                 }
@@ -122,7 +125,7 @@ public class Ia {
             System.out.println("Ceci est un test");
             return valuation(j, (byte)((j.getGameboard()[ligne][colonne].get_color()+1)%2));
         }
-        if(j.getJump()==0){
+        if(j.getJump()==0 && !sameColor){
             j.setHas_jumped((byte) 0);
             for (int lig = 0; lig < 7; lig++) {
                 for (int col = 0; col < 9; col++){
@@ -134,15 +137,18 @@ public class Ia {
                                     if ((j.getGameboard()[lig + (j.getPossible_jump()[n][0] - lig) / 2][col + (j.getPossible_jump()[n][1] - col) / 2].get_color()) != j.getGameboard()[lig][col].get_color()) {
                                         if (obl == 0)
                                             max = 0;
-                                        inter = max(j.copy(), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim);
+                                        inter = max(j.copy(), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim, true);
+                                        if (max < inter)
+                                            max = inter;
+                                        inter = min(j.copy(), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim, false);
                                         if (max < inter)
                                             max = inter;
                                         obl = 1;
                                     } else if (obl == 0) {
-                                        inter = max(j.copy(), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim);
+                                        inter = max(j.copy(), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim, true);
                                         if (max < inter)
                                             max = inter;
-                                        inter = min(j.copy(), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim -1 );
+                                        inter = min(j.copy(), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim -1, false);
                                         if (max < inter)
                                             max = inter;
                                     }
@@ -152,7 +158,7 @@ public class Ia {
 
                         if (j.getPossible_move() != null && obl == 0) {
                             for (int n = 0; n < j.getPossible_move().length; n++) {
-                                inter = min(j.copy(), j.getPossible_move()[n][0], j.getPossible_move()[n][0], lim - 1);
+                                inter = min(j.copy(), j.getPossible_move()[n][0], j.getPossible_move()[n][0], lim - 1, false);
                                 if (max < inter)
                                     max = inter;
                             }
@@ -166,17 +172,21 @@ public class Ia {
         return max;
     }
 
-    public int min(GameBoard j, int ligne, int colonne, int lim) {
+    public int min(GameBoard j, int ligne, int colonne, int lim, boolean sameColor) {
         j.move(ligne, colonne);
         int min=0;
         int inter=0;
         int obl=0;
         int[][] poss;
-        if(j.getHas_jumped()==1){
+        if(j.getHas_jumped()==1 && sameColor){
             poss=j.get_possibilities(j.getGameboard()[ligne][colonne], ligne, colonne);
             if(poss!=null){
                 for(int i=0; i<poss.length; i++){
-                    inter=min(j.copy(),poss[i][0],poss[i][1],lim);
+                    inter=min(j.copy(),poss[i][0],poss[i][1],lim, true);
+                    if(min>inter){
+                        min=inter;
+                    }
+                    inter=max(j.copy(),poss[i][0],poss[i][1],lim-1, false);
                     if(min>inter){
                         min=inter;
                     }
@@ -191,7 +201,7 @@ public class Ia {
                             poss = j.get_possibilities(j.getGameboard()[lig][col], lig, col);
                             if(poss!=null) {
                                 for (int i = 0; i < poss.length; i++) {
-                                    inter = min(j.copy(), poss[i][0], poss[i][1], lim);
+                                    inter = min(j.copy(), poss[i][0], poss[i][1], lim, true);
                                     if (min > inter)
                                         min = inter;
                                 }
@@ -209,7 +219,7 @@ public class Ia {
                             poss = j.get_possibilities(j.getGameboard()[lig][col], lig, col);
                             if(poss!=null) {
                                 for (int i = 0; i < poss.length; i++) {
-                                    inter = max(j.copy(), poss[i][0], poss[i][1], lim - 1);
+                                    inter = max(j.copy(), poss[i][0], poss[i][1], lim - 1, false);
                                     if (min > inter)
                                         min = inter;
                                 }
@@ -222,7 +232,7 @@ public class Ia {
         if(lim==0 || j.getNb_W_stars()==0 || j.getNb_B_stars()==0){
             return valuation(j, j.getGameboard()[ligne][colonne].get_color());
         }
-        if(j.getJump()<=0){
+        if(j.getJump()<=0 && !sameColor){
             j.setHas_jumped((byte) 0);
             for (int lig = 0; lig < 7; lig++) {
                 for (int col = 0; col < 9; col++){
@@ -234,16 +244,19 @@ public class Ia {
                                     if ((j.getGameboard()[lig + (j.getPossible_jump()[n][0] - lig) / 2][col + (j.getPossible_jump()[n][1] - col) / 2].get_color()) != j.getGameboard()[lig][col].get_color() && (j.getGameboard()[lig + (j.getPossible_jump()[n][0] - lig) / 2][col + (j.getPossible_jump()[n][1] - col) / 2].get_color()) != -1) {
                                         if (obl == 0)
                                             min = 0;
-                                        inter = min(j.copy(), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim);
+                                        inter = min(j.copy(), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim, true);
+                                        if (min > inter)
+                                            min = inter;
+                                        inter = max(j.copy(), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim-1, false);
                                         if (min > inter)
                                             min = inter;
                                         obl = 1;
                                     } else if (obl == 0) {
                                         System.out.println("la ligne "+ lig +" la colonne "+ col+" [0]: "+j.getPossible_jump()[n][0] +" ||  et [1]"+ j.getPossible_jump()[n][1]);
-                                        inter = min(j.copy(), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim);
+                                        inter = min(j.copy(), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim, true);
                                         if (min > inter)
                                             min = inter;
-                                        inter = max(j.copy(), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim-1);
+                                        inter = max(j.copy(), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim-1, false);
                                         if (min > inter)
                                             min = inter;
                                     }
@@ -254,7 +267,7 @@ public class Ia {
                         //System.out.println("Getpossiblemove : " + j.getPossible_move()[0] + " / " + j.getPossible_move()[1]);
                         if (j.getPossible_move() != null && obl == 0) {
                             for (int n = 0; n < j.getPossible_move().length; n++) {
-                                inter = max(j.copy(), j.getPossible_move()[n][0], j.getPossible_move()[n][0], lim - 1);
+                                inter = max(j.copy(), j.getPossible_move()[n][0], j.getPossible_move()[n][0], lim - 1, false);
                                 if (min > inter)
                                     min = inter;
                             }
