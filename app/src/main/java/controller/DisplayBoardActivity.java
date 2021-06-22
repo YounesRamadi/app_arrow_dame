@@ -210,7 +210,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                             turn ++;
                                             update();
                                             do {
-                                                iaMove = ia.minMax((byte) (1), game.copy(), 1);
+                                                iaMove = ia.minMax((byte) (1), game.copy(), 3);
                                                 System.out.println("Taking " + iaMove[0] + " : " + iaMove[1]);
                                                 System.out.println("Going in " + iaMove[2] + " : " + iaMove[3]);
                                                 game.setSelection(iaMove[0], iaMove[1]);
