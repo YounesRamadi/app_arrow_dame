@@ -30,6 +30,10 @@ public class GameBoard{
         return gameboard;
     }
 
+    public Context getContext() {
+        return context;
+    }
+
     public GameBoard(GameBoard g, Context context){
         String entree = "03b03a07b25o07d03c03d";
 
@@ -411,7 +415,7 @@ public class GameBoard{
             System.err.println("PositionX and Position Y of the checked pawn is out of the board.");
             return -1;
         }
-        if(gameboard[posFinalx][posFinaly] ==null){
+        if(gameboard[posFinalx][posFinaly] ==null || gameboard[posPionx][posPiony] ==null){
             System.err.println("Target pawn is out of the board but still in the array");
             return -1;
         }
