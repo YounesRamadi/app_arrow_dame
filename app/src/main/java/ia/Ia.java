@@ -342,8 +342,7 @@ public class Ia {
                             poss = j.get_possibilities(j.getGameboard()[lig][col], lig, col);
                             if(poss!=null) {
                                 for (int i = 0; i < poss.length; i++) {
-                                    inter = max(j.copy(), poss[i][0], poss[i][1], lim, true);
-
+                                    inter = min(j.copy(), poss[i][0], poss[i][1], lim-1, false);
                                     if (max < inter) {
                                         max = inter;
                                         pos[0] = j.getMovedPawn()[0];
