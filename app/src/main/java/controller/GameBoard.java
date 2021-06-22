@@ -109,7 +109,9 @@ public class GameBoard{
     public void setNb_W_stars(int nb_W_stars) {
         this.nb_W_stars = nb_W_stars;
     }
-
+    public int[] getSelection(){
+        return this.selection;
+    }
     public void setSelection(int x, int y){
         selection[0] = x;
         selection[1] = y;
@@ -220,6 +222,8 @@ public class GameBoard{
         return jump;
     }
 
+    // lors de la creation d'une partie
+    // on cree un plateau en fonction d'une chaine de caracteres
     public Pion[][] makeGameBoard(String ch){
         int[] tab = new int[63];
         int i=0;
@@ -335,14 +339,14 @@ public class GameBoard{
     // check_selection permet de verifier que l'utilisateur puisse prendre la piece
     // honetement on sait pas ce qu'elle fait
     public int check_selection(int x, int y, int turn, int checkforjump) {
-
+        // on commence par regarder que les donnes envoyees sont bonnes
         if(x <0 || x >= 7 || y < 0 || y >= 9){
             toast = Toast.makeText(context, "Wtf args are you sending bruh ?", Toast.LENGTH_LONG );
             toast.show();
             System.err.println("Wtf args are you sending bruh ?");
             return -1;
         }
-
+        // est ce que le pion choisi est de la bonne couleur
         if(gameboard[x][y].get_color() != turn%2){
             toast = Toast.makeText(context, "That's not your pawn!", Toast.LENGTH_LONG );
             toast.show();
@@ -353,14 +357,25 @@ public class GameBoard{
 
         int actual_color = gameboard[x][y].get_color();
         get_possibilities(gameboard[x][y],x,y);
+
+        // flag checkforjump inutile
+
+        //on regarde si lorsque l'on choisit une fleche
+        // et que celle-ci ne peut pas sauter
+        // qu'aucune autre fleche ne peut sauter
         if (checkforjump == 1 && gameboard[x][y] instanceof Fleche){
             for(int i=0; i<7;i++){
                 for(int j=0; j<9; j++){
+
                     if(gameboard[i][j] == null){
                         continue;
                     }
+                    // si le pion est de la couleur de la fleche
                     if(gameboard[i][j].get_color() == actual_color){
+                        // et que le pion n'est pas le pion teste
                         if(!(i== x && j ==y)) {
+
+                            // on regarde si il peut jump un ennemi et que cest une fleche
                             if(gameboard[i][j] instanceof Fleche &&canJumpEnnemy(i, j)  && !canJumpEnnemy(x,y)){
                                 System.err.println("An other pawn can jump, impossible to move this arrow");
                                 return -1;
@@ -370,7 +385,8 @@ public class GameBoard{
                 }
             }
         }
-
+        // si cest une etoile
+        // on verifie juste son
         if(gameboard[x][y] instanceof Etoile){
             if(jump < 1){
                 toast = Toast.makeText(context, "You can't move this star!", Toast.LENGTH_LONG );
@@ -411,12 +427,14 @@ public class GameBoard{
     public void add_turn(){
         turn++;
     }
-    // returnne 0 si cest vide
-    // returnne 1 si cest la même color
-    // returnne 2 si la color est differente
-    // returnne -1 si le pion est en dehors de la grille
+
+
+    // retuorne 0 si cest vide
+    // retourne 1 si cest la même color
+    // retourne 2 si la color est differente
+    // retourne -1 si le pion est en dehors de la grille
     public int check_specified_pawn(int posPionx, int posPiony, int posFinalx, int posFinaly){
-        // toutes les positions
+        // toutes les positions sont dans le tableau ?
         if(posPionx < 0 || posPionx >= 7 || posPiony < 0 || posPiony >= 9){
             System.err.println("PositionX and Position Y of the target pawn is out of the board.");
             return -1;
@@ -425,12 +443,15 @@ public class GameBoard{
             System.err.println("PositionX and Position Y of the checked pawn is out of the board.");
             return -1;
         }
+        // si le pion choisi ne correspond pas à une case cachée
         if(gameboard[posFinalx][posFinaly] ==null || gameboard[posPionx][posPiony] ==null){
             System.err.println("Target pawn is out of the board but still in the array");
             return -1;
         }
-        if(gameboard[posFinalx][posFinaly].get_color() == -1)
+        //si la case choisit est une case vide
+        if(gameboard[posFinalx][posFinaly].get_color() == -1 ||gameboard[posPionx][posPiony].get_color()==-1)
             return 0;
+        // on compare les couleurs des deux pions
         if(gameboard[posPionx][posPiony].get_color() == gameboard[posFinalx][posFinaly].get_color())
             return 1;
         return 2;
