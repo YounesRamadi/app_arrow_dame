@@ -5,24 +5,49 @@
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="activities.DisplayBoardActivity">
 
-    <RelativeLayout
-        android:id="@+id/head"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></RelativeLayout>
 
-    <TextView
+    <Button
+        android:id="@+id/endTurn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Apadnom"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.07" />
+        android:layout_toStartOf= "@id/board"
+        android:layout_centerVertical="true"
+        android:text="Fin de Tour"
+        android:textSize="25sp"
+        android:layout_marginRight="50dp"
+        tools:ignore="NotSibling" />
 
+    <Button
+        android:id="@+id/endTurn1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf= "@id/board"
+        android:layout_centerVertical="true"
+        android:text="Fin de Tour"
+        android:textSize="25sp"
+        android:rotation="180"
+        android:layout_marginLeft="50dp"
+        tools:ignore="NotSibling" />
+
+
+    <RelativeLayout
+        android:id="@+id/board"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+
+        <RelativeLayout
+            android:id="@+id/possibilites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/selected"
@@ -36,40 +61,23 @@
         android:id="@+id/nb_jump_b"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/endTurn1"
+        android:rotation="180"
         android:layout_x="187dp"
         android:layout_y="654dp"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/nb_jump_w"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_x="185dp"
+        android:layout_toEndOf="@+id/endTurn"
+        android:layout_alignParentBottom="true"
+        android:layout_x="500dp"
         android:layout_y="606dp"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textSize="20sp"/>
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_x="300dp"
-        android:layout_y="600dp"
-        android:text="restart" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_x="285dp"
-        android:layout_y="523dp"
-        android:text="Fin de Tour" />
-
-    <TextView
-        android:id="@+id/playerTurn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_x="39dp"
-        android:layout_y="652dp"
-        android:text="TextView" />
 
 </RelativeLayout>

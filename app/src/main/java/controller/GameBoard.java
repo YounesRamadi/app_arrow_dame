@@ -2,11 +2,13 @@ package controller;
 
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class GameBoard {
+public class GameBoard implements Parcelable {
     public int turn;
     private Pion[][] gameboard;
     private int nb_W_stars;
@@ -52,6 +54,29 @@ public class GameBoard {
         this.gameboard = makeGameBoard(ch);
         setNb_stars();
     }
+
+    protected GameBoard(Parcel in) {
+        turn = in.readInt();
+        nb_W_stars = in.readInt();
+        nb_B_stars = in.readInt();
+        has_jumped = in.readByte();
+        jump = in.readInt();
+        selection = in.createIntArray();
+        movedPawn = in.createIntArray();
+        lastPosition = in.createIntArray();
+    }
+
+    public static final Creator<GameBoard> CREATOR = new Creator<GameBoard>() {
+        @Override
+        public GameBoard createFromParcel(Parcel in) {
+            return new GameBoard(in);
+        }
+
+        @Override
+        public GameBoard[] newArray(int size) {
+            return new GameBoard[size];
+        }
+    };
 
     public Pion[][] getGameboard() {
         return gameboard;
@@ -345,16 +370,22 @@ public class GameBoard {
         int actual_color = gameboard[x][y].get_color();
 
         if (checkforjump == 1) {
+
             for (int i = 0; i < 7; i++) {
+                if(canJumpEnnemy(x, y)){
+                    break;
+                }
                 for (int j = 0; j < 9; j++) {
                     if (gameboard[i][j] == null) {
                         continue;
                     }
                     if (gameboard[i][j].get_color() == actual_color) {
                         if (!(i == x && j == y)) {
-                            if (canJumpEnnemy(i, j)) {
-                                System.err.println("An other pawn can jump, impossible to move this arrow");
-                                return -1;
+                            if(gameboard[i][j] instanceof Fleche){
+                                if (canJumpEnnemy(i, j)) {
+                                    System.err.println("An other pawn can jump, impossible to move this arrow");
+                                    return -1;
+                                }
                             }
                         }
                     }
@@ -906,4 +937,20 @@ public class GameBoard {
         return false;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(turn);
+        dest.writeInt(nb_W_stars);
+        dest.writeInt(nb_B_stars);
+        dest.writeByte(has_jumped);
+        dest.writeInt(jump);
+        dest.writeIntArray(selection);
+        dest.writeIntArray(movedPawn);
+        dest.writeIntArray(lastPosition);
+    }
 }
