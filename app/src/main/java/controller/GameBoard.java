@@ -22,6 +22,11 @@ public class GameBoard {
     }
 
     private int[] selection = new int[2];
+
+    public int[] getMovedPawn() {
+        return movedPawn;
+    }
+
     private int[] movedPawn = new int[2];
     private int[] lastPosition = new int[2];
     private int[][] jumpableEnnemies;
