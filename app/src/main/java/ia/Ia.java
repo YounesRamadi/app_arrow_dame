@@ -248,6 +248,7 @@ public class Ia {
             }
         }
         if(lim==0 || j.getNb_W_stars()==0 || j.getNb_B_stars()==0){
+            System.out.println("Ceci est un testbis");
             return valuation(j, j.getGameboard()[ligne][colonne].get_color());
         }
         if(j.getJump()<=0 && !sameColor){
@@ -302,6 +303,8 @@ public class Ia {
     }
 
     public int[] minMax(byte couleur, GameBoard j, int lim) {
+        System.out.println("fonction : " + j.getJump());
+
         Pion[][] plateau = j.getGameboard();
         int[] pos= {-1,-1,-1,-1,0,0};
         int[][] possible_jump = {{-1,-1}};
@@ -338,13 +341,18 @@ public class Ia {
             for (int lig = 0; lig < 7; lig++) {
                 for (int col = 0; col < 9; col++){
                     if (j.getGameboard()[lig][col] != null) {
+                        System.out.println("nul1");
                         if (j.getGameboard()[lig][col].get_color() == couleur && j.getGameboard()[lig][col] instanceof Etoile) {
+                            System.out.println("nul2");
                             poss = j.get_possibilities(j.getGameboard()[lig][col], lig, col);
                             if(poss!=null) {
+
                                 for (int i = 0; i < poss.length; i++) {
+                                    System.out.println("nul3"+poss[i][0]+poss[i][1]);
                                     inter = max(j.copy(), poss[i][0], poss[i][1], lim, true);
 
                                     if (max < inter) {
+                                        System.out.println("nul4");
                                         max = inter;
                                         pos[0] = j.getMovedPawn()[0];
                                         pos[1] = j.getMovedPawn()[1];
@@ -428,7 +436,7 @@ public class Ia {
         j.setPossible_jump(possible_jump);
         j.setSelection(pos[0],pos[1]);
 
-        System.out.println("Mverenvoi : " +j.move(pos[2],pos[3]));
+        System.out.println("Mverenvoi : " +j.move(pos[2],pos[3]) + " pos[0]/ pos1 :" + pos[0] + pos[1]);
         pos[4]=j.getHas_jumped();
         pos[5]=j.getJump();
         return pos;
