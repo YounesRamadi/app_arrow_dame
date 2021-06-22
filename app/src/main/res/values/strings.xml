@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Apadnom</string>
+    <string name="end_turn">Fin de Tour</string>
+    <string name="black_score">Black score</string>
+    <string name="white_score">White score</string>
+    <string name="todo">TODO</string>
 </resources>
