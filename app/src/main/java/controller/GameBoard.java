@@ -49,12 +49,10 @@ public class GameBoard{
 
 
 
-    public Context getContext() {
-        return context;
-    }
 
     //eviter les conflits de jeu
     // utile pour l'IA
+
 
     public GameBoard(GameBoard g, Context context){
         String entree = "03b03a07b25o07d03c03d";
@@ -69,6 +67,10 @@ public class GameBoard{
         this.nb_B_stars = g.getNb_B_stars();
         this.nb_W_stars = g.getNb_W_stars();
     }
+    /**
+     * Constructeur de la classe
+     * @param context contexte pour la couche graphique (getContext())
+     */
     public GameBoard(Context context) {
         // initGameBoard();
         String entree = "03b03a07b25o07d03c03d";
@@ -77,6 +79,11 @@ public class GameBoard{
         this.gameboard = makeGameBoard(entree);
         setNb_stars();
     }
+
+    /**
+     * Permet de copier l'objet / equivalent de clone
+     * @return un objet GameBoard identique
+     */
     public GameBoard copy(){
         GameBoard retour = new GameBoard(this.context);
         Pion[][] p= new Pion[7][9];
@@ -93,6 +100,10 @@ public class GameBoard{
         retour.setSelection(this.selection[0], this.selection[1]);
         return retour;
     }
+
+    /**
+     * Créer le plateau de jeu
+     */
     public void initGameBoard() {
         int[] tempgameboard = new int[63];
 
@@ -166,6 +177,12 @@ public class GameBoard{
 
     // lors de la creation d'une partie
     // on cree un plateau en fonction d'une chaine de caracteres
+
+    /**
+     *  on cree un plateau en fonction d'une chaine de caracteres
+     * @param ch chaine formatée pour créer un tableau
+     * @return un plateau initialisé
+     */
     public Pion[][] makeGameBoard(String ch){
         int[] tab = new int[63];
         int i=0;
@@ -251,6 +268,10 @@ public class GameBoard{
     }
 
     //initialise automatique le nombre d'etoiles
+
+    /**
+     * Compte le nombre d'etoiles sur le plateau de jeu
+     */
     public void setNb_stars() {
         int n = 0;
         int a = 0;
@@ -274,6 +295,11 @@ public class GameBoard{
     }
 
     //fonction pour l'affichage graphique
+
+    /**
+     * Je sais pas ce qu'elle fait
+     * @return un tableau de pion visiblement
+     */
     public Pion[][] display(){
         Pion[][] display = new Pion[7][9];
 
@@ -927,8 +953,6 @@ public class GameBoard{
         return -1;
     }
 
-
-
     /**
      * Verfie si c'est la fin du tour
      * @return vrai si c'est la fin du tour, au sinon
@@ -974,11 +998,19 @@ public class GameBoard{
         return (byte)0;
     }
 
+    /**
+     * Ajoute un tour au tour de jeu
+     */
     public void add_turn(){
         turn++;
     }
 
     // getters and setters
+    public Context getContext() {
+        return context;
+    }
+
+
     public Pion[][] getGameboard() {
         return gameboard;
     }
@@ -1041,10 +1073,6 @@ public class GameBoard{
     public Pion getCell(int x, int y) {
         return this.gameboard[x][y];
     }
-
-
-
-
 
     public int getNb_B_stars() {
 
