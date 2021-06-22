@@ -215,6 +215,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                                 //jump = 0
                                                 System.out.println("Taking " + iaMove[0] + " : " + iaMove[1]);
                                                 System.out.println("Going in " + iaMove[2] + " : " + iaMove[3]);
+
                                                 game.setSelection(iaMove[0], iaMove[1]);
                                                 //jump = 0
                                                 int[][] setterjump = new int[1][2];
@@ -230,11 +231,17 @@ public class DisplayBoardActivity extends AppCompatActivity {
 
                                                 game.setPossible_jump(setterjump);
                                                 game.setPossible_move(settermove);
+
                                                 if(iaMove[2] == -1 || iaMove[1] == -1){
                                                     break;
                                                 }
                                                 System.out.println("Moving : " + game.move(iaMove[2], iaMove[3]));
+                                                game.set_movedPawn(iaMove[2],iaMove[3]);
                                                 System.out.println("Flags h_j :" + iaMove[4] + "/ j :" + iaMove[5]);
+
+                                                if(game.checkEndTurn()){
+                                                    break;
+                                                }
                                                 update();
 
                                             }while(iaMove[5] >= 1 || iaMove[4] == (byte)1);

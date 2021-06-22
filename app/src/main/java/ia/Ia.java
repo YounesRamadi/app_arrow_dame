@@ -18,39 +18,47 @@ public class Ia {
             return 500;
         else if(j.getNb_W_stars()==0 && color==1)
             return 0;
+        //score+= j.getJump()*50000000;
+        System.out.println("A : "+j.getJump() + " B : " + j.getHas_jumped());
+
         for (int lig = 0; lig < 7; lig++) {
             for (int col = 0; col < 9; col++){
                 if (j.getGameboard()[lig][col] != null){
                     j.get_possibilities(j.getGameboard()[lig][col], lig, col);
                     if(j.getGameboard()[lig][col].get_color()==color){
-                        score+=j.getPossible_jump().length*2;
+                        score+=j.getPossible_jump().length*2 +lig;
                         score+=j.getPossible_move().length;
-                    }
+                    }/*
                     else{
                         score-=j.getPossible_jump().length*2;
                         score-=j.getPossible_move().length;
-                    }
+                    }*/
+                    //color 1 ceux qui sont haut
+                    //color 0 ceux qui sont en bas
                     if(j.getGameboard()[lig][col].get_color()!=j.getGameboard()[lig][col].get_direction() && j.getGameboard()[lig][col].get_color()==color)
                         score+=20;
                     else if(j.getGameboard()[lig][col].get_color()==color && j.getGameboard()[lig][col] instanceof Etoile) {
                         if (j.getNb_B_stars() == 1 && color == 1) {
                             fEtoile = 0;
-                            score += lig;
+                            score -= 6 - lig;
                         } else if (j.getNb_W_stars() == 1 && color == 0) {
                             fEtoile = 0;
-                            score += 6 - lig;
+                            score += lig*50;
+
                         } else if (j.getNb_B_stars() == 2 && color == 1) {
                             fEtoile = fEtoile - 2;
-                            score += lig;
+                            score -= 6 - lig;
                         } else if (j.getNb_W_stars() == 2 && color == 0) {
                             fEtoile = fEtoile - 2;
-                            score += 6 - lig;
+                            score += lig*50;
+
                         } else if (j.getNb_B_stars() == 3 && color == 1) {
                             fEtoile--;
-                            score += lig;
+                            score -= 6 - lig;
                         } else if (j.getNb_W_stars() == 3 && color == 0) {
                             fEtoile--;
-                            score += 6 - lig;
+                            score += lig*50;
+
                         }
                     }
                 }
@@ -67,8 +75,8 @@ public class Ia {
         int inter=0;
         int obl=0;
         int[][] poss;
-        if(j.getHas_jumped()==1 && sameColor){
-
+        if(j.getHas_jumped()==(byte)1 && sameColor){
+            System.out.println("Zebi:"+j.getJump());
             poss=j.get_possibilities(j.getGameboard()[ligne][colonne], ligne, colonne);
             if(poss!=null){
                 for(int i=0; i<poss.length; i++){
@@ -76,7 +84,7 @@ public class Ia {
                     if(max<inter){
                         max=inter;
                     }
-                    inter=max(j.copy(),poss[i][0],poss[i][1],lim, false);
+                    inter=min(j.copy(),poss[i][0],poss[i][1],lim-1, false);
                     if(max<inter){
                         max=inter;
                     }
@@ -109,7 +117,7 @@ public class Ia {
                             poss = j.get_possibilities(j.getGameboard()[lig][col], lig, col);
                             if(poss!=null) {
                                 for (int i = 0; i < poss.length; i++) {
-                                    inter = max(j.copy(), poss[i][0], poss[i][1], lim, true);
+                                    inter = min(j.copy(), poss[i][0], poss[i][1], lim-1, false);
 
                                     if (max < inter)
                                         max = inter;
@@ -158,7 +166,7 @@ public class Ia {
                                         inter = max(j.copy(), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim, true);
                                         if (max < inter)
                                             max = inter;
-                                        inter = min(j.copy(), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim, false);
+                                        inter = min(j.copy(), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim-1, false);
                                         if (max < inter)
                                             max = inter;
                                         obl = 1;
@@ -196,7 +204,9 @@ public class Ia {
         int inter=0;
         int obl=0;
         int[][] poss;
-        if(j.getHas_jumped()==1 && sameColor){
+        if(j.getHas_jumped()==(byte)1 && sameColor){
+            System.out.println("Zebi:"+j.getJump());
+
             poss=j.get_possibilities(j.getGameboard()[ligne][colonne], ligne, colonne);
             if(poss!=null){
                 for(int i=0; i<poss.length; i++){
@@ -353,8 +363,8 @@ public class Ia {
                                     if (max < inter) {
                                         System.out.println("nul4");
                                         max = inter;
-                                        pos[0] = j.getMovedPawn()[0];
-                                        pos[1] = j.getMovedPawn()[1];
+                                        pos[0] = lig;
+                                        pos[1] = col;
                                         pos[2] = poss[i][0];
                                         pos[3] = poss[i][1];
                                         possible_move = j.getPossible_move();
@@ -367,7 +377,7 @@ public class Ia {
                 }
             }
         }
-        else if(j.getHas_jumped()==1){
+        else if(j.getHas_jumped()==(byte)1){
             poss=j.get_possibilities(j.getGameboard()[j.getMovedPawn()[0]][j.getMovedPawn()[1]], j.getMovedPawn()[0], j.getMovedPawn()[1]);
             if(poss!=null){
                 for(int i=0; i<poss.length; i++){
