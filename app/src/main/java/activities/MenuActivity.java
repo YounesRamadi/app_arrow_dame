@@ -1,7 +1,6 @@
 package activities;
 
 import android.annotation.SuppressLint;
-import android.content.SharedPreferences;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -19,8 +18,6 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     private Button mTutoriel;
     private Button mOptions;
     private Button mCredits;
-    private String firstname = new String();
-    private SharedPreferences preferences;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -32,12 +29,9 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         mNewGame = (Button) findViewById(R.id.newgame);
         mTutoriel = (Button) findViewById(R.id.tutoriel);
         mOptions = (Button) findViewById(R.id.options);
-        mCredits = (Button) findViewById(R.id.history);
+        mCredits = (Button) findViewById(R.id.credits);
 
-        preferences = getSharedPreferences("firstname", MODE_PRIVATE);
-        firstname = preferences.getString("firstname", null);
-
-        mName.setText("Bienvenue "  + firstname + " !");
+        mName.setText("Bienvenue " + getIntent().getStringExtra("nom") + " !");
 
         mNewGame.setTag(0);
         mTutoriel.setTag(1);
@@ -64,11 +58,10 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                 Intent TutorielActivity = new Intent(MenuActivity.this, TutorielActivity.class);
                 startActivity(TutorielActivity);
                 break;
-            case 2:
+            /*case 2:
                 Intent SettingsActivity = new Intent(MenuActivity.this, SettingsActivity.class);
                 startActivity(SettingsActivity);
                 break;
-                /*
             case 3:
                 Intent CreditsActivity = new Intent(MenuActivity.this, CreditsActivity.class);
                 startActivity(CreditsActivity);
@@ -76,13 +69,5 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
             default:
                 // code block
         }
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        preferences = getSharedPreferences("firstname", MODE_PRIVATE);
-        firstname = preferences.getString("firstname", null);
-
-        mName.setText("Bienvenue "  + firstname + " !");
     }
 }
