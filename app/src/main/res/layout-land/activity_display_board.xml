@@ -29,27 +29,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/endTurn1"
+        <TextView
+            android:id="@+id/nb_jump_w"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:rotation="180"
-            android:text="Fin de Tour"
-            android:textSize="25sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="NotSibling" />
-
-        <Button
-            android:id="@+id/endTurn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fin de Tour"
-            android:textSize="25sp"
+            android:layout_x="500dp"
+            android:layout_y="606dp"
+            android:text="nb_jump_w"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="NotSibling" />
+            app:layout_constraintEnd_toEndOf="@+id/endTurn1"
+            app:layout_constraintStart_toStartOf="@+id/endTurn1"
+            app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
         <TextView
             android:id="@+id/selected"
@@ -61,71 +52,76 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <Button
+            android:id="@+id/endTurn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fin de Tour"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="NotSibling" />
+
+        <Button
+            android:id="@+id/endTurn1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="180"
+            android:text="Fin de Tour"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="NotSibling" />
+
         <TextView
             android:id="@+id/nb_jump_b"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_x="187dp"
             android:layout_y="654dp"
             android:rotation="180"
             android:text="nb_jump_b"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline4"
-            app:layout_constraintEnd_toEndOf="@+id/endTurn1"
-            app:layout_constraintStart_toStartOf="@+id/endTurn1"
-            app:layout_constraintTop_toBottomOf="@+id/endTurn1"
-            tools:ignore="MissingConstraints" />
-
-        <TextView
-            android:id="@+id/nb_jump_w"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="36dp"
-            android:layout_x="500dp"
-            android:layout_y="606dp"
-            android:text="nb_jump_w"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/endTurn"
+            app:layout_constraintBottom_toTopOf="@+id/guideline5"
             app:layout_constraintEnd_toEndOf="@+id/endTurn"
-            app:layout_constraintStart_toStartOf="@+id/endTurn"
-            app:layout_constraintTop_toTopOf="@+id/guideline4"
-            tools:ignore="MissingConstraints" />
-
-        <ImageView
-            android:id="@+id/scoreW"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toTopOf="@+id/guideline4"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="205dp" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="365dp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/scoreB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/guideline4"
-            app:layout_constraintEnd_toStartOf="@+id/guideline3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline5"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageView
+            android:id="@+id/scoreW"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/guideline5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="365dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="205dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
