@@ -295,7 +295,7 @@ public class Ia {
                         int[][] poss = j.get_possibilities(plateau[ligne][col], ligne, col);
                         if(poss!=null){
                             for (int s = 0; s < poss.length; s++) {
-                                inter = min(j.copy(), poss[s][0], poss[s][1], lim - 1);
+                                inter = min(j.copy(), poss[s][0], poss[s][1], lim - 1,false);
                                 if (max < inter) {
                                     max = inter;
                                     pos[0] = ligne;
