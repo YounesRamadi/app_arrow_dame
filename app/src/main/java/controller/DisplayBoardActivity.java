@@ -209,12 +209,14 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                             game.end_turn();
                                             turn ++;
                                             update();
+                                            //jump = 0
                                             do {
                                                 iaMove = ia.minMax((byte) (1), game.copy(), 3);
                                                 System.out.println("Taking " + iaMove[0] + " : " + iaMove[1]);
                                                 System.out.println("Going in " + iaMove[2] + " : " + iaMove[3]);
-                                                game.setSelection(iaMove[0], iaMove[1]);
 
+                                                game.setSelection(iaMove[0], iaMove[1]);
+                                                //jump = 0
                                                 int[][] setterjump = new int[1][2];
                                                 setterjump[0][0] = iaMove[2];
                                                 setterjump[0][1] = iaMove[3];
@@ -224,14 +226,21 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                                 settermove[0][1] = iaMove[3];
 
                                                 game.setHas_jumped((byte) iaMove[4]);
-                                                game.setJump((byte) iaMove[5]);
+                                                System.out.println("quil est bete : " + iaMove[5]);
+
                                                 game.setPossible_jump(setterjump);
                                                 game.setPossible_move(settermove);
+
                                                 if(iaMove[2] == -1 || iaMove[1] == -1){
                                                     break;
                                                 }
                                                 System.out.println("Moving : " + game.move(iaMove[2], iaMove[3]));
+                                                game.set_movedPawn(iaMove[2],iaMove[3]);
                                                 System.out.println("Flags h_j :" + iaMove[4] + "/ j :" + iaMove[5]);
+
+                                                if(game.checkEndTurn()){
+                                                    break;
+                                                }
                                                 update();
 
                                             }while(iaMove[5] >= 1 || iaMove[4] == (byte)1);

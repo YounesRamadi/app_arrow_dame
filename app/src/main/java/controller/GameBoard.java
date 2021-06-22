@@ -356,7 +356,7 @@ public class GameBoard{
         //on regarde si lorsque l'on choisit une fleche
         // et que celle-ci ne peut pas sauter
         // qu'aucune autre fleche ne peut sauter
-        if (checkforjump == 1 && gameboard[x][y] instanceof Fleche){
+        if (checkforjump == 1 && gameboard[x][y] instanceof Fleche && has_jumped == (byte)0){
             for(int i=0; i<7;i++){
                 for(int j=0; j<9; j++){
 
@@ -790,6 +790,12 @@ public class GameBoard{
 
         possible_move= arl.toArray(new int[0][0]);
         possible_jump = ar2.toArray(new int[0][0]);
+        if(indexMove == 0){
+            possible_move = null;
+        }
+        if(indexJump==0){
+            possible_jump =null;
+        }
         int[][] retour = new int[indexJump+indexMove][2];
         for(int i=0; i<indexJump+indexMove;i++){
             if(i<indexMove && indexMove != 0){
@@ -883,7 +889,7 @@ public class GameBoard{
                     } else {
                         has_jumped = (byte) 1;
                         if (gameboard[distanceX + selection[0]][distanceY + selection[1]].get_color() != gameboard[selection[0]][selection[1]].get_color()) {
-                            System.out.println("zob");
+
                             jump++;
                         }
                     }
@@ -1090,3 +1096,4 @@ public class GameBoard{
         this.movedPawn[1] =y;
     }
 }
+
