@@ -40,7 +40,6 @@ public class GameBoard{
     }
 
 
-
     private int[] lastPosition = new int[2];
     private int[][] jumpableEnnemies;
 
