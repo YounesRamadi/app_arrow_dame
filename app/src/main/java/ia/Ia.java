@@ -272,7 +272,7 @@ public class Ia {
 
     public int[] minMax(byte couleur, GameBoard j, int lim) {
         Pion[][] plateau = j.getGameboard();
-        int[] pos= {-1,-1,-1,-1};
+        int[] pos= {-1,-1,-1,-1,0,0};
         int max=0;
         int inter=0;
         for (int ligne = 0; ligne < 7; ligne++) {
@@ -296,6 +296,10 @@ public class Ia {
                 }
             }
         }
+        j.setSelection(pos[0],pos[1]);
+        j.move(pos[2],pos[3]);
+        pos[4]=j.getSelection()[0];
+        pos[5]=j.getSelection()[1];
         return pos;
     }
 }
