@@ -288,13 +288,41 @@ public class Ia {
         int[] pos= {-1,-1,-1,-1,0,0};
         int[][] possible_jump = {{-1,-1}};
         int[][] possible_move = {{-1,-1}};
+        int[][] poss;
         int max=0;
         int inter=0;
+        if(j.getHas_jumped()==1){
+            poss=j.get_possibilities(j.getGameboard()[j.getMovedPawn()[0]][j.getMovedPawn()[1]], j.getGameboard()[j.getMovedPawn()[0], j.getGameboard()[j.getMovedPawn()[1]);
+            if(poss!=null){
+                for(int i=0; i<poss.length; i++){
+                    inter=max(j.copy(),poss[i][0],poss[i][1],lim, true);
+                    if (max < inter) {
+                        max = inter;
+                        pos[0] = j.getMovedPawn()[0];
+                        pos[1] = j.getMovedPawn()[1];
+                        pos[2] = poss[i][0];
+                        pos[3] = poss[i][1];
+                        possible_move = j.getPossible_move();
+                        possible_jump = j.getPossible_jump();
+                    }
+                    inter=max(j.copy(),poss[i][0],poss[i][1],lim, false);
+                    if (max < inter) {
+                        max = inter;
+                        pos[0] = j.getMovedPawn()[0];
+                        pos[1] = j.getMovedPawn()[1];
+                        pos[2] = poss[i][0];
+                        pos[3] = poss[i][1];
+                        possible_move = j.getPossible_move();
+                        possible_jump = j.getPossible_jump();
+                    }
+                }
+            }
+        }
         for (int ligne = 0; ligne < 7; ligne++) {
             for (int col = 0; col < 9; col++) {
                 if (plateau[ligne][col] != null) {
                     if (plateau[ligne][col].get_color() == couleur) {
-                        int[][] poss = j.get_possibilities(plateau[ligne][col], ligne, col);
+                        poss = j.get_possibilities(plateau[ligne][col], ligne, col);
                         if(poss!=null){
                             for (int s = 0; s < poss.length; s++) {
                                 inter = min(j.copy(), poss[s][0], poss[s][1], lim - 1,false);
