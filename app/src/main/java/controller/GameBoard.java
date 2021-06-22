@@ -33,7 +33,7 @@ public class GameBoard{
     private int[] selection = new int[2]; // le pion selectionne
     private int[] movedPawn = new int[2]; // le dernier pion
 
-    private int[] selection = new int[2];
+
 
     public int[] getMovedPawn() {
         return movedPawn;
