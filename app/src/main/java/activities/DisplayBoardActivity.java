@@ -1,4 +1,4 @@
-package controller;
+package activities;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.apadnom.R;
 
+import controller.GameBoard;
+import controller.Pion;
 import ia.Ia;
 
 
@@ -28,7 +30,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
     private TextView player;
     private TextView nb_jump_w;
     private TextView nb_jump_b;
-    private int turn=0;
+    private int turn = 0;
 
     private int[] iaMove = new int[4];
     private Ia ia;
@@ -62,10 +64,10 @@ public class DisplayBoardActivity extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("white : " +game.getNb_B_stars()+ " black " +game.getNb_W_stars());
+                System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
 
                 game.end_turn();
-                turn ++;
+                turn++;
                 //myLayout.removeAllViews();
                 update();
             }
@@ -128,7 +130,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
                 AbsoluteLayout.LayoutParams parms = new AbsoluteLayout.LayoutParams(100, 100, x, y);
                 int finalI = i;
                 int finalJ = j;
-                if(display_mat[i][j].get_color() != -1) {
+                if (display_mat[i][j].get_color() != -1) {
                     img.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -136,7 +138,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
                             sy = finalJ;
                             setSelected(sx, sy);
                             removeImages(layout);
-                            if(game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
+                            if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
                                 display_possibilities(getSelected()[0], getSelected()[1]);
                             }
                         }
@@ -158,11 +160,10 @@ public class DisplayBoardActivity extends AppCompatActivity {
                 t.setText(s);
             }
         }
-        if((turn %2) == 0){
+        if ((turn % 2) == 0) {
             nb_jump_b.setText("0");
             nb_jump_w.setText(String.valueOf(game.getJump()));
-        }
-        else if((turn %2) == 1){
+        } else if ((turn % 2) == 1) {
             nb_jump_w.setText("0");
             nb_jump_b.setText(String.valueOf(game.getJump()));
         }
@@ -173,10 +174,10 @@ public class DisplayBoardActivity extends AppCompatActivity {
         layout.removeAllViews();
         if (game.getGameboard()[px][py] != null && game.getGameboard()[px][py].get_color() != -1) {
             int[][] pos = null;
-            if(game.check_selection(px, py, turn, 1) != -1) {
+            if (game.check_selection(px, py, turn, 1) != -1) {
                 pos = game.get_possibilities(game.getCell(px, py), px, py);
             }
-            if(pos != null) {
+            if (pos != null) {
                 for (int[] p : pos
                 ) {
                     int[] tmp = getrelative_position(p);
@@ -204,18 +205,18 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                         layout.removeAllViews();
                                         removeImages(myLayout);
                                         removeImages(myLayout);
-                                        if(game.checkEndTurn()){
+                                        if (game.checkEndTurn()) {
                                             System.out.println("fin de tour");
-                                            turn ++;
+                                            turn++;
                                             update();
-                                            iaMove = ia.minMax((byte) (turn%2), new GameBoard(game, getApplicationContext()), 2);
+                                            iaMove = ia.minMax((byte) (turn % 2), new GameBoard(game, getApplicationContext()), 2);
                                             game.setSelection(iaMove[0], iaMove[1]);
                                             game.move(iaMove[2], iaMove[3]);
-                                            turn ++;
-                                            System.out.println("white : " +game.getNb_B_stars()+ " black " +game.getNb_W_stars());
+                                            turn++;
+                                            System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
                                             game.end_turn();
                                             game.add_turn();
-                                            System.out.println("zobturn"+turn);
+                                            System.out.println("zobturn" + turn);
                                             /*
                                             if(game.end_turn()==(byte)1) {
                                                 System.out.println("Test");
@@ -258,7 +259,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
         return new_pos;
     }
 
-    public void removeImages(AbsoluteLayout layout){
+    public void removeImages(AbsoluteLayout layout) {
         for (int pos = 0; pos < layout.getChildCount(); pos++) {
             if (layout.getChildAt(pos) instanceof ImageView) {
                 layout.removeView(layout.getChildAt(pos));

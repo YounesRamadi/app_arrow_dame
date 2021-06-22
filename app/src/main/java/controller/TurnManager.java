@@ -5,27 +5,28 @@ public class TurnManager {
     protected int nb_white_star;
     protected int nb_black_star;
 
-    public TurnManager(){
+    public TurnManager() {
 
     }
 
-    public void set_nb_white_star(int nb_white_star){
+    public void set_nb_white_star(int nb_white_star) {
         this.nb_white_star = nb_white_star;
     }
-    public void set_nb_black_star(int nb_black_star){
+
+    public void set_nb_black_star(int nb_black_star) {
         this.nb_black_star = nb_black_star;
     }
 
-    public void change_turn(){
+    public void change_turn() {
         this.turn = turn++;
     }
 
-    public void play(GameBoard gameboard){
+    public void play(GameBoard gameboard) {
 
     }
 
-    public void newTurn(GameBoard gameboard){
-        gameboard.setHas_jumped((byte)0);
+    public void newTurn(GameBoard gameboard) {
+        gameboard.setHas_jumped((byte) 0);
     }
 
 }

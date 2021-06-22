@@ -1,4 +1,4 @@
-package controller;
+package activities;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -11,6 +11,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.apadnom.R;
+
+import controller.GameBoard;
+import controller.Pion;
 
 
 public class TutorielActivity extends AppCompatActivity {
@@ -25,7 +28,7 @@ public class TutorielActivity extends AppCompatActivity {
     private Button btn;
     private TextView nb_jump_w;
     private TextView nb_jump_b;
-    private int turn=0;
+    private int turn = 0;
     private TextView tutoriel;
     private Button suivant;
     private Button precedent;
@@ -46,7 +49,7 @@ public class TutorielActivity extends AppCompatActivity {
         tutoriel = (TextView) findViewById(R.id.tutoriel);
 
         suivant = (Button) findViewById(R.id.suivant);
-        precedant = (Button) findViewById(R.id.precedant);
+        precedent = (Button) findViewById(R.id.precedent);
 
         tutoriel.setText("Voici le plateau de jeu !");
 
@@ -60,7 +63,7 @@ public class TutorielActivity extends AppCompatActivity {
                 update();
             }
         });
-        precedant.setOnClickListener(new View.OnClickListener() {
+        precedent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 index--;
@@ -74,51 +77,51 @@ public class TutorielActivity extends AppCompatActivity {
 
     }
 
-    private void bigSwitch(){
-        switch(index) {
+    private void bigSwitch() {
+        switch (index) {
             case (0):
                 gameboardTuto();
                 break;
-            case(1):
+            case (1):
                 pionsTuto();
                 break;
-            case(2):
+            case (2):
                 arrowsTuto();
                 break;
-            case(3):
+            case (3):
                 starsTuto();
                 break;
-            case(4):
+            case (4):
                 goalTuto();
                 break;
-            case(5):
+            case (5):
                 moveArrow();
                 break;
-            case(6):
+            case (6):
                 jumpArrow();
                 break;
-            case(7):
+            case (7):
                 jumpLateralArrow();
                 break;
-            case(8):
+            case (8):
                 moveStar();
                 break;
-            case(9):
+            case (9):
                 jumpStar();
                 break;
-            case(10):
+            case (10):
                 shootingStar();
                 break;
-            case(11):
+            case (11):
                 mustJumpTuto();
                 break;
-            case(12):
+            case (12):
                 boardTuto();
                 break;
-            case(13):
+            case (13):
                 endTuto();
                 break;
-            case(14):
+            case (14):
                 closeTuto();
                 break;
             default:
@@ -127,81 +130,95 @@ public class TutorielActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    private void gameboardTuto(){
+    private void gameboardTuto() {
         tutoriel.setText("Voici le plateau de jeu !");
         game = new GameBoard("51o");
     }
+
     @SuppressLint("SetTextI18n")
-    private void pionsTuto(){
+    private void pionsTuto() {
         tutoriel.setText("Il existe deux types de pions");
         game = new GameBoard("51o");
     }
+
     @SuppressLint("SetTextI18n")
-    private void arrowsTuto(){
+    private void arrowsTuto() {
         tutoriel.setText("Ces pions sont appelés des flèches");
         game = new GameBoard("24o01b01o01d24o");
     }
+
     @SuppressLint("SetTextI18n")
-    private void starsTuto(){
+    private void starsTuto() {
         tutoriel.setText("Et ceux-là des étoiles");
         game = new GameBoard("24o01a01o01c24o");
     }
+
     @SuppressLint("SetTextI18n")
-    private void goalTuto(){
+    private void goalTuto() {
         tutoriel.setText("Le but du jeu est d'amener ses 3 étoiles de l'autre côté du plateau");
         game = new GameBoard("03c48o");
     }
+
     @SuppressLint("SetTextI18n")
-    private void moveArrow(){
+    private void moveArrow() {
         tutoriel.setText("Essaye de faire bouger la flèche en cliquant dessus !");
         game = new GameBoard("25o01d25o");
     }
+
     @SuppressLint("SetTextI18n")
-    private void jumpArrow(){
+    private void jumpArrow() {
         tutoriel.setText("Si vous êtes bloqué par des pions adverses sautez par dessus !");
         game = new GameBoard("16o02b06o01b01d01b24o");
     }
+
     @SuppressLint("SetTextI18n")
-    private void jumpLateralArrow(){
+    private void jumpLateralArrow() {
         tutoriel.setText("Vous ne pouvez sauter latéralement qu'après un premier saut");
         game = new GameBoard("09o01b06o02b06o01b01d01b24o");
     }
+
     @SuppressLint("SetTextI18n")
-    private void moveStar(){
+    private void moveStar() {
         tutoriel.setText("Les étoiles bougent différemment, essayez en cliquant dessus !");
         game = new GameBoard("25o01c25o");
         game.setHas_jumped((byte) 1);
         game.setJump(2);
     }
+
     @SuppressLint("SetTextI18n")
-    private void jumpStar(){
+    private void jumpStar() {
         tutoriel.setText("Vous pouvez aussi sauter avec les étoiles !");
         game = new GameBoard("16o02b06o01b01c01b24o");
         game.setHas_jumped((byte) 1);
         game.setJump(1);
     }
+
     @SuppressLint("SetTextI18n")
-    private void shootingStar(){
+    private void shootingStar() {
         tutoriel.setText("Mais pour bouger vos étoiles il faut d'abord sauter par dessus un pion de l'adversaire avec une de vos flèches");
         game = new GameBoard("16o02b06o01b01d01b18o03c03o");
     }
+
     @SuppressLint("SetTextI18n")
-    private void mustJumpTuto(){
+    private void mustJumpTuto() {
         tutoriel.setText("Si vous pouvez sauter avec une flèche, vous ne pouvez pas juste bouger avec une autre");
         game = new GameBoard("16o02b06o01b01d01b01o01d22o");
     }
+
     @SuppressLint("SetTextI18n")
-    private void boardTuto(){
+    private void boardTuto() {
         tutoriel.setText("Voici le plateau au début d'une partie !");
         game = new GameBoard("03b03a07b25o07d03c03d");
     }
+
     @SuppressLint("SetTextI18n")
-    private void endTuto(){
+    private void endTuto() {
         tutoriel.setText("Maintenant que vous connaissez les règles vous pouvez essayer de jouer contre un ami !");
         game = new GameBoard("03b03a07b25o07d03c03d");
     }
+
     @SuppressLint("SetTextI18n")
-    private void closeTuto(){
+    private void closeTuto() {
         finish();
     }
 
@@ -257,7 +274,7 @@ public class TutorielActivity extends AppCompatActivity {
                 AbsoluteLayout.LayoutParams parms = new AbsoluteLayout.LayoutParams(100, 100, x, y);
                 int finalI = i;
                 int finalJ = j;
-                if(display_mat[i][j].get_color() != -1) {
+                if (display_mat[i][j].get_color() != -1) {
                     img.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -265,7 +282,7 @@ public class TutorielActivity extends AppCompatActivity {
                             sy = finalJ;
                             setSelected(sx, sy);
                             removeImages(layout);
-                            if(game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
+                            if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
                                 display_possibilities(getSelected()[0], getSelected()[1]);
                             }
                         }
@@ -287,11 +304,10 @@ public class TutorielActivity extends AppCompatActivity {
                 t.setText(s);
             }
         }
-        if((turn %2) == 0){
+        if ((turn % 2) == 0) {
             nb_jump_b.setText("0");
             nb_jump_w.setText(String.valueOf(game.getJump()));
-        }
-        else if((turn %2) == 1){
+        } else if ((turn % 2) == 1) {
             nb_jump_w.setText("0");
             nb_jump_b.setText(String.valueOf(game.getJump()));
         }
@@ -302,10 +318,10 @@ public class TutorielActivity extends AppCompatActivity {
         layout.removeAllViews();
         if (game.getGameboard()[px][py] != null && game.getGameboard()[px][py].get_color() != -1) {
             int[][] pos = null;
-            if(game.check_selection(px, py, turn, 1) != -1) {
+            if (game.check_selection(px, py, turn, 1) != -1) {
                 pos = game.get_possibilities(game.getCell(px, py), px, py);
             }
-            if(pos != null) {
+            if (pos != null) {
                 for (int[] p : pos
                 ) {
                     int[] tmp = getrelative_position(p);
@@ -333,11 +349,11 @@ public class TutorielActivity extends AppCompatActivity {
                                         layout.removeAllViews();
                                         removeImages(myLayout);
                                         removeImages(myLayout);
-                                        if(game.checkEndTurn()){
+                                        if (game.checkEndTurn()) {
                                             System.out.println("fin de tour");
 
-                                            System.out.println("white : " +game.getNb_B_stars()+ " black " +game.getNb_W_stars());
-                                            if(game.end_turn()==(byte)1) {
+                                            System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
+                                            if (game.end_turn() == (byte) 1) {
                                             }
                                             update();
                                         }
@@ -374,7 +390,7 @@ public class TutorielActivity extends AppCompatActivity {
         return new_pos;
     }
 
-    public void removeImages(AbsoluteLayout layout){
+    public void removeImages(AbsoluteLayout layout) {
         for (int pos = 0; pos < layout.getChildCount(); pos++) {
             if (layout.getChildAt(pos) instanceof ImageView) {
                 layout.removeView(layout.getChildAt(pos));

@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="controller.TutorielActivity">
+    tools:context="activities.TutorielActivity">
 
     <AbsoluteLayout
         android:id="@+id/head"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        >
-    </AbsoluteLayout>
+        android:layout_height="wrap_content"></AbsoluteLayout>
 
     <TextView
         android:id="@+id/selected"
@@ -29,9 +25,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_y="400dp"
-        android:textSize="30dp"
+        android:gravity="center"
         android:text="tuto"
-        android:gravity="center"/>
+        android:textSize="30dp" />
 
 
     <TextView

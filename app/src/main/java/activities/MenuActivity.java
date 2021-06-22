@@ -1,18 +1,17 @@
-package controller;
-
-import androidx.appcompat.app.AppCompatActivity;
+package activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.apadnom.R;
 
-public class MenuActivity extends AppCompatActivity implements View.OnClickListener{
+public class MenuActivity extends AppCompatActivity implements View.OnClickListener {
 
     public TextView mName;
     private Button mNewGame;
@@ -50,7 +49,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         int menuIndex = (int) v.getTag();
 
-        switch(menuIndex) {
+        switch (menuIndex) {
             case 0:
                 Intent DisplayBoardActivity = new Intent(MenuActivity.this, DisplayBoardActivity.class);
                 startActivity(DisplayBoardActivity);

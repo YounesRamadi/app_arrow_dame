@@ -1,15 +1,13 @@
-package controller;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-
-import android.os.Handler;
-import android.widget.TextView;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
+package activities;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.apadnom.R;
 
@@ -28,12 +26,12 @@ public class MainActivity extends AppCompatActivity {
         mLogo = (ImageView) findViewById(R.id.etoile);
 
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable(){
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 finish();
             }
-        },10);
+        }, 10);
     }
 }
