@@ -19,7 +19,6 @@ public class GameBoard implements Parcelable {
     private Pion[][] gameboard;
     private int nb_W_stars;
     private int nb_B_stars;
-    private int turn;
 
     private byte has_jumped;
     private int jump;
@@ -48,10 +47,6 @@ public class GameBoard implements Parcelable {
     private Context context;
     private Toast toast;
 
-
-    public Pion[][] getGameboard() {
-        return gameboard;
-    }
 
     public GameBoard(GameBoard g, Context context){
         String entree = "03b03a07b25o07d03c03d";
@@ -123,6 +118,9 @@ public class GameBoard implements Parcelable {
     public int[][] getPossible_move() {
         if (possible_move == null) {
             return new int[0][0];
+        }
+        return  possible_move;
+    }
     /**
      * Permet de copier l'objet / equivalent de clone
      * @return un objet GameBoard identique
@@ -144,6 +142,10 @@ public class GameBoard implements Parcelable {
         return retour;
     }
 
+    private void setGameboard(Pion[][] p) {
+        this.gameboard = p;
+    }
+
     public void setPossible_move(int[][] possible_move) {
         this.possible_move = possible_move;
     }
@@ -159,13 +161,13 @@ public class GameBoard implements Parcelable {
         this.possible_jump = possible_jump;
     }
 
-    public void setPossible_move(int[][] possible_move) {
-        this.possible_move = possible_move;
-    }
-
     public void setNb_W_stars(int nb_W_stars) {
         this.nb_W_stars = nb_W_stars;
     }
+    public void setNb_B_stars(int nb_B_stars) {
+        this.nb_B_stars = nb_B_stars;
+    }
+
 
     public void setSelection(int x, int y){
         selection[0] = x;
@@ -247,35 +249,9 @@ public class GameBoard implements Parcelable {
             gameboard[x][y] = p;
     }
 
-    public int getNb_W_stars() {
+    public int getNb_W_stars(){
         System.out.println("b_stars :" + nb_B_stars);
         return nb_W_stars;
-    }
-
-    public void setNb_W_stars(int nb_W_stars) {
-        this.nb_W_stars = nb_W_stars;
-    }
-
-    public void setNb_stars() {
-        int n = 0;
-        int a = 0;
-        Pion p;
-
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 9; j++) {
-                p = gameboard[i][j];
-                if (p instanceof Etoile){
-                    if(p.get_color() == 0){
-                        n++;
-                    }else{
-                        a++;
-                    }
-                }
-
-            }
-        }
-        nb_W_stars = n;
-        nb_B_stars = a;
     }
 
     public int getJump() {
@@ -1095,7 +1071,7 @@ public class GameBoard implements Parcelable {
         dest.writeIntArray(movedPawn);
         dest.writeIntArray(lastPosition);
     }
-}
+
     /**
      * Permet de finir un tour et de savoir si c'est la fin de la partie
      * @return 1 si c'est la fin de la partie 0 sinon
@@ -1126,3 +1102,4 @@ public class GameBoard implements Parcelable {
     public Context getContext() {
         return context;
     }
+}

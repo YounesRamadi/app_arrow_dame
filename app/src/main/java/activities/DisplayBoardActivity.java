@@ -88,8 +88,6 @@ public class DisplayBoardActivity extends AppCompatActivity {
                 update();
             }
         });
-
-        player = (TextView) findViewById(R.id.playerTurn);
         update();
 
     }
@@ -292,7 +290,6 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                                 game = new GameBoard(getApplicationContext());
                                                 //game.initGameBoard();
                                             }
-                                            */
 
                                             update();
                                         }
