@@ -17,7 +17,6 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mGameName;
     private ImageView mLogo;
-    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,15 +25,14 @@ public class MainActivity extends AppCompatActivity {
 
         mGameName = (TextView) findViewById(R.id.nomjeu);
         mLogo = (ImageView) findViewById(R.id.etoile);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable(){
             @Override
             public void run() {
-                startActivity(new Intent(MainActivity.this, MenuActivity.class));
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 finish();
             }
-        },1000);
+        },10);
     }
 }

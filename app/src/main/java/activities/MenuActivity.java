@@ -57,7 +57,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (menuIndex) {
             case 0:
-                Intent DisplayBoardActivity = new Intent(MenuActivity.this, DisplayBoardActivity.class);
+                Intent DisplayBoardActivity = new Intent(MenuActivity.this, DisplayBoardIaActivity.class);
                 startActivity(DisplayBoardActivity);
                 break;
             case 1:

@@ -41,6 +41,8 @@
         app:layout_constraintHorizontal_bias="0.122"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.176" />
+        app:layout_constraintVertical_bias="0.176"
+        android:maxLines="1"
+        android:minLines="1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
