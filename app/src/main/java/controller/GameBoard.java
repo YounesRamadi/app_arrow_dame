@@ -412,32 +412,34 @@ public class GameBoard implements Parcelable {
         get_possibilities(gameboard[x][y],x,y);
 
         // flag checkforjump inutile
-
         //on regarde si lorsque l'on choisit une fleche
         // et que celle-ci ne peut pas sauter
         // qu'aucune autre fleche ne peut sauter
-        if (checkforjump == 1 && gameboard[x][y] instanceof Fleche){
-            for(int i=0; i<7;i++){
-                for(int j=0; j<9; j++){
+        if(has_jumped == (byte) 0){
+            if (checkforjump == 1 && gameboard[x][y] instanceof Fleche && has_jumped == (byte)0){
+                for(int i=0; i<7;i++){
+                    for(int j=0; j<9; j++){
 
-                    if(gameboard[i][j] == null){
-                        continue;
-                    }
-                    // si le pion est de la couleur de la fleche
-                    if(gameboard[i][j].get_color() == actual_color){
-                        // et que le pion n'est pas le pion teste
-                        if(!(i== x && j ==y)) {
+                        if(gameboard[i][j] == null){
+                            continue;
+                        }
+                        // si le pion est de la couleur de la fleche
+                        if(gameboard[i][j].get_color() == actual_color){
+                            // et que le pion n'est pas le pion teste
+                            if(!(i== x && j ==y)) {
 
-                            // on regarde si il peut jump un ennemi et que cest une fleche
-                            if(gameboard[i][j] instanceof Fleche &&canJumpEnnemy(i, j)  && !canJumpEnnemy(x,y)){
-                                System.err.println("An other pawn can jump, impossible to move this arrow");
-                                return -1;
+                                // on regarde si il peut jump un ennemi et que cest une fleche
+                                if(gameboard[i][j] instanceof Fleche && canJumpEnnemy(i, j)  && !canJumpEnnemy(x,y)){
+                                    System.err.println("An other pawn can jump, impossible to move this arrow");
+                                    return -1;
+                                }
                             }
                         }
                     }
                 }
             }
         }
+
         // si cest une etoile
         // on verifie juste son
         if(gameboard[x][y] instanceof Etoile){
