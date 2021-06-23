@@ -46,7 +46,7 @@ public class GameBoard implements Parcelable {
     private Context context;
     private Toast toast;
 
-
+    private ArrayList<int[][]> jumpedPawn = new ArrayList<int[][]>();
     public GameBoard(GameBoard g, Context context){
         String entree = "03b03a07b25o07d03c03d";
 
@@ -718,47 +718,67 @@ public class GameBoard implements Parcelable {
 
 
                 if (check_specified_pawn(x, y, x - 1, y) > 0 && check_specified_pawn(x, y, x - 2, y) == 0) {// pion P() -> 0
-                    if(!((x-2 == lastPosition[0]) && (y == lastPosition[1]))) {
+                    if(!ifPawnJumped(x-1,y)) {
                         tmp = new int[2];
                         tmp[0] = x - 2;
                         tmp[1] = y;
-                        ar2.add(indexJump++, tmp);
+                        //ar2.add(indexJump++, tmp);
 
                         if(check_specified_pawn(x,y,x-1,y) == 2){
                             possibleEnemyJump++;
+                            if(has_jumped == (byte)0) {
+                                if (possibleEnemyJump == 1) {
+                                    ar2 = new ArrayList<int[]>();
+
+                                }
+                                ar2.add(ar2.size(), tmp);
+                            }
+                        }
+                        if(possibleEnemyJump == 0 || has_jumped == (byte) 1) {
+                            ar2.add(ar2.size(), tmp);
                         }
                     }
                 }
                 if (check_specified_pawn(x, y, x, y + 2) == 0 && check_specified_pawn(x, y, x, y + 1) > 0 && has_jumped == (byte) 1) {
-                    if(!((x == lastPosition[0]) && (y+2 == lastPosition[1]))) {
+                    if(!ifPawnJumped(x,y+1)) {
                         tmp = new int[2];
                         tmp[0] = x;
                         tmp[1] = y + 2;
-                        ar2.add(indexJump++, tmp);
+                        ar2.add(ar2.size(), tmp);
                         if(check_specified_pawn(x,y,x,y+1) == 2){
                             possibleEnemyJump++;
                         }
                     }
                 }
                 if (check_specified_pawn(x, y, x, y - 2) == 0 && check_specified_pawn(x, y, x, y - 1) > 0 && has_jumped == (byte) 1) {
-                    if(!((x == lastPosition[0]) && (y-2 == lastPosition[1]))) {
+                    if(!ifPawnJumped(x,y-1)) {
                         tmp = new int[2];
                         tmp[0] = x;
                         tmp[1] = y - 2;
-                        ar2.add(indexJump++, tmp);
+                        ar2.add(ar2.size(), tmp);
                         if(check_specified_pawn(x,y,x,y-1) == 2){
                             possibleEnemyJump++;
                         }
                     }
                 }
                 if (check_specified_pawn(x, y, x - 2, y - 2) == 0 && check_specified_pawn(x, y, x - 1, y - 1) > 0) {
-                    if(!((x-2 == lastPosition[0]) && (y-2 == lastPosition[1]))) {
+                    if(!ifPawnJumped(x-1,y-1)) {
                         tmp = new int[2];
                         tmp[0] = x - 2;
                         tmp[1] = y - 2;
-                        ar2.add(indexJump++, tmp);
+                        //ar2.add(indexJump++, tmp);
                         if(check_specified_pawn(x,y,x-1,y-1) == 2){
                             possibleEnemyJump++;
+                            if(has_jumped == (byte)0) {
+                                if (possibleEnemyJump == 1) {
+                                    ar2 = new ArrayList<int[]>();
+
+                                }
+                                ar2.add(ar2.size(), tmp);
+                            }
+                        }
+                        if(possibleEnemyJump == 0 || has_jumped == (byte) 1) {
+                            ar2.add(ar2.size(), tmp);
                         }
                     }
                 }
@@ -786,46 +806,60 @@ public class GameBoard implements Parcelable {
         else {
             //jumps
             if(check_specified_pawn(x, y, x+2, y) == 0  && check_specified_pawn(x, y, x+1, y) > 0){ // pion P() -> 0
-                if(!((x+2 == lastPosition[0]) && (y == lastPosition[1]))) {
+                if(!ifPawnJumped(x+1,y)) {
                     tmp = new int[2];
                     tmp[0] = x + 2;
                     tmp[1] = y;
-                    ar2.add(indexJump++, tmp);
                     if(check_specified_pawn(x,y,x+1,y) == 2){
                         possibleEnemyJump++;
+                        if(has_jumped == (byte)0) {
+                            if (possibleEnemyJump == 1) {
+                                ar2 = new ArrayList<int[]>();
+
+                            }
+                            ar2.add(ar2.size(), tmp);
+                        }
+                    }
+                    if(possibleEnemyJump == 0 || has_jumped == (byte) 1) {
+                        ar2.add(ar2.size(), tmp);
                     }
                 }
             }
             if(check_specified_pawn(x, y, x, y-2) == 0  && check_specified_pawn(x, y, x, y-1) > 0 && has_jumped == (byte)1){
-                if(!((x == lastPosition[0]) && (y-2 == lastPosition[1]))) {
+                if(!ifPawnJumped(x,y-1)) {
                     tmp = new int[2];
                     tmp[0] = x;
                     tmp[1] = y-2;
-                    ar2.add(indexJump++, tmp);
-                    if(check_specified_pawn(x,y,x,y-1) == 2){
-                        possibleEnemyJump++;
-                    }
+                    ar2.add(ar2.size(), tmp);
                 }
             }
             if(check_specified_pawn(x, y, x, y+2) == 0  && check_specified_pawn(x, y, x, y+1) > 0 && has_jumped == (byte)1){
-                if(!((x == lastPosition[0]) && (y+2 == lastPosition[1]))) {
+                if(!ifPawnJumped(x,y+1)) {
                     tmp = new int[2];
                     tmp[0] = x;
                     tmp[1] = y + 2;
-                    ar2.add(indexJump++, tmp);
-                    if(check_specified_pawn(x,y,x,y+1) == 2){
-                        possibleEnemyJump++;
-                    }
+                    ar2.add(ar2.size(), tmp);
+
                 }
             }
             if(check_specified_pawn(x, y, x+2, y+2) == 0  && check_specified_pawn(x, y, x+1, y+1) > 0){
-                if(!((x+2 == lastPosition[0]) && (y+2 == lastPosition[1]))) {
+                if(!ifPawnJumped(x+1,y+1)) {
                     tmp = new int[2];
                     tmp[0] = x + 2;
                     tmp[1] = y + 2;
-                    ar2.add(indexJump++, tmp);
+
                     if(check_specified_pawn(x,y,x+1,y+1) == 2){
                         possibleEnemyJump++;
+                        if(has_jumped == (byte)0) {
+                            if (possibleEnemyJump == 1) {
+                                ar2 = new ArrayList<int[]>();
+
+                            }
+                            ar2.add(ar2.size(), tmp);
+                        }
+                    }
+                    if(possibleEnemyJump == 0 || has_jumped == (byte) 1) {
+                        ar2.add(ar2.size(), tmp);
                     }
                 }
             }
@@ -845,10 +879,11 @@ public class GameBoard implements Parcelable {
                 }
             }
         }
-
+        indexMove = arl.size();
         if(has_jumped == (byte) 1){
             indexMove = 0;
         }
+        indexJump = ar2.size();
 
         possible_move= arl.toArray(new int[0][0]);
         possible_jump = ar2.toArray(new int[0][0]);
@@ -868,6 +903,17 @@ public class GameBoard implements Parcelable {
         return retour;
     }
 
+    private boolean ifPawnJumped(int x,int y){
+        if(jumpedPawn == null){
+            return false;
+        }
+        for(int i= 0; i<jumpedPawn.size(); i++){
+            if(jumpedPawn.get(i)[0][0] == x && jumpedPawn.get(i)[0][1]==y){
+                return true;
+            }
+        }
+        return false;
+    }
     // permet de savoir lorsque qu'un pion peut jump un ennemi ou non
 
     /**
@@ -962,8 +1008,12 @@ public class GameBoard implements Parcelable {
                     } else {
                         has_jumped = (byte) 1;
                         if (gameboard[distanceX + selection[0]][distanceY + selection[1]].get_color() != gameboard[selection[0]][selection[1]].get_color()) {
+
                             jump++;
                         }
+                        int[][] test = {{distanceX + selection[0],distanceY + selection[1]}};
+
+                        jumpedPawn.add(jumpedPawn.size(),test);
                     }
                     movedPawn = new int[2];
                     movedPawn[0] = x;
@@ -1090,6 +1140,7 @@ public class GameBoard implements Parcelable {
         selection = new int[2];
         movedPawn = new int[2];
         lastPosition = new int[2];
+        jumpedPawn = new ArrayList<int[][]>();
         if (nb_B_stars == 0 || nb_W_stars == 0){
             return (byte)1;
         }
