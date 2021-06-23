@@ -49,11 +49,15 @@ public class Ia {
         return score;
     }
     public int max(GameBoard j, int ligne, int colonne, int lim, boolean sameColor){
-        j.move(ligne, colonne);
+        if(j.getPossible_jump()!=null && j.getPossible_jump().length!=0){
+            System.out.println("les jumps : "+j.getPossible_jump().length);
+        }
+        int lemove=j.move(ligne, colonne);
         int max=0;
         int inter=0;
         int obl=0;
         int[][] poss;
+        System.out.println("max jump color: " + j.getHas_jumped() + "le move : " + lemove);
         if(j.getHas_jumped()==(byte)1 && sameColor){
             System.out.println("Zebi:"+j.getJump());
             poss=j.get_possibilities(j.getGameboard()[ligne][colonne], ligne, colonne);
@@ -126,7 +130,7 @@ public class Ia {
                 }
             }
         }
-        if(lim==0 || j.getNb_W_stars()==0 || j.getNb_B_stars()==0){
+        if(lim<=0 || j.getNb_W_stars()==0 || j.getNb_B_stars()==0){
             System.out.println("Ceci est un test");
             return valuation(j, (byte)((j.getGameboard()[ligne][colonne].get_color()+1)%2));
         }
@@ -236,7 +240,7 @@ public class Ia {
                 }
             }
         }
-        if(lim==0 || j.getNb_W_stars()==0 || j.getNb_B_stars()==0){
+        if(lim<=0 || j.getNb_W_stars()==0 || j.getNb_B_stars()==0){
             System.out.println("Ceci est un testbis");
             return valuation(j, j.getGameboard()[ligne][colonne].get_color());
         }
@@ -298,7 +302,7 @@ public class Ia {
     }
 
     public int[] minMax(byte couleur, GameBoard j, int lim) {
-        System.out.println("fonction : " + j.getJump());
+        System.out.println("fonction : " + j.getJump()+"\n");
 
         Pion[][] plateau = j.getGameboard();
         int[] pos= {-1,-1,-1,-1,0,0};
@@ -391,12 +395,16 @@ public class Ia {
 
         }
         else {
+            System.out.println(("ok1\n"));
             for (int ligne = 0; ligne < 7; ligne++) {
                 for (int col = 0; col < 9; col++) {
                     if (plateau[ligne][col] != null) {
+                        System.out.println(("ok peut etre 2\n"));
                         if (plateau[ligne][col].get_color() == couleur) {
+                            System.out.println(("ok peut etre 3\n"));
                             poss = j.get_possibilities(plateau[ligne][col], ligne, col);
                             if (j.getPossible_move() != null) {
+                                System.out.println(("ok peut etre 4\n"));
                                 for (int s = 0; s < j.getPossible_move().length; s++) {
                                     inter = min(j.copy(), j.getPossible_move()[s][0], j.getPossible_move()[s][1], lim - 1, false);
                                     if (max < inter) {
@@ -410,8 +418,12 @@ public class Ia {
                                     }
                                 }
                                 if (j.getPossible_jump() != null) {
+                                    //System.out.println(("ok peut etre 5"+j.getPossible_jump().length+"\n"));
                                     for (int s = 0; s < j.getPossible_jump().length; s++) {
+                                        //System.out.println("less coordonnées : "+j.getPossible_jump()[s][0]+ "||"+ j.getPossible_jump()[s][1] + "il vient de : " + ligne + "||"+col);
                                         inter = max(j.copy(), j.getPossible_jump()[s][0], j.getPossible_jump()[s][1], lim, true);
+                                        //System.out.println(("max jump : "+max+"\n"));
+                                        //System.out.println(("inter jump : " + inter+"\n"));
                                         if (max < inter) {
                                             max = inter;
                                             pos[0] = ligne;

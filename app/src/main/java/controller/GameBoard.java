@@ -95,6 +95,8 @@ public class GameBoard{
         retour.setHas_jumped(has_jumped);
         retour.setNb_B_stars(nb_B_stars);
         retour.setNb_W_stars(nb_W_stars);
+        retour.setPossible_jump(possible_jump);
+        retour.setPossible_move(possible_move);
         retour.setJump(jump);
         retour.setGameboard(p);
         retour.setSelection(this.selection[0], this.selection[1]);
@@ -615,6 +617,7 @@ public class GameBoard{
 
         }
 
+
         possible_move= arl.toArray(new int[0][0]);
         possible_jump = ar2.toArray(new int[0][0]);
         int[][] retour = new int[indexJump+indexMove][2];
@@ -901,7 +904,7 @@ public class GameBoard{
                     lastPosition[1] = selection[1];
                     gameboard[x][y] = gameboard[selection[0]][selection[1]];
                     gameboard[selection[0]][selection[1]] = new Pion();
-                    possible_move = null;
+
                     if ((x == 0 && gameboard[x][y].get_direction() == 0) || (x == 6 && gameboard[x][y].get_direction() == 1)) {
                         if (gameboard[x][y] instanceof Etoile) {
                             if (gameboard[x][y].get_color() == (byte)0) {
@@ -929,8 +932,7 @@ public class GameBoard{
                     lastPosition[0] = selection[0];
                     lastPosition[1] = selection[1];
                     gameboard[selection[0]][selection[1]] = new Pion();
-                    possible_jump = null;
-                    possible_move = null;
+
                     if(gameboard[x][y] instanceof Etoile){
                         jump --;
                     }
@@ -1045,6 +1047,12 @@ public class GameBoard{
         return possible_move;
     }
     public void setPossible_move(int[][] possible_move) {
+        /*int[][] retour = new int [possible_move.length][2];
+        for(int i=0;i < possible_move.length; i++){
+            retour[i][0] = possible_move[i][0];
+            retour[i][1] = possible_move[i][1];
+
+        }*/
         this.possible_move = possible_move;
     }
 
@@ -1055,6 +1063,12 @@ public class GameBoard{
         return possible_jump;
     }
     public void setPossible_jump(int[][] possible_jump) {
+        /*int[][] retour = new int [possible_jump.length][2];
+        for(int i=0;i < possible_jump.length; i++){
+            retour[i][0] = possible_jump[i][0];
+            retour[i][1] = possible_jump[i][1];
+
+        }*/
         this.possible_jump = possible_jump;
     }
 
