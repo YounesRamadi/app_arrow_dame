@@ -15,9 +15,14 @@ public class Fleche extends Pion {
         super();
     }
 
-
-    public String toString() {
-        if (this.color == 0) {
+    public Fleche copy(){
+        Fleche retour = new Fleche();
+        retour.color = color;
+        retour.direction = direction;
+        return retour;
+    }
+    public String toString(){
+        if(this.color == 0){
             return "Fb";
         }
         return "Fn";

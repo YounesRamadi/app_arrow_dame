@@ -23,17 +23,13 @@ public class Pion {
         this.color = pCouleur;
         this.direction = pDirection;
     }
-
-    public @DrawableRes
-    int getImg() {
-        return img;
+    public Pion copy(){
+        Pion retour = new Pion();
+        retour.color = color;
+        retour.direction = direction;
+        return retour;
     }
-
-    public void setImg(@DrawableRes int d) {
-        img = d;
-    }
-
-    public byte get_color() {
+    public byte get_color(){
         return this.color;
     }
 

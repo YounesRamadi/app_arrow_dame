@@ -123,7 +123,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public void update() {
-        System.out.println("turn:" + turn);
+        //System.out.println("turn:" + turn);
         // faudrait peut etre trouver autre chose
         removeImages(myLayout);
         removeImages(myLayout);
@@ -237,22 +237,24 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View v) {
                                         setSelected(finalI, finalJ);
-                                        System.out.println("move depuis:" + getSelected()[0] + getSelected()[1] + "vers :" + finalI + finalJ);
+                                        //System.out.println("move depuis:" + getSelected()[0] + getSelected()[1] + "vers :" + finalI + finalJ);
                                         game.move(finalI, finalJ);
                                         update();
                                         layout.removeAllViews();
                                         removeImages(myLayout);
                                         removeImages(myLayout);
                                         if(game.checkEndTurn()){
-                                            System.out.println("fin de tour");
-                                            game.end_turn();
+                                            //System.out.println("fin de tour");
+                                            if(game.end_turn() == (byte) 1){
+                                                System.out.println("Fin du game");
+                                            }
                                             turn ++;
                                             update();
                                             //jump = 0
                                             do {
                                                 iaMove = ia.minMax((byte) (1), game.copy(), 2);
-                                                System.out.println("Taking " + iaMove[0] + " : " + iaMove[1]);
-                                                System.out.println("Going in " + iaMove[2] + " : " + iaMove[3]);
+                                                //System.out.println("Taking " + iaMove[0] + " : " + iaMove[1]);
+                                                //System.out.println("Going in " + iaMove[2] + " : " + iaMove[3]);
 
                                                 game.setSelection(iaMove[0], iaMove[1]);
                                                 //jump = 0
@@ -265,7 +267,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                                 settermove[0][1] = iaMove[3];
 
                                                 game.setHas_jumped((byte) iaMove[4]);
-                                                System.out.println("quil est bete : " + iaMove[5]);
+                                                //System.out.println("quil est bete : " + iaMove[5]);
 
                                                 game.setPossible_jump(setterjump);
                                                 game.setPossible_move(settermove);
@@ -275,7 +277,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                                 }
                                                 System.out.println("Moving : " + game.move(iaMove[2], iaMove[3]));
                                                 game.set_movedPawn(iaMove[2],iaMove[3]);
-                                                System.out.println("Flags h_j :" + iaMove[4] + "/ j :" + iaMove[5]);
+                                                //System.out.println("Flags h_j :" + iaMove[4] + "/ j :" + iaMove[5]);
 
                                                 if(game.checkEndTurn()){
                                                     break;
@@ -284,13 +286,12 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
 
                                             }while(iaMove[5] >= 1 || iaMove[4] == (byte)1);
 
-                                            turn ++;
-                                            game.end_turn();
+
                                             //game.add_turn();
 
 
                                             if(game.end_turn()==(byte)1) {
-                                                System.out.println("Test");
+                                                //System.out.println("Test");
                                                 game = new GameBoard(getApplicationContext());
                                                 //game.initGameBoard();
                                             }

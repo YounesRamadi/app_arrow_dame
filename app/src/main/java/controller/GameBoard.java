@@ -42,6 +42,11 @@ public class GameBoard implements Parcelable{
     }
 
 
+    public void setLastPosition(int lastPositionx, int lastPositiony) {
+        this.lastPosition[0] = lastPositionx;
+        this.lastPosition[1] = lastPositiony;
+    }
+
     private int[] lastPosition = new int[2];
     private int[][] jumpableEnnemies;
 
@@ -132,7 +137,11 @@ public class GameBoard implements Parcelable{
         Pion[][] p= new Pion[7][9];
         for(int i=0; i<gameboard.length;i++){
             for(int j=0;j<gameboard[i].length;j++){
-                p[i][j] = gameboard[i][j];
+                if(gameboard[i][j]==null){
+                    gameboard[i][j]=null;
+                }
+                else
+                    p[i][j] = gameboard[i][j].copy();
             }
         }
         retour.setHas_jumped(has_jumped);
@@ -141,8 +150,10 @@ public class GameBoard implements Parcelable{
         retour.setPossible_jump(possible_jump);
         retour.setPossible_move(possible_move);
         retour.setJump(jump);
+        retour.setLastPosition(lastPosition[0],lastPosition[1]);
         retour.setGameboard(p);
         retour.setSelection(this.selection[0], this.selection[1]);
+        retour.set_movedPawn(movedPawn[0], movedPawn[1]);
         return retour;
     }
 
@@ -397,14 +408,14 @@ public class GameBoard implements Parcelable{
         if (x < 0 || x >= 7 || y < 0 || y >= 9) {
             toast = Toast.makeText(context, "Wtf args are you sending bruh ?", Toast.LENGTH_LONG);
             toast.show();
-            System.err.println("Wtf args are you sending bruh ?");
+            //System.err.println("Wtf args are you sending bruh ?");
             return -1;
         }
         // est ce que le pion choisi est de la bonne couleur
         if (gameboard[x][y].get_color() != turn % 2) {
             toast = Toast.makeText(context, "That's not your pawn!", Toast.LENGTH_LONG);
             toast.show();
-            System.err.println("That's not your pawn!");
+            //System.err.println("That's not your pawn!");
             return -1;
         }
 
@@ -422,19 +433,18 @@ public class GameBoard implements Parcelable{
                 for (int i = 0; i < 7; i++) {
                     for (int j = 0; j < 9; j++) {
 
-                        if (gameboard[i][j] == null) {
-                            continue;
-                        }
-                        // si le pion est de la couleur de la fleche
-                        if (gameboard[i][j].get_color() == actual_color) {
-                            // et que le pion n'est pas le pion teste
-                            if (!(i == x && j == y)) {
+                    if(gameboard[i][j] == null){
+                        continue;
+                    }
+                    // si le pion est de la couleur de la fleche
+                    if(gameboard[i][j].get_color() == actual_color){
+                        // et que le pion n'est pas le pion teste
+                        if(!(i== x && j ==y)) {
 
-                                // on regarde si il peut jump un ennemi et que cest une fleche
-                                if (gameboard[i][j] instanceof Fleche && canJumpEnnemy(i, j) && !canJumpEnnemy(x, y)) {
-                                    System.err.println("An other pawn can jump, impossible to move this arrow");
-                                    return -1;
-                                }
+                            // on regarde si il peut jump un ennemi et que cest une fleche
+                            if(gameboard[i][j] instanceof Fleche &&canJumpEnnemy(i, j)  && !canJumpEnnemy(x,y)){
+                                //System.err.println("An other pawn can jump, impossible to move this arrow");
+                                return -1;
                             }
                         }
                     }
@@ -495,16 +505,16 @@ public class GameBoard implements Parcelable{
     private int check_specified_pawn(int posPionx, int posPiony, int posFinalx, int posFinaly){
         // toutes les positions sont dans le tableau ?
         if(posPionx < 0 || posPionx >= 7 || posPiony < 0 || posPiony >= 9){
-            System.err.println("PositionX and Position Y of the target pawn is out of the board.");
+            //System.err.println("PositionX and Position Y of the target pawn is out of the board.");
             return -1;
         }
         if(posFinalx < 0 || posFinalx >= 7 || posFinaly < 0 || posFinaly >= 9){
-            System.err.println("PositionX and Position Y of the checked pawn is out of the board.");
+            //System.err.println("PositionX and Position Y of the checked pawn is out of the board.");
             return -1;
         }
         // si le pion choisi ne correspond pas à une case cachée
         if(gameboard[posFinalx][posFinaly] ==null || gameboard[posPionx][posPiony] ==null){
-            System.err.println("Target pawn is out of the board but still in the array");
+            //System.err.println("Target pawn is out of the board but still in the array");
             return -1;
         }
         //si la case choisit est une case vide
@@ -984,7 +994,7 @@ public class GameBoard implements Parcelable{
     public int move(int x, int y){
 
         if(check_specified_pawn(x, y,selection[0], selection[1]) == -1){
-            System.err.println("Tried to move a non-existing pawn");
+            //System.err.println("Tried to move a non-existing pawn");
             return -1;
         }
         // commence par s'il y a des jumps
@@ -998,7 +1008,8 @@ public class GameBoard implements Parcelable{
                         has_jumped = (byte) 0;
                         jump--;
                         if (jump <= -1) {
-                            System.err.println("Star has 0 turn left");
+                            jump=0;
+                            //System.err.println("Star has 0 turn left");
                             return -1;
                         }
 
@@ -1074,7 +1085,7 @@ public class GameBoard implements Parcelable{
             }
             return 0;
         }
-        System.err.println("Destination not in possible move/jump");
+        //System.err.println("Destination not in possible move/jump");
         return -1;
     }
 
