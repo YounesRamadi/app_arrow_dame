@@ -9,6 +9,14 @@ public class Pion {
     protected byte color; // 1 noir 0 blanc
     protected byte direction; // 0 vers le nord / haut
 
+    public int getImg() {
+        return img;
+    }
+
+    public void setImg(int img) {
+        this.img = img;
+    }
+
     private @DrawableRes
     int img = R.drawable.hexagone;
 

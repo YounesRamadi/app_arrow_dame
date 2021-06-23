@@ -289,8 +289,9 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
 
                                             //game.add_turn();
 
-
+                                            turn ++;
                                             if(game.end_turn()==(byte)1) {
+
                                                 //System.out.println("Test");
                                                 game = new GameBoard(getApplicationContext());
                                                 //game.initGameBoard();
