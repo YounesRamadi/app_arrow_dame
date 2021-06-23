@@ -206,12 +206,14 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                         removeImages(myLayout);
                                         if(game.checkEndTurn()){
                                             //System.out.println("fin de tour");
-                                            game.end_turn();
+                                            if(game.end_turn() == (byte) 1){
+                                                System.out.println("Fin du game");
+                                            }
                                             turn ++;
                                             update();
                                             //jump = 0
                                             do {
-                                                iaMove = ia.minMax((byte) (1), game.copy(), 3);
+                                                iaMove = ia.minMax((byte) (1), game.copy(), 2);
                                                 //System.out.println("Taking " + iaMove[0] + " : " + iaMove[1]);
                                                 //System.out.println("Going in " + iaMove[2] + " : " + iaMove[3]);
 
@@ -245,8 +247,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
 
                                             }while(iaMove[5] >= 1 || iaMove[4] == (byte)1);
 
-                                            turn ++;
-                                            game.end_turn();
+
                                             //game.add_turn();
 
 
@@ -255,7 +256,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                                 game = new GameBoard(getApplicationContext());
                                                 //game.initGameBoard();
                                             }
-
+                                            turn++;
 
                                             update();
                                         }
