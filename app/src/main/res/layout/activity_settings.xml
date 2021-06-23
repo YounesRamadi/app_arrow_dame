@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:hint="Entrez votre prénom"
+        android:hint="Réalisé"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.122"
@@ -46,5 +46,19 @@
         android:minLines="1"
         android:maxLength="15"
         android:inputType="text"/>
+
+    <TextView
+        android:id="@+id/credits"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Réalisé par Pierre Mauger, Younes Ramadi, Gabriel Pithon, Antonin Guichard et Anthony Laperche"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.447"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.992"
+        android:textSize="9dp"
+        android:gravity="center_horizontal"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

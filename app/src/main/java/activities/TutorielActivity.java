@@ -92,6 +92,7 @@ public class TutorielActivity extends AppCompatActivity {
     }
 
     private void bigSwitch() {
+        removeImages(boardLayout);
         switch (index) {
             case (0):
                 gameboardTuto();
@@ -118,24 +119,27 @@ public class TutorielActivity extends AppCompatActivity {
                 jumpLateralArrow();
                 break;
             case (8):
-                moveStar();
+                backJumpArrow();
                 break;
             case (9):
-                jumpStar();
+                moveStar();
                 break;
             case (10):
-                shootingStar();
+                jumpStar();
                 break;
             case (11):
-                mustJumpTuto();
+                shootingStar();
                 break;
             case (12):
-                boardTuto();
+                mustJumpTuto();
                 break;
             case (13):
-                endTuto();
+                boardTuto();
                 break;
             case (14):
+                endTuto();
+                break;
+            case (15):
                 closeTuto();
                 break;
             default:
@@ -154,13 +158,13 @@ public class TutorielActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void pionsTuto() {
         precedent.setVisibility(View.VISIBLE);
-        tutoriel.setText("Il existe deux types de pions");
+        tutoriel.setText("Il existe deux types de pions.");
         game = new GameBoard("51o", getApplicationContext());
     }
 
     @SuppressLint("SetTextI18n")
     private void arrowsTuto() {
-        tutoriel.setText("Ces pions sont appelés des flèches");
+        tutoriel.setText("Ces pions sont appelés des flèches.");
         game = new GameBoard("24o01b01o01d24o", getApplicationContext());
     }
 
@@ -172,7 +176,7 @@ public class TutorielActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void goalTuto() {
-        tutoriel.setText("Le but du jeu est d'amener ses 3 étoiles de l'autre côté du plateau");
+        tutoriel.setText("Le but du jeu est d'amener ses 3 étoiles de l'autre côté du plateau.");
         game = new GameBoard("03c48o", getApplicationContext());
     }
 
@@ -191,7 +195,13 @@ public class TutorielActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void jumpLateralArrow() {
         tutoriel.setText("Tu peux même sauter plusieurs fois de suite avec la même flèche. Après un saut, tu peux aussi faire un saut sur le côté.");
-        game = new GameBoard("09o01b06o01b01d06o01b01d01b24o", getApplicationContext());
+        game = new GameBoard("07o01b03o01b04o02b06o01b01d01b24o", getApplicationContext());
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void backJumpArrow() {
+        tutoriel.setText("Par contre tu ne peux pas revenir sur la case d'où tu viens.");
+        game = new GameBoard("07o01b03o01b04o02b06o01b01d01b24o", getApplicationContext());
     }
 
     @SuppressLint("SetTextI18n")
@@ -212,13 +222,13 @@ public class TutorielActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void shootingStar() {
-        tutoriel.setText("Mais pour bouger vos étoiles il faut d'abord sauter par dessus un pion de l'adversaire avec une de vos flèches");
+        tutoriel.setText("Mais pour bouger vos étoiles il faut d'abord sauter par dessus un pion de l'adversaire avec une de vos flèches.");
         game = new GameBoard("16o02b06o01b01d01b18o03c03o", getApplicationContext());
     }
 
     @SuppressLint("SetTextI18n")
     private void mustJumpTuto() {
-        tutoriel.setText("Si tu peux sauter avec une flèche, tu ne peux pas juste bouger avec une autre");
+        tutoriel.setText("Si tu peux sauter avec une flèche, tu ne peux pas juste bouger avec une autre.");
         game = new GameBoard("16o02b06o01b01d01b01o01d22o", getApplicationContext());
     }
 
@@ -268,6 +278,7 @@ public class TutorielActivity extends AppCompatActivity {
     }
     @SuppressLint("UseCompatLoadingForDrawables")
     public void update() {
+        removeImages(boardLayout);
         System.out.println("turn:" + turn);
         // faudrait peut etre trouver autre chose
         //affichage du cadre
@@ -296,7 +307,7 @@ public class TutorielActivity extends AppCompatActivity {
                     img.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            possibilitiesLayout.removeAllViews();
+                            removeImages(possibilitiesLayout);
                             sx = finalI;
                             sy = finalJ;
                             setSelected(sx, sy);
@@ -336,6 +347,7 @@ public class TutorielActivity extends AppCompatActivity {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public void display_possibilities(int px, int py) {
+        removeImages(possibilitiesLayout);
         if (game.getGameboard()[px][py] != null && game.getGameboard()[px][py].get_color() != -1) {
             int[][] pos = null;
             if (game.check_selection(px, py, turn, 1) != -1) {
@@ -360,7 +372,6 @@ public class TutorielActivity extends AppCompatActivity {
                                 img.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        boardLayout.removeAllViews();
                                         setSelected(finalI, finalJ);
                                         System.out.println("move depuis:" + getSelected()[0] + getSelected()[1] + "vers :" + finalI + finalJ);
                                         game.move(finalI, finalJ);
@@ -368,7 +379,6 @@ public class TutorielActivity extends AppCompatActivity {
                                         if (game.checkEndTurn()) {
                                             System.out.println("fin de tour");
                                             turn++;
-                                            update();
                                             System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
                                             game.end_turn();
                                             game.add_turn();
@@ -381,6 +391,8 @@ public class TutorielActivity extends AppCompatActivity {
                                             */
 
                                         }
+                                        removeImages(possibilitiesLayout);
+                                        removeImages(boardLayout);
                                         update();
                                     }
                                 });
@@ -421,5 +433,14 @@ public class TutorielActivity extends AppCompatActivity {
         return new_pos;
     }
 
-
+    public void removeImages(RelativeLayout layout){
+        for(int k = 0; k < 10; k++){
+            for(int i=0;i<layout.getChildCount();i++){
+                View view=layout.getChildAt(i);
+                if(view.getId()!=R.id.possibilites){
+                    layout.removeViewAt(i);
+                }
+            }
+        }
+    }
 }
