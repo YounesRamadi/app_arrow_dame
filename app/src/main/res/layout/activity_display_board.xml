@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout"
@@ -12,24 +11,32 @@
     <RelativeLayout
         android:id="@+id/board"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <RelativeLayout
             android:id="@+id/possibilites"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            ></RelativeLayout>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </RelativeLayout>
     </RelativeLayout>
 
+
     <TextView
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Apadnom"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.07" />
-
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/selected"
@@ -45,7 +52,12 @@
         android:layout_height="wrap_content"
         android:layout_x="187dp"
         android:layout_y="654dp"
-        android:text="TextView" />
+        android:rotation="180"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/endTurn1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/nb_jump_w"
@@ -53,7 +65,11 @@
         android:layout_height="wrap_content"
         android:layout_x="185dp"
         android:layout_y="606dp"
-        android:text="TextView" />
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/endTurn" />
 
     <Button
         android:id="@+id/endTurn"
@@ -61,7 +77,11 @@
         android:layout_height="wrap_content"
         android:layout_x="300dp"
         android:layout_y="600dp"
-        android:text="restart" />
+        android:text="Fin de Tour"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline11" />
 
     <Button
         android:id="@+id/endTurn1"
@@ -69,7 +89,12 @@
         android:layout_height="wrap_content"
         android:layout_x="285dp"
         android:layout_y="523dp"
-        android:text="Fin de Tour" />
+        android:rotation="180"
+        android:text="Fin de Tour"
+        app:layout_constraintBottom_toTopOf="@+id/guideline11"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/playerTurn"
@@ -77,6 +102,22 @@
         android:layout_height="wrap_content"
         android:layout_x="39dp"
         android:layout_y="652dp"
-        android:text="TextView" />
+        android:text="TextView"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="415dp" />
 
-</RelativeLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="196dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="414dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

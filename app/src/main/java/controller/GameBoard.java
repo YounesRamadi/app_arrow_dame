@@ -35,7 +35,6 @@ public class GameBoard implements Parcelable {
     private int[] movedPawn = new int[2]; // le dernier pion
 
 
-
     public int[] getMovedPawn() {
         return movedPawn;
     }
@@ -942,6 +941,7 @@ public class GameBoard implements Parcelable {
             System.err.println("Tried to move a non-existing pawn");
             return -1;
         }
+
         // commence par s'il y a des jumps
         if(possible_jump != null){
             for(int i=0; i<possible_jump.length;i++){
@@ -1035,13 +1035,17 @@ public class GameBoard implements Parcelable {
      */
     public boolean checkEndTurn(){
         // lorsque l'on est avec une fleche
+        System.out.println("test end turn");
         if(gameboard[movedPawn[0]][movedPawn[1]] instanceof  Fleche){
             // si il a fait un deplacement on arrete le tour
+
             if(has_jumped == (byte) 0){
                 return true ;
             }
             int[][] tmp = get_possibilitiesArrow(gameboard[movedPawn[0]][movedPawn[1]], movedPawn[0], movedPawn[1]);
             if((jump < 1) && (tmp == null)){
+                System.out.println("test end turn");
+
                 return true;
             }
         }
@@ -1077,7 +1081,7 @@ public class GameBoard implements Parcelable {
      * @return 1 si c'est la fin de la partie 0 sinon
      */
     public byte end_turn(){
-        jump=0;
+        this.jump=0;
         possible_jump = null;
         possible_move = null;
         has_jumped = (byte) 0;

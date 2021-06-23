@@ -19,8 +19,8 @@ import controller.Pion;
 public class DisplayBoardActivity extends AppCompatActivity {
 
     private GameBoard game;
-    private RelativeLayout myLayout;
-    private RelativeLayout layout;
+    private RelativeLayout boardLayout;
+    private RelativeLayout possibilitiesLayout;
     private Pion[][] display_mat = new Pion[7][9];
     private int[] selected = new int[2];
     private int sx;
@@ -48,8 +48,8 @@ public class DisplayBoardActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_display_board);
 
-        this.myLayout = (RelativeLayout) findViewById(R.id.board);
-        this.layout = (RelativeLayout) findViewById(R.id.possibilites);
+        this.boardLayout = (RelativeLayout) findViewById(R.id.board);
+        this.possibilitiesLayout = (RelativeLayout) findViewById(R.id.possibilites);
 
         nb_jump_w = (TextView) findViewById(R.id.nb_jump_w);
         nb_jump_b = (TextView) findViewById(R.id.nb_jump_b);
@@ -63,7 +63,6 @@ public class DisplayBoardActivity extends AppCompatActivity {
 
                 game.end_turn();
                 turn++;
-                //myLayout.removeAllViews();
                 update();
             }
         });
@@ -76,7 +75,6 @@ public class DisplayBoardActivity extends AppCompatActivity {
 
                 game.end_turn();
                 turn++;
-                //myLayout.removeAllViews();
                 update();
             }
         });
@@ -117,9 +115,10 @@ public class DisplayBoardActivity extends AppCompatActivity {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public void update() {
+        removeImages(boardLayout);
+
         System.out.println("turn:" + turn);
         // faudrait peut etre trouver autre chose
-        myLayout.removeAllViews();
         //affichage du cadre
 
         this.display_mat = game.display();
@@ -135,20 +134,22 @@ public class DisplayBoardActivity extends AppCompatActivity {
                     x += 100;
                     continue;
                 }
-
+                //Marche bien ton programme en vrai
                 ImageView img = new ImageView(this);
                 img.setImageDrawable(getDrawable(display_mat[i][j].getImg()));
 
                 int finalI = i;
                 int finalJ = j;
-
                 if (display_mat[i][j].get_color() != -1) {
                     img.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            removeImages(possibilitiesLayout);
+                            update();
                             sx = finalI;
                             sy = finalJ;
                             setSelected(sx, sy);
+                            System.out.println(sx + " " + sy + "0" + getSelected()[0] + " " + getSelected()[1]);
                             if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
                                 display_possibilities(getSelected()[0], getSelected()[1]);
                             }
@@ -169,7 +170,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
 
                 x += 100;
 
-                myLayout.addView(img);
+                boardLayout.addView(img);
 
                 getSelected();
                 String s = sx + ":" + selected[1];
@@ -190,7 +191,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public void display_possibilities(int px, int py) {
-        layout.removeAllViews();
+        removeImages(possibilitiesLayout);
         if (game.getGameboard()[px][py] != null && game.getGameboard()[px][py].get_color() != -1) {
             int[][] pos = null;
             if (game.check_selection(px, py, turn, 1) != -1) {
@@ -207,6 +208,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
 
                         for (int j = 0; j < 9; j++) {
                             if (i == tmp[0] && j == tmp[1]) {
+                                System.out.println(i + " " + j);
                                 ImageView img = new ImageView(this);
                                 img.setImageDrawable(getDrawable(R.drawable.yellow_haxagone));
                                 RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(100, 100);
@@ -218,8 +220,6 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                         setSelected(finalI, finalJ);
                                         System.out.println("move depuis:" + getSelected()[0] + getSelected()[1] + "vers :" + finalI + finalJ);
                                         game.move(finalI, finalJ);
-                                        update();
-                                        layout.removeAllViews();
                                         if (game.checkEndTurn()) {
                                             System.out.println("fin de tour");
                                             turn++;
@@ -227,7 +227,6 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                             System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
                                             game.end_turn();
                                             game.add_turn();
-                                            System.out.println("zobturn" + turn);
                                             /*
                                             if(game.end_turn()==(byte)1) {
                                                 System.out.println("Test");
@@ -235,8 +234,8 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                             }
                                             */
 
-                                            update();
                                         }
+                                        removeImages(possibilitiesLayout);
                                         update();
                                     }
                                 });
@@ -245,7 +244,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                 parms.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                                 img.setLayoutParams(parms);
 
-                                layout.addView(img);
+                                possibilitiesLayout.addView(img);
                             }
                             x += 100;
                         }
@@ -277,5 +276,14 @@ public class DisplayBoardActivity extends AppCompatActivity {
         return new_pos;
     }
 
-
+    public void removeImages(RelativeLayout layout){
+        for(int k = 0; k < 10; k++){
+            for(int i=0;i<layout.getChildCount();i++){
+                View view=layout.getChildAt(i);
+                if(view.getId()!=R.id.possibilites){
+                    layout.removeViewAt(i);
+                }
+            }
+        }
+    }
 }
