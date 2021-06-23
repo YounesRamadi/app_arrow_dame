@@ -7,10 +7,16 @@
     android:orientation="vertical"
     tools:context="activities.TutorielActivity">
 
-    <AbsoluteLayout
-        android:id="@+id/head"
+    <RelativeLayout
+        android:id="@+id/board"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></AbsoluteLayout>
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/possibilites"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            ></RelativeLayout>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/selected"

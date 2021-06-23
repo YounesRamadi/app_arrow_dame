@@ -9,9 +9,15 @@
     tools:context="activities.DisplayBoardIaActivity">
 
     <RelativeLayout
-        android:id="@+id/head"
+        android:id="@+id/board"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></RelativeLayout>
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/possibilites"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            ></RelativeLayout>
+    </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
