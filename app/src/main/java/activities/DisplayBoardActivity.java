@@ -225,7 +225,6 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                                 System.out.println("Test");
                                                 game.initGameBoard();
                                             }
-                                            */
 
                                             update();
                                         }
