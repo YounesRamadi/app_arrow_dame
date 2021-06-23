@@ -36,7 +36,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
     public static final String BUNDLE_STATE_GAMEBOARD="currentGameboard";
 
     private int[]  iaMove = new int[4];
-    private Ia ia;
+    private Ia ia = new Ia();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

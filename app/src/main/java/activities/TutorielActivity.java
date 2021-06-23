@@ -351,7 +351,7 @@ public class TutorielActivity extends AppCompatActivity {
         if (game.getGameboard()[px][py] != null && game.getGameboard()[px][py].get_color() != -1) {
             int[][] pos = null;
             if (game.check_selection(px, py, turn, 1) != -1) {
-                pos = game.get_possibilities(game.getCell(px, py), px, py);
+                pos = game.get_possibilities(game.getGameboard()[px][py], px, py);
             }
             if (pos != null) {
                 for (int[] p : pos
