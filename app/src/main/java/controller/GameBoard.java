@@ -265,7 +265,7 @@ public class GameBoard implements Parcelable{
     }
 
     public int getNb_W_stars(){
-        System.out.println("b_stars :" + nb_B_stars);
+        //System.out.println("b_stars :" + nb_B_stars);
         return nb_W_stars;
     }
 
@@ -450,36 +450,37 @@ public class GameBoard implements Parcelable{
                         }
                     }
                 }
+            }
+        }
+
                 // si cest une etoile
-                // on verifie juste son
-                if (gameboard[x][y] instanceof Etoile) {
-                    if (jump < 1) {
-                        toast = Toast.makeText(context, "You can't move this star!", Toast.LENGTH_LONG);
-                        toast.show();
-                        System.err.println("You can't move this star!");
-                        return -1;
-                    }
-                    return 0;
+            // on verifie juste son
+        if (gameboard[x][y] instanceof Etoile) {
+            if (jump < 1) {
+                toast = Toast.makeText(context, "You can't move this star!", Toast.LENGTH_LONG);
+                toast.show();
+                System.err.println("You can't move this star!");
+                return -1;
+            }
+            return 0;
+        } else {
+            if (movedPawn != null) {
+                if (gameboard[movedPawn[0]][movedPawn[1]] instanceof Etoile) {
+                    toast = Toast.makeText(context, "You can't move this arrow! ( you just moved a star )", Toast.LENGTH_LONG);
+                    toast.show();
+                    System.err.println("You can't move this arrow! ( you just moved a star )");
+                    return -1;
                 } else {
-                    if (movedPawn != null) {
-                        if (gameboard[movedPawn[0]][movedPawn[1]] instanceof Etoile) {
-                            toast = Toast.makeText(context, "You can't move this arrow! ( you just moved a star )", Toast.LENGTH_LONG);
-                            toast.show();
-                            System.err.println("You can't move this arrow! ( you just moved a star )");
-                            return -1;
+                    if (has_jumped == (byte) 0) {
+                        return 0;
+                    } else {
+                        if ((x == movedPawn[0]) && (y == movedPawn[1])) {
+                            return 0;
                         } else {
-                            if (has_jumped == (byte) 0) {
-                                return 0;
-                            } else {
-                                if ((x == movedPawn[0]) && (y == movedPawn[1])) {
-                                    return 0;
-                                } else {
-                                    toast = Toast.makeText(context, "That's not the arrow you just moved!", Toast.LENGTH_LONG);
-                                    toast.show();
-                                    System.err.println("That's not the arrow you just moved!");
-                                    return -1;
-                                }
-                            }
+                            toast = Toast.makeText(context, "That's not the arrow you just moved!", Toast.LENGTH_LONG);
+                            toast.show();
+                            System.err.println("That's not the arrow you just moved!");
+                            return -1;
                         }
                     }
                 }
