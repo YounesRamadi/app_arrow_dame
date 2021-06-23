@@ -12,7 +12,12 @@ public class Etoile extends Pion{
         else
             super.setImg(R.drawable.red_star);
     }
-
+    public Etoile copy(){
+        Etoile retour = new Etoile();
+        retour.color = color;
+        retour.direction = direction;
+        return retour;
+    }
     public Etoile(){
         super();
     }

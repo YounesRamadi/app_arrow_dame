@@ -42,7 +42,12 @@ public class Pion {
         this.color = pCouleur;
         this.direction = pDirection;
     }
-
+    public Pion copy(){
+        Pion retour = new Pion();
+        retour.color = color;
+        retour.direction = direction;
+        return retour;
+    }
     public byte get_color(){
         return this.color;
     }
