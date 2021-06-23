@@ -215,7 +215,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
         if (game.getGameboard()[px][py] != null && game.getGameboard()[px][py].get_color() != -1) {
             int[][] pos = null;
             if(game.check_selection(px, py, turn, 1) != -1) {
-                pos = game.get_possibilities(game.getCell(px, py), px, py);
+                pos = game.get_possibilities(game.getGameboard()[px][py], px, py);
             }
             if(pos != null) {
                 for (int[] p : pos
@@ -250,10 +250,10 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                             update();
                                             //jump = 0
                                             do {
-                                                iaMove = ia.minMax((byte) (1), game.copy(), 1);
-                                                //jump = 0
+                                                iaMove = ia.minMax((byte) (1), game.copy(), 2);
                                                 System.out.println("Taking " + iaMove[0] + " : " + iaMove[1]);
                                                 System.out.println("Going in " + iaMove[2] + " : " + iaMove[3]);
+
                                                 game.setSelection(iaMove[0], iaMove[1]);
                                                 //jump = 0
                                                 int[][] setterjump = new int[1][2];
@@ -269,11 +269,17 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
 
                                                 game.setPossible_jump(setterjump);
                                                 game.setPossible_move(settermove);
+
                                                 if(iaMove[2] == -1 || iaMove[1] == -1){
                                                     break;
                                                 }
                                                 System.out.println("Moving : " + game.move(iaMove[2], iaMove[3]));
+                                                game.set_movedPawn(iaMove[2],iaMove[3]);
                                                 System.out.println("Flags h_j :" + iaMove[4] + "/ j :" + iaMove[5]);
+
+                                                if(game.checkEndTurn()){
+                                                    break;
+                                                }
                                                 update();
 
                                             }while(iaMove[5] >= 1 || iaMove[4] == (byte)1);

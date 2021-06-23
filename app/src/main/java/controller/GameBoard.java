@@ -14,11 +14,12 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class GameBoard implements Parcelable {
-    public int turn;
+public class GameBoard implements Parcelable{
+
     private Pion[][] gameboard;
     private int nb_W_stars;
     private int nb_B_stars;
+    private int turn;
 
     private byte has_jumped;
     private int jump;
@@ -33,6 +34,7 @@ public class GameBoard implements Parcelable {
 
     private int[] selection = new int[2]; // le pion selectionne
     private int[] movedPawn = new int[2]; // le dernier pion
+
 
 
     public int[] getMovedPawn() {
@@ -135,6 +137,8 @@ public class GameBoard implements Parcelable {
         retour.setHas_jumped(has_jumped);
         retour.setNb_B_stars(nb_B_stars);
         retour.setNb_W_stars(nb_W_stars);
+        retour.setPossible_jump(possible_jump);
+        retour.setPossible_move(possible_move);
         retour.setJump(jump);
         retour.setGameboard(p);
         retour.setSelection(this.selection[0], this.selection[1]);
@@ -368,17 +372,13 @@ public class GameBoard implements Parcelable {
                         a++;
                     }
                 }
+
             }
         }
         nb_W_stars = n;
         nb_B_stars = a;
     }
 
-
-
-    public Pion getCell(int x, int y) {
-        return this.gameboard[x][y];
-    }
 
     // check_selection permet de verifier que l'utilisateur puisse prendre la piece
     // honetement on sait pas ce qu'elle fait
@@ -393,15 +393,15 @@ public class GameBoard implements Parcelable {
      */
     public int check_selection(int x, int y, int turn, int checkforjump) {
         // on commence par regarder que les donnes envoyees sont bonnes
-        if(x <0 || x >= 7 || y < 0 || y >= 9){
-            toast = Toast.makeText(context, "Wtf args are you sending bruh ?", Toast.LENGTH_LONG );
+        if (x < 0 || x >= 7 || y < 0 || y >= 9) {
+            toast = Toast.makeText(context, "Wtf args are you sending bruh ?", Toast.LENGTH_LONG);
             toast.show();
             System.err.println("Wtf args are you sending bruh ?");
             return -1;
         }
         // est ce que le pion choisi est de la bonne couleur
-        if(gameboard[x][y].get_color() != turn%2){
-            toast = Toast.makeText(context, "That's not your pawn!", Toast.LENGTH_LONG );
+        if (gameboard[x][y].get_color() != turn % 2) {
+            toast = Toast.makeText(context, "That's not your pawn!", Toast.LENGTH_LONG);
             toast.show();
             System.err.println("That's not your pawn!");
             return -1;
@@ -409,27 +409,28 @@ public class GameBoard implements Parcelable {
 
 
         int actual_color = gameboard[x][y].get_color();
-        get_possibilities(gameboard[x][y],x,y);
+        get_possibilities(gameboard[x][y], x, y);
 
         // flag checkforjump inutile
+
         //on regarde si lorsque l'on choisit une fleche
         // et que celle-ci ne peut pas sauter
         // qu'aucune autre fleche ne peut sauter
-        if(has_jumped == (byte) 0){
-            if (checkforjump == 1 && gameboard[x][y] instanceof Fleche && has_jumped == (byte)0){
-                for(int i=0; i<7;i++){
-                    for(int j=0; j<9; j++){
+        if (has_jumped == (byte) 0) {
+            if (checkforjump == 1 && gameboard[x][y] instanceof Fleche && has_jumped == (byte) 0) {
+                for (int i = 0; i < 7; i++) {
+                    for (int j = 0; j < 9; j++) {
 
-                        if(gameboard[i][j] == null){
+                        if (gameboard[i][j] == null) {
                             continue;
                         }
                         // si le pion est de la couleur de la fleche
-                        if(gameboard[i][j].get_color() == actual_color){
+                        if (gameboard[i][j].get_color() == actual_color) {
                             // et que le pion n'est pas le pion teste
-                            if(!(i== x && j ==y)) {
+                            if (!(i == x && j == y)) {
 
                                 // on regarde si il peut jump un ennemi et que cest une fleche
-                                if(gameboard[i][j] instanceof Fleche && canJumpEnnemy(i, j)  && !canJumpEnnemy(x,y)){
+                                if (gameboard[i][j] instanceof Fleche && canJumpEnnemy(i, j) && !canJumpEnnemy(x, y)) {
                                     System.err.println("An other pawn can jump, impossible to move this arrow");
                                     return -1;
                                 }
@@ -438,40 +439,35 @@ public class GameBoard implements Parcelable {
                     }
                 }
             }
-        }
-
-        // si cest une etoile
-        // on verifie juste son
-        if(gameboard[x][y] instanceof Etoile){
-            if(jump < 1){
-                toast = Toast.makeText(context, "You can't move this star!", Toast.LENGTH_LONG );
-                toast.show();
-                System.err.println("You can't move this star!");
-                return -1;
-            }
-            return 0;
-        }
-        else{
-            if(movedPawn != null){
-                if(gameboard[movedPawn[0]][movedPawn[1]] instanceof Etoile) {
-                    toast = Toast.makeText(context, "You can't move this arrow! ( you just moved a star )", Toast.LENGTH_LONG );
+            // si cest une etoile
+            // on verifie juste son
+            if (gameboard[x][y] instanceof Etoile) {
+                if (jump < 1) {
+                    toast = Toast.makeText(context, "You can't move this star!", Toast.LENGTH_LONG);
                     toast.show();
-                    System.err.println("You can't move this arrow! ( you just moved a star )");
+                    System.err.println("You can't move this star!");
                     return -1;
                 }
-                else{
-                    if(has_jumped == (byte) 0){
-                        return 0;
-                    }
-                    else{
-                        if((x == movedPawn[0]) && (y == movedPawn[1])){
+                return 0;
+            } else {
+                if (movedPawn != null) {
+                    if (gameboard[movedPawn[0]][movedPawn[1]] instanceof Etoile) {
+                        toast = Toast.makeText(context, "You can't move this arrow! ( you just moved a star )", Toast.LENGTH_LONG);
+                        toast.show();
+                        System.err.println("You can't move this arrow! ( you just moved a star )");
+                        return -1;
+                    } else {
+                        if (has_jumped == (byte) 0) {
                             return 0;
-                        }
-                        else{
-                            toast = Toast.makeText(context, "That's not the arrow you just moved!", Toast.LENGTH_LONG );
-                            toast.show();
-                            System.err.println("That's not the arrow you just moved!");
-                            return -1;
+                        } else {
+                            if ((x == movedPawn[0]) && (y == movedPawn[1])) {
+                                return 0;
+                            } else {
+                                toast = Toast.makeText(context, "That's not the arrow you just moved!", Toast.LENGTH_LONG);
+                                toast.show();
+                                System.err.println("That's not the arrow you just moved!");
+                                return -1;
+                            }
                         }
                     }
                 }
@@ -810,6 +806,7 @@ public class GameBoard implements Parcelable {
                     tmp = new int[2];
                     tmp[0] = x + 2;
                     tmp[1] = y;
+                    ar2.add(indexJump++, tmp);
                     if(check_specified_pawn(x,y,x+1,y) == 2){
                         possibleEnemyJump++;
                         if(has_jumped == (byte)0) {
@@ -925,13 +922,13 @@ public class GameBoard implements Parcelable {
     private boolean canJumpEnnemy(int x, int y){
         if(gameboard[x][y].get_direction() == 0) {
             // vers le haut
-            if(check_specified_pawn(x, y, x -2, y - 2) == 0){
-                if(check_specified_pawn(x, y, x -1, y - 1) == 2){
+            if (check_specified_pawn(x, y, x - 2, y - 2) == 0) {
+                if (check_specified_pawn(x, y, x - 1, y - 1) == 2) {
                     return true;
                 }
             }
-            if(check_specified_pawn(x, y, x - 2, y ) == 0){
-                if(check_specified_pawn(x, y, x - 1, y ) == 2){
+            if (check_specified_pawn(x, y, x - 2, y) == 0) {
+                if (check_specified_pawn(x, y, x - 1, y) == 2) {
                     return true;
                 }
             }
@@ -989,7 +986,6 @@ public class GameBoard implements Parcelable {
             System.err.println("Tried to move a non-existing pawn");
             return -1;
         }
-
         // commence par s'il y a des jumps
         if(possible_jump != null){
             for(int i=0; i<possible_jump.length;i++){
@@ -1087,17 +1083,13 @@ public class GameBoard implements Parcelable {
      */
     public boolean checkEndTurn(){
         // lorsque l'on est avec une fleche
-        System.out.println("test end turn");
         if(gameboard[movedPawn[0]][movedPawn[1]] instanceof  Fleche){
             // si il a fait un deplacement on arrete le tour
-
             if(has_jumped == (byte) 0){
                 return true ;
             }
             int[][] tmp = get_possibilitiesArrow(gameboard[movedPawn[0]][movedPawn[1]], movedPawn[0], movedPawn[1]);
             if((jump < 1) && (tmp == null)){
-                System.out.println("test end turn");
-
                 return true;
             }
         }
@@ -1158,5 +1150,10 @@ public class GameBoard implements Parcelable {
     // getters and setters
     public Context getContext() {
         return context;
+    }
+
+    public void set_movedPawn(int x, int y) {
+        movedPawn[0] = x;
+        movedPawn[1] = y;
     }
 }
