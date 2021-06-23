@@ -119,14 +119,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
     public void update() {
         System.out.println("turn:" + turn);
         // faudrait peut etre trouver autre chose
-        removeImages(myLayout);
-        removeImages(myLayout);
-        removeImages(myLayout);
-        removeImages(myLayout);
-        removeImages(myLayout);
-        removeImages(myLayout);
-        removeImages(myLayout);
-
+        myLayout.removeAllViews();
         //affichage du cadre
 /*
         ImageView imgTurn = new ImageView(this);
@@ -166,7 +159,6 @@ public class DisplayBoardActivity extends AppCompatActivity {
                             sx = finalI;
                             sy = finalJ;
                             setSelected(sx, sy);
-                            removeImages(layout);
                             if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
                                 display_possibilities(getSelected()[0], getSelected()[1]);
                             }
@@ -238,8 +230,6 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                         game.move(finalI, finalJ);
                                         update();
                                         layout.removeAllViews();
-                                        removeImages(myLayout);
-                                        removeImages(myLayout);
                                         if (game.checkEndTurn()) {
                                             System.out.println("fin de tour");
                                             turn++;
@@ -295,14 +285,6 @@ public class DisplayBoardActivity extends AppCompatActivity {
             new_pos[1] = pos[1];
         }
         return new_pos;
-    }
-
-    public void removeImages(RelativeLayout layout) {
-        for (int pos = 0; pos < layout.getChildCount(); pos++) {
-            if (layout.getChildAt(pos) instanceof ImageView) {
-                layout.removeView(layout.getChildAt(pos));
-            }
-        }
     }
 
 

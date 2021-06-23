@@ -3,7 +3,6 @@ package activities;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AbsoluteLayout;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -52,7 +51,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
             game = new GameBoard(getApplicationContext());
         }
 
-        setContentView(R.layout.activity_display_board);
+        setContentView(R.layout.activity_display_board_ia);
 
         this.myLayout = (RelativeLayout) findViewById(R.id.board);
         this.layout = (RelativeLayout) findViewById(R.id.possibilites);
