@@ -1,4 +1,4 @@
-package controller;
+package activities;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -6,20 +6,23 @@ import android.view.View;
 import android.widget.AbsoluteLayout;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.apadnom.R;
 
+import controller.GameBoard;
+import controller.Pion;
 import ia.Ia;
 
 
 public class DisplayBoardActivity extends AppCompatActivity {
 
     private GameBoard game;
-    private AbsoluteLayout myLayout;
-    private AbsoluteLayout layout;
+    private RelativeLayout myLayout;
+    private RelativeLayout layout;
     private Pion[][] display_mat = new Pion[7][9];
     private int[] selected = new int[2];
     private int sx;
@@ -28,7 +31,9 @@ public class DisplayBoardActivity extends AppCompatActivity {
     private TextView player;
     private TextView nb_jump_w;
     private TextView nb_jump_b;
-    private int turn=0;
+    private int turn = 0;
+    public static final String BUNDLE_STATE_TURN="currentTurn";
+    public static final String BUNDLE_STATE_GAMEBOARD="currentGameboard";
 
     private int[] iaMove = new int[4];
     private Ia ia;
@@ -36,44 +41,62 @@ public class DisplayBoardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(savedInstanceState != null){
+            turn = savedInstanceState.getInt(BUNDLE_STATE_TURN);
+            game = savedInstanceState.getParcelable(BUNDLE_STATE_GAMEBOARD);
+        }
+        else {
+            turn = 0;
+            game = new GameBoard(getApplicationContext());
+        }
+
         setContentView(R.layout.activity_display_board);
 
         ia = new Ia();
 
-        this.myLayout = (AbsoluteLayout) findViewById(R.id.layout);
-        this.layout = (AbsoluteLayout) findViewById(R.id.head);
-        game = new GameBoard(getApplicationContext());
+        this.myLayout = (RelativeLayout) findViewById(R.id.board);
+        this.layout = (RelativeLayout) findViewById(R.id.possibilites);
 
         nb_jump_w = (TextView) findViewById(R.id.nb_jump_w);
         nb_jump_b = (TextView) findViewById(R.id.nb_jump_b);
 
-        btn = (Button) findViewById(R.id.button);
-        btn.setOnClickListener(new View.OnClickListener() {
+        Button btn1 = new Button(this);
+        btn1 = (Button) findViewById(R.id.endTurn);
+        btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                game.initGameBoard();
+                System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
+
+                game.end_turn();
+                turn++;
                 //myLayout.removeAllViews();
                 turn = 0;
                 update();
             }
         });
-        Button btn1 = new Button(this);
-        btn1 = (Button) findViewById(R.id.button2);
-        btn1.setOnClickListener(new View.OnClickListener() {
+        Button btn2 = new Button(this);
+        btn2 = (Button) findViewById(R.id.endTurn1);
+        btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("white : " +game.getNb_B_stars()+ " black " +game.getNb_W_stars());
+                System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
 
                 game.end_turn();
-                turn ++;
+                turn++;
                 //myLayout.removeAllViews();
                 update();
             }
         });
-
-        player = (TextView) findViewById(R.id.playerTurn);
         update();
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outstate){
+        super.onSaveInstanceState(outstate);
+        outstate.putInt(BUNDLE_STATE_TURN, turn);
+        outstate.putParcelable(BUNDLE_STATE_GAMEBOARD, game);
     }
 
     public void setSelected(int a, int b) {
@@ -112,12 +135,24 @@ public class DisplayBoardActivity extends AppCompatActivity {
         removeImages(myLayout);
         removeImages(myLayout);
 
+        //affichage du cadre
+/*
+        ImageView imgTurn = new ImageView(this);
+        imgTurn.setImageDrawable(getDrawable(R.drawable.yellow_haxagone));
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(1000, 1000);
+        params.setMargins(0, -200, 0, 0);
+        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        imgTurn.setLayoutParams(params);
+        imgTurn.setRotation(90);
+        myLayout.addView(imgTurn);
+*/
         this.display_mat = game.display();
+
         int y = 0;
         int x = 0;
         for (int i = 0; i < 7; i++) {
-            y += 100;
-            x = 50 * (i % 2);
+
             for (int j = 0; j < 9; j++) {
                 if (display_mat[i][j] == null) {
                     x += 100;
@@ -125,10 +160,11 @@ public class DisplayBoardActivity extends AppCompatActivity {
                 }
                 ImageView img = new ImageView(this);
                 img.setImageDrawable(getDrawable(display_mat[i][j].getImg()));
-                AbsoluteLayout.LayoutParams parms = new AbsoluteLayout.LayoutParams(100, 100, x, y);
+
                 int finalI = i;
                 int finalJ = j;
-                if(display_mat[i][j].get_color() != -1) {
+
+                if (display_mat[i][j].get_color() != -1) {
                     img.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -136,7 +172,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
                             sy = finalJ;
                             setSelected(sx, sy);
                             removeImages(layout);
-                            if(game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
+                            if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
                                 display_possibilities(getSelected()[0], getSelected()[1]);
                             }
                         }
@@ -146,6 +182,11 @@ public class DisplayBoardActivity extends AppCompatActivity {
                     img.setRotation(270);
                 else
                     img.setRotation(90);
+
+                RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(100, 100);
+                parms.setMargins(x - 50, y, 0, 0);
+                parms.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                parms.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                 img.setLayoutParams(parms);
 
                 x += 100;
@@ -157,6 +198,8 @@ public class DisplayBoardActivity extends AppCompatActivity {
                 TextView t = (TextView) findViewById(R.id.selected);
                 t.setText(s);
             }
+            y += 100;
+            x = 50 * ((i + 1) % 2);
         }
         if((turn %2) == 0){
             nb_jump_b.setText("0");
@@ -184,14 +227,12 @@ public class DisplayBoardActivity extends AppCompatActivity {
                     int x = 0;
 
                     for (int i = 0; i < 7; i++) {
-                        y += 100;
-                        x = 50 * (i % 2);
+
                         for (int j = 0; j < 9; j++) {
                             if (i == tmp[0] && j == tmp[1]) {
                                 ImageView img = new ImageView(this);
                                 img.setImageDrawable(getDrawable(R.drawable.yellow_haxagone));
-                                AbsoluteLayout.LayoutParams parms = new AbsoluteLayout.LayoutParams(100, 100, x, y);
-                                img.setLayoutParams(parms);
+                                RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(100, 100);
                                 int finalI = p[0];
                                 int finalJ = p[1];
                                 img.setOnClickListener(new View.OnClickListener() {
@@ -250,16 +291,22 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                                 //game.initGameBoard();
                                             }
 
-
                                             update();
                                         }
                                         update();
                                     }
                                 });
+                                parms.setMargins(x - 50, y, 0, 0);
+                                parms.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                                parms.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                                img.setLayoutParams(parms);
+
                                 layout.addView(img);
                             }
                             x += 100;
                         }
+                        y += 100;
+                        x = 50 * ((i+1) % 2);
                     }
                 }
             }
@@ -287,7 +334,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
         return new_pos;
     }
 
-    public void removeImages(AbsoluteLayout layout){
+    public void removeImages(RelativeLayout layout) {
         for (int pos = 0; pos < layout.getChildCount(); pos++) {
             if (layout.getChildAt(pos) instanceof ImageView) {
                 layout.removeView(layout.getChildAt(pos));

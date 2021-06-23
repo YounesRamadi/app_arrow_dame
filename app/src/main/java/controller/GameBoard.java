@@ -8,16 +8,17 @@ package controller;
 
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class GameBoard{
-
+public class GameBoard implements Parcelable {
+    public int turn;
     private Pion[][] gameboard;
     private int nb_W_stars;
     private int nb_B_stars;
-    private int turn;
 
     private byte has_jumped;
     private int jump;
@@ -39,20 +40,12 @@ public class GameBoard{
         return movedPawn;
     }
 
-    private int[] movedPawn = new int[2];
 
     private int[] lastPosition = new int[2];
     private int[][] jumpableEnnemies;
 
     private Context context;
-    private Toast toast; // pour faire des bons aperos
-    // il faut des bons toasts
-
-
-
-
-    //eviter les conflits de jeu
-    // utile pour l'IA
+    private Toast toast;
 
 
     public GameBoard(GameBoard g, Context context){
@@ -81,6 +74,53 @@ public class GameBoard{
         setNb_stars();
     }
 
+    public GameBoard(String ch) {
+        this.gameboard = makeGameBoard(ch);
+        setNb_stars();
+    }
+
+    protected GameBoard(Parcel in) {
+        turn = in.readInt();
+        nb_W_stars = in.readInt();
+        nb_B_stars = in.readInt();
+        has_jumped = in.readByte();
+        jump = in.readInt();
+        selection = in.createIntArray();
+        movedPawn = in.createIntArray();
+        lastPosition = in.createIntArray();
+    }
+
+    public static final Creator<GameBoard> CREATOR = new Creator<GameBoard>() {
+        @Override
+        public GameBoard createFromParcel(Parcel in) {
+            return new GameBoard(in);
+        }
+
+        @Override
+        public GameBoard[] newArray(int size) {
+            return new GameBoard[size];
+        }
+    };
+
+    public Pion[][] getGameboard() {
+        return gameboard;
+    }
+
+    public byte getHas_jumped() {
+        return has_jumped;
+    }
+
+    public void setHas_jumped(byte j) {
+        has_jumped = j;
+    }
+
+
+    public int[][] getPossible_move() {
+        if (possible_move == null) {
+            return new int[0][0];
+        }
+        return  possible_move;
+    }
     /**
      * Permet de copier l'objet / equivalent de clone
      * @return un objet GameBoard identique
@@ -102,9 +142,39 @@ public class GameBoard{
         return retour;
     }
 
-    /**
-     * Créer le plateau de jeu
-     */
+    private void setGameboard(Pion[][] p) {
+        this.gameboard = p;
+    }
+
+    public void setPossible_move(int[][] possible_move) {
+        this.possible_move = possible_move;
+    }
+
+    public int[][] getPossible_jump() {
+        if (possible_jump == null) {
+            return new int[0][0];
+        }
+        return possible_jump;
+    }
+
+    public void setPossible_jump(int[][] possible_jump) {
+        this.possible_jump = possible_jump;
+    }
+
+    public void setNb_W_stars(int nb_W_stars) {
+        this.nb_W_stars = nb_W_stars;
+    }
+    public void setNb_B_stars(int nb_B_stars) {
+        this.nb_B_stars = nb_B_stars;
+    }
+
+
+    public void setSelection(int x, int y){
+        selection[0] = x;
+        selection[1] = y;
+    }
+
+
     public void initGameBoard() {
         int[] tempgameboard = new int[63];
 
@@ -174,17 +244,25 @@ public class GameBoard{
         }
     }
 
+    public void setCell(int x, int y, Pion p) {
+        if (p != null)
+            gameboard[x][y] = p;
+    }
 
+    public int getNb_W_stars(){
+        System.out.println("b_stars :" + nb_B_stars);
+        return nb_W_stars;
+    }
 
-    // lors de la creation d'une partie
-    // on cree un plateau en fonction d'une chaine de caracteres
+    public int getJump() {
+        return jump;
+    }
 
-    /**
-     *  on cree un plateau en fonction d'une chaine de caracteres
-     * @param ch chaine formatée pour créer un tableau
-     * @return un plateau initialisé
-     */
-    public Pion[][] makeGameBoard(String ch){
+    public void setJump(int jump) {
+        this.jump = jump;
+    }
+
+    public Pion[][] makeGameBoard(String ch) {
         int[] tab = new int[63];
         int i=0;
         int oc = 0;
@@ -268,7 +346,10 @@ public class GameBoard{
         return tempgameboard;
     }
 
-    //initialise automatique le nombre d'etoiles
+    public int getNb_B_stars() {
+        System.out.println("b_stars :" + nb_B_stars);
+        return nb_B_stars;
+    }
 
     /**
      * Compte le nombre d'etoiles sur le plateau de jeu
@@ -288,38 +369,17 @@ public class GameBoard{
                         a++;
                     }
                 }
-
             }
         }
         nb_W_stars = n;
         nb_B_stars = a;
     }
 
-    //fonction pour l'affichage graphique
 
-    /**
-     * Je sais pas ce qu'elle fait
-     * @return un tableau de pion visiblement
-     */
-    public Pion[][] display(){
-        Pion[][] display = new Pion[7][9];
 
-        for(int i = 0; i < 9; i++){
-            display[0][i] = gameboard[0][(i+7)%9];
-            display[1][i] = gameboard[1][(i+8)%9];
-            display[2][i] = gameboard[2][(i+8)%9];
-
-            display[3][i] = gameboard[3][i];
-
-            display[4][i] = gameboard[4][i];
-            display[5][i] = gameboard[5][(i+1)%9];
-            display[6][i] = gameboard[6][(i+1)%9];
-        }
-        return display;
+    public Pion getCell(int x, int y) {
+        return this.gameboard[x][y];
     }
-
-
-
 
     // check_selection permet de verifier que l'utilisateur puisse prendre la piece
     // honetement on sait pas ce qu'elle fait
@@ -818,13 +878,13 @@ public class GameBoard{
     private boolean canJumpEnnemy(int x, int y){
         if(gameboard[x][y].get_direction() == 0) {
             // vers le haut
-            if (check_specified_pawn(x, y, x - 2, y - 2) == 0) {
-                if (check_specified_pawn(x, y, x - 1, y - 1) == 2) {
+            if(check_specified_pawn(x, y, x -2, y - 2) == 0){
+                if(check_specified_pawn(x, y, x -1, y - 1) == 2){
                     return true;
                 }
             }
-            if (check_specified_pawn(x, y, x - 2, y) == 0) {
-                if (check_specified_pawn(x, y, x - 1, y) == 2) {
+            if(check_specified_pawn(x, y, x - 2, y ) == 0){
+                if(check_specified_pawn(x, y, x - 1, y ) == 2){
                     return true;
                 }
             }
@@ -848,6 +908,22 @@ public class GameBoard{
             }
         }
         return false;
+    }
+    public Pion[][] display(){
+        Pion[][] display = new Pion[7][9];
+
+        for(int i = 0; i < 9; i++){
+            display[0][i] = gameboard[0][(i+7)%9];
+            display[1][i] = gameboard[1][(i+8)%9];
+            display[2][i] = gameboard[2][(i+8)%9];
+
+            display[3][i] = gameboard[3][i];
+
+            display[4][i] = gameboard[4][i];
+            display[5][i] = gameboard[5][(i+1)%9];
+            display[6][i] = gameboard[6][(i+1)%9];
+        }
+        return display;
     }
 
     // fonction pour deplacer les pions
@@ -884,7 +960,6 @@ public class GameBoard{
                     } else {
                         has_jumped = (byte) 1;
                         if (gameboard[distanceX + selection[0]][distanceY + selection[1]].get_color() != gameboard[selection[0]][selection[1]].get_color()) {
-                            System.out.println("zob");
                             jump++;
                         }
                     }
@@ -980,6 +1055,23 @@ public class GameBoard{
         return false;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(turn);
+        dest.writeInt(nb_W_stars);
+        dest.writeInt(nb_B_stars);
+        dest.writeByte(has_jumped);
+        dest.writeInt(jump);
+        dest.writeIntArray(selection);
+        dest.writeIntArray(movedPawn);
+        dest.writeIntArray(lastPosition);
+    }
+
     /**
      * Permet de finir un tour et de savoir si c'est la fin de la partie
      * @return 1 si c'est la fin de la partie 0 sinon
@@ -1010,85 +1102,4 @@ public class GameBoard{
     public Context getContext() {
         return context;
     }
-
-
-    public Pion[][] getGameboard() {
-        return gameboard;
-    }
-    public void setGameboard(Pion[][] p){
-        this.gameboard = p;
-    }
-
-    public byte getHas_jumped(){
-        return has_jumped;
-    }
-    public void setHas_jumped(byte j){
-        has_jumped = j;
-    }
-
-    public void setJump(int pJump){
-        this.jump = pJump;
-    }
-    public int getJump(){
-        return jump;
-    }
-
-    public int[][] getPossible_move() {
-        if(possible_move == null){
-            return new int[0][0];
-        }
-        return possible_move;
-    }
-    public void setPossible_move(int[][] possible_move) {
-        this.possible_move = possible_move;
-    }
-
-    public int[][] getPossible_jump() {
-        if(possible_jump == null){
-            return new int[0][0];
-        }
-        return possible_jump;
-    }
-    public void setPossible_jump(int[][] possible_jump) {
-        this.possible_jump = possible_jump;
-    }
-
-
-    public void setNb_W_stars(int nb_W_stars) {
-        this.nb_W_stars = nb_W_stars;
-    }
-    public int getNb_W_stars() {
-
-        return nb_W_stars;
-    }
-
-    public void setSelection(int x, int y){
-        selection[0] = x;
-        selection[1] = y;
-    }
-
-    public void setCell(int x, int y, Pion p) {
-        if(p != null)
-            gameboard[x][y] = p;
-    }
-    public Pion getCell(int x, int y) {
-        return this.gameboard[x][y];
-    }
-
-    public int getNb_B_stars() {
-
-        return nb_B_stars;
-    }
-    public void setNb_B_stars(int nb_B_stars) {
-        this.nb_B_stars = nb_B_stars;
-    }
-
-    public int[] get_movedPawn(){
-        return this.movedPawn;
-    }
-    public void set_movedPawn(int x, int y){
-        this.movedPawn[0] = x;
-        this.movedPawn[1] =y;
-    }
 }
-
