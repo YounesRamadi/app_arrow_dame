@@ -75,7 +75,8 @@ public class GameBoard implements Parcelable{
         setNb_stars();
     }
 
-    public GameBoard(String ch) {
+    public GameBoard(String ch, Context context) {
+        this.context = context;
         this.gameboard = makeGameBoard(ch);
         setNb_stars();
     }

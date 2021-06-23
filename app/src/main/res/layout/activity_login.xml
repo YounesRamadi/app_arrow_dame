@@ -24,7 +24,9 @@
         android:gravity="center"
         android:hint="prénom"
         android:maxLines="1"
-        android:minLines="1" />
+        android:minLines="1"
+        android:maxLength="15"
+        android:inputType="text"/>
 
     <Button
         android:id="@+id/validate"
