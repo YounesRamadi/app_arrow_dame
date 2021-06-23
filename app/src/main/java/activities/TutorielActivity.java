@@ -3,12 +3,13 @@ package activities;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AbsoluteLayout;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.apadnom.R;
 
@@ -19,8 +20,8 @@ import controller.Pion;
 public class TutorielActivity extends AppCompatActivity {
 
     private GameBoard game;
-    private AbsoluteLayout myLayout;
-    private AbsoluteLayout layout;
+    private RelativeLayout boardLayout;
+    private RelativeLayout possibilitiesLayout;
     private Pion[][] display_mat = new Pion[7][9];
     private int[] selected = new int[2];
     private int sx;
@@ -40,8 +41,8 @@ public class TutorielActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutoriel);
 
-        this.myLayout = (AbsoluteLayout) findViewById(R.id.layout);
-        this.layout = (AbsoluteLayout) findViewById(R.id.head);
+        this.boardLayout = (RelativeLayout) findViewById(R.id.board);
+        this.possibilitiesLayout = (RelativeLayout) findViewById(R.id.possibilites);
         game = new GameBoard("51o");
 
         nb_jump_w = (TextView) findViewById(R.id.nb_jump_w);
@@ -245,35 +246,33 @@ public class TutorielActivity extends AppCompatActivity {
         }
         return selected;
     }
-
     @SuppressLint("UseCompatLoadingForDrawables")
     public void update() {
         System.out.println("turn:" + turn);
         // faudrait peut etre trouver autre chose
-        removeImages(myLayout);
-        removeImages(myLayout);
-        removeImages(myLayout);
-        removeImages(myLayout);
-        removeImages(myLayout);
-        removeImages(myLayout);
-        removeImages(myLayout);
+        boardLayout.removeAllViews();
+        //affichage du cadre
 
         this.display_mat = game.display();
+
         int y = 0;
         int x = 0;
+
         for (int i = 0; i < 7; i++) {
-            y += 100;
-            x = 50 * (i % 2);
+
             for (int j = 0; j < 9; j++) {
+
                 if (display_mat[i][j] == null) {
                     x += 100;
                     continue;
                 }
+
                 ImageView img = new ImageView(this);
                 img.setImageDrawable(getDrawable(display_mat[i][j].getImg()));
-                AbsoluteLayout.LayoutParams parms = new AbsoluteLayout.LayoutParams(100, 100, x, y);
+
                 int finalI = i;
                 int finalJ = j;
+
                 if (display_mat[i][j].get_color() != -1) {
                     img.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -281,28 +280,32 @@ public class TutorielActivity extends AppCompatActivity {
                             sx = finalI;
                             sy = finalJ;
                             setSelected(sx, sy);
-                            removeImages(layout);
                             if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
                                 display_possibilities(getSelected()[0], getSelected()[1]);
                             }
                         }
                     });
                 }
+
                 if (display_mat[i][j].get_direction() == 0)
                     img.setRotation(270);
                 else
                     img.setRotation(90);
+
+                RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(100, 100);
+                parms.setMargins(x - 50, y, 0, 0);
+                parms.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                parms.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                 img.setLayoutParams(parms);
 
                 x += 100;
 
-                myLayout.addView(img);
+                boardLayout.addView(img);
 
                 getSelected();
-                String s = sx + ":" + selected[1];
-                TextView t = (TextView) findViewById(R.id.selected);
-                t.setText(s);
             }
+            y += 100;
+            x = 50 * ((i + 1) % 2);
         }
         if ((turn % 2) == 0) {
             nb_jump_b.setText("0");
@@ -315,7 +318,7 @@ public class TutorielActivity extends AppCompatActivity {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public void display_possibilities(int px, int py) {
-        layout.removeAllViews();
+        possibilitiesLayout.removeAllViews();
         if (game.getGameboard()[px][py] != null && game.getGameboard()[px][py].get_color() != -1) {
             int[][] pos = null;
             if (game.check_selection(px, py, turn, 1) != -1) {
@@ -329,14 +332,12 @@ public class TutorielActivity extends AppCompatActivity {
                     int x = 0;
 
                     for (int i = 0; i < 7; i++) {
-                        y += 100;
-                        x = 50 * (i % 2);
+
                         for (int j = 0; j < 9; j++) {
                             if (i == tmp[0] && j == tmp[1]) {
                                 ImageView img = new ImageView(this);
                                 img.setImageDrawable(getDrawable(R.drawable.yellow_haxagone));
-                                AbsoluteLayout.LayoutParams parms = new AbsoluteLayout.LayoutParams(100, 100, x, y);
-                                img.setLayoutParams(parms);
+                                RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(100, 100);
                                 int finalI = p[0];
                                 int finalJ = p[1];
                                 img.setOnClickListener(new View.OnClickListener() {
@@ -345,25 +346,39 @@ public class TutorielActivity extends AppCompatActivity {
                                         setSelected(finalI, finalJ);
                                         System.out.println("move depuis:" + getSelected()[0] + getSelected()[1] + "vers :" + finalI + finalJ);
                                         game.move(finalI, finalJ);
-
-                                        layout.removeAllViews();
-                                        removeImages(myLayout);
-                                        removeImages(myLayout);
+                                        update();
+                                        possibilitiesLayout.removeAllViews();
                                         if (game.checkEndTurn()) {
                                             System.out.println("fin de tour");
-
+                                            turn++;
+                                            update();
                                             System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
-                                            if (game.end_turn() == (byte) 1) {
+                                            game.end_turn();
+                                            game.add_turn();
+                                            System.out.println("zobturn" + turn);
+                                            /*
+                                            if(game.end_turn()==(byte)1) {
+                                                System.out.println("Test");
+                                                game.initGameBoard();
                                             }
+                                            */
+
                                             update();
                                         }
                                         update();
                                     }
                                 });
-                                layout.addView(img);
+                                parms.setMargins(x - 50, y, 0, 0);
+                                parms.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                                parms.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                                img.setLayoutParams(parms);
+
+                                possibilitiesLayout.addView(img);
                             }
                             x += 100;
                         }
+                        y += 100;
+                        x = 50 * ((i+1) % 2);
                     }
                 }
             }
@@ -388,14 +403,6 @@ public class TutorielActivity extends AppCompatActivity {
             new_pos[1] = pos[1];
         }
         return new_pos;
-    }
-
-    public void removeImages(AbsoluteLayout layout) {
-        for (int pos = 0; pos < layout.getChildCount(); pos++) {
-            if (layout.getChildAt(pos) instanceof ImageView) {
-                layout.removeView(layout.getChildAt(pos));
-            }
-        }
     }
 
 

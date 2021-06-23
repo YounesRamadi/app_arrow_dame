@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout"
     android:layout_width="match_parent"
@@ -10,30 +11,20 @@
     <RelativeLayout
         android:id="@+id/board"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/guideline7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
+
         <RelativeLayout
             android:id="@+id/possibilites"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            ></RelativeLayout>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </RelativeLayout>
     </RelativeLayout>
-
-    <TextView
-        android:id="@+id/selected"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_x="147dp"
-        android:layout_y="569dp"
-        android:text="TextView" />
-
-    <TextView
-        android:id="@+id/tutoriel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_y="400dp"
-        android:gravity="center"
-        android:text="tuto"
-        android:textSize="30dp" />
 
 
     <TextView
@@ -42,7 +33,10 @@
         android:layout_height="wrap_content"
         android:layout_x="187dp"
         android:layout_y="654dp"
-        android:text="TextView" />
+        android:text="TextView"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="98dp"
+        tools:layout_editor_absoluteY="787dp" />
 
     <TextView
         android:id="@+id/nb_jump_w"
@@ -50,7 +44,10 @@
         android:layout_height="wrap_content"
         android:layout_x="185dp"
         android:layout_y="606dp"
-        android:text="TextView" />
+        android:text="TextView"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="98dp"
+        tools:layout_editor_absoluteY="731dp" />
 
     <Button
         android:id="@+id/suivant"
@@ -58,7 +55,24 @@
         android:layout_height="wrap_content"
         android:layout_x="294dp"
         android:layout_y="612dp"
-        android:text="Suivant" />
+        android:text="Suivant"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline7"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/tutoriel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_y="400dp"
+        android:gravity="center"
+        android:text="tuto"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/precedent"
@@ -66,7 +80,26 @@
         android:layout_height="wrap_content"
         android:layout_x="38dp"
         android:layout_y="614dp"
-        android:text="Precedent" />
+        android:text="Precedent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        app:layout_constraintTop_toTopOf="@+id/guideline7"
+        tools:ignore="MissingConstraints" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="196dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="414dp" />
 
 
-</AbsoluteLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
