@@ -1,8 +1,10 @@
 package activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -11,11 +13,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.apadnom.R;
 
+import controller.User;
+
 public class MainActivity extends AppCompatActivity {
 
     private TextView mGameName;
     private ImageView mLogo;
-    private ProgressBar mProgressBar;
+    public User mUser = new User();
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +34,15 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(MainActivity.this, DisplayBoardActivity.class));
+                preferences = getSharedPreferences("firstname", MODE_PRIVATE);
+                String firstname = preferences.getString("firstname", null);
+                if (firstname !=null) {
+                    mUser.setFirstName(firstname);
+                    startActivity(new Intent(MainActivity.this, MenuActivity.class));
+                }
+                else{
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
                 finish();
             }
         }, 10);
