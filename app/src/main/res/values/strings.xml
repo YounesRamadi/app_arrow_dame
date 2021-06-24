@@ -14,4 +14,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="nb_jump_w">nb_jump_w</string>
+    <string name="selected">selected</string>
+    <string name="nb_jump_b">nb_jump_b</string>
 </resources>
