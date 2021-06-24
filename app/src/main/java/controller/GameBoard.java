@@ -408,14 +408,14 @@ public class GameBoard implements Parcelable{
     public int check_selection(int x, int y, int turn, int checkforjump) {
         // on commence par regarder que les donnes envoyees sont bonnes
         if (x < 0 || x >= 7 || y < 0 || y >= 9) {
-            toast = Toast.makeText(context, "Wtf args are you sending bruh ?", Toast.LENGTH_LONG);
+            toast = Toast.makeText(context, "Wtf args are you sending bruh ?", Toast.LENGTH_SHORT);
             toast.show();
             //System.err.println("Wtf args are you sending bruh ?");
             return -1;
         }
         // est ce que le pion choisi est de la bonne couleur
         if (gameboard[x][y].get_color() != turn % 2) {
-            toast = Toast.makeText(context, "That's not your pawn!", Toast.LENGTH_LONG);
+            toast = Toast.makeText(context, "That's not your pawn!", Toast.LENGTH_SHORT);
             toast.show();
             //System.err.println("That's not your pawn!");
             return -1;
@@ -459,7 +459,7 @@ public class GameBoard implements Parcelable{
             // on verifie juste son
         if (gameboard[x][y] instanceof Etoile) {
             if (jump < 1) {
-                toast = Toast.makeText(context, "You can't move this star!", Toast.LENGTH_LONG);
+                toast = Toast.makeText(context, "You can't move this star!", Toast.LENGTH_SHORT);
                 toast.show();
                 System.err.println("You can't move this star!");
                 return -1;
@@ -468,7 +468,7 @@ public class GameBoard implements Parcelable{
         } else {
             if (movedPawn != null) {
                 if (gameboard[movedPawn[0]][movedPawn[1]] instanceof Etoile) {
-                    toast = Toast.makeText(context, "You can't move this arrow! ( you just moved a star )", Toast.LENGTH_LONG);
+                    toast = Toast.makeText(context, "You can't move this arrow! ( you just moved a star )", Toast.LENGTH_SHORT);
                     toast.show();
                     System.err.println("You can't move this arrow! ( you just moved a star )");
                     return -1;
@@ -479,7 +479,7 @@ public class GameBoard implements Parcelable{
                         if ((x == movedPawn[0]) && (y == movedPawn[1])) {
                             return 0;
                         } else {
-                            toast = Toast.makeText(context, "That's not the arrow you just moved!", Toast.LENGTH_LONG);
+                            toast = Toast.makeText(context, "That's not the arrow you just moved!", Toast.LENGTH_SHORT);
                             toast.show();
                             System.err.println("That's not the arrow you just moved!");
                             return -1;
@@ -1201,6 +1201,7 @@ public class GameBoard implements Parcelable{
                 else if(gameboard[i][j].get_color() == -1){
                     board += 'h';
                 }
+                // Star
                 else if(gameboard[i][j] instanceof Etoile){
                     if(gameboard[i][j].get_color() == 1){
                         board += 'd';
@@ -1209,19 +1210,26 @@ public class GameBoard implements Parcelable{
                         board += 'g';
                     }
                 }
+                // Arrow
                 else{
+                    // Black
                     if(gameboard[i][j].get_color() == 1){
+                        // Up
                         if(gameboard[i][j].get_direction() == 0){
                             board += 'b';
                         }
+                        // Down
                         else{
                             board += 'c';
                         }
                     }
+                    // White
                     else{
+                        // Up
                         if(gameboard[i][j].get_direction() == 0){
                             board += 'e';
                         }
+                        // Down
                         else{
                             board += 'f';
                         }
@@ -1255,12 +1263,20 @@ public class GameBoard implements Parcelable{
         int x = 0;
         int y = 0;
         int count = 0;
+
+        // a -> null
+        // b -> pion noir haut
+        // c -> pion noir bas
+        // d -> etoile noire
+        // e -> pion blanc haut
+        // f -> pion blanc bas
+        // g -> etoile blanche
+        // h -> case vide
+
         // parcourt de la string
-        for(int i = 0; i < s.length(); i += 2){
+        for(int i = 0; i < s.length() - 1; i += 2){
             n = Character.getNumericValue(s.charAt(i));
             p = s.charAt(i +1);
-            System.out.println(n + " " + p);
-
             for(int j = 0; j < n ; j ++, count ++){
 
                 if(y+1 == 9){
@@ -1281,14 +1297,13 @@ public class GameBoard implements Parcelable{
                         gameboard[x][y] = new Etoile((byte) 1, (byte) 1);
                         break;
                     case 'e':
-                        gameboard[x][y] = new Fleche((byte) 0, (byte) 1);
+                        gameboard[x][y] = new Fleche((byte) 0, (byte) 0);
                         break;
                     case 'f':
                         gameboard[x][y] = new Fleche((byte) 0, (byte) 1);
                         break;
-
                     case 'g':
-                        gameboard[x][y] = new Etoile((byte) 1, (byte) 1);
+                        gameboard[x][y] = new Etoile((byte) 0, (byte) 0);
                         break;
                     case 'h':
                         gameboard[x][y] = new Pion();
