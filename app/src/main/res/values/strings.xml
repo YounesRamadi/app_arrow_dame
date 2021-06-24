@@ -22,4 +22,12 @@
     <string name="quitter">Quitter</string>
     <string name="tuto">tuto</string>
     <string name="precedent">Precedent</string>
+    <string name="apadnom">Apadnom</string>
+    <string name="fin_de_tour">Fin de tour</string>
+    <string name="endTurn">Fin de Tour</string>
+    <string name="nouvelle_partie">Nouvelle Partie</string>
+    <string name="string_nouvelle_partie" />
+    <string name="partie_locale_2_joueurs">Partie locale 2 joueurs</string>
+    <string name="partie_contre_l_ordinateur">Partie contre l\'ordinateur</string>
+    <string name="partie_en_ligne">Partie En ligne</string>
 </resources>

@@ -94,7 +94,7 @@
         android:id="@+id/scoreW"
         android:layout_width="75dp"
         android:layout_height="200dp"
-        android:contentDescription="@string/todo"
+        android:contentDescription="@string/white_score"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/board"

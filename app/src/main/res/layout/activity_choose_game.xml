@@ -14,7 +14,7 @@
         android:layout_margin="20dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="Nouvelle Partie"
+        android:text="@string/string_nouvelle_partie"
         android:textStyle="bold" />
 
     <Button
@@ -23,7 +23,7 @@
         android:layout_height="0dp"
         android:layout_margin="20dp"
         android:layout_weight="1"
-        android:text="Partie locale 2 joueurs"/>
+        android:text="@string/partie_locale_2_joueurs"/>
 
     <Button
         android:id="@+id/computerGame"
@@ -31,7 +31,7 @@
         android:layout_height="0dp"
         android:layout_margin="20dp"
         android:layout_weight="1"
-        android:text="Partie contre l'ordinateur" />
+        android:text="@string/partie_contre_l_ordinateur" />
 
     <Button
         android:id="@+id/onlineGame"
@@ -39,7 +39,7 @@
         android:layout_height="0dp"
         android:layout_margin="20dp"
         android:layout_weight="1"
-        android:text="Partie En ligne"/>
+        android:text="@string/partie_en_ligne"/>
 
 
 </LinearLayout>
