@@ -10,18 +10,18 @@
     <ImageView
         android:id="@+id/etoile"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_gravity="top"
-        android:layout_marginTop="100dp"
-        app:srcCompat="@android:drawable/btn_star" />
+        android:layout_height="399dp"
+        app:srcCompat="@drawable/stars" />
 
     <TextView
         android:id="@+id/nomjeu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="APALNOM"
-        android:textSize="50sp" />
+        android:text="SHOOTING STARS"
+        android:textSize="50sp"
+        android:layout_marginTop="50dp"
+        android:layout_margin="20dp"/>
 
     <ProgressBar
         android:id="@+id/progressBar"

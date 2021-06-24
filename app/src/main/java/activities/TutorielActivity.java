@@ -116,30 +116,33 @@ public class TutorielActivity extends AppCompatActivity {
                 jumpArrow();
                 break;
             case (7):
-                jumpLateralArrow();
+                turnArrow();
                 break;
             case (8):
-                backJumpArrow();
+                jumpLateralArrow();
                 break;
             case (9):
-                moveStar();
+                backJumpArrow();
                 break;
             case (10):
-                jumpStar();
+                moveStar();
                 break;
             case (11):
-                shootingStar();
+                jumpStar();
                 break;
             case (12):
-                mustJumpTuto();
+                shootingStar();
                 break;
             case (13):
-                boardTuto();
+                mustJumpTuto();
                 break;
             case (14):
-                endTuto();
+                boardTuto();
                 break;
             case (15):
+                endTuto();
+                break;
+            case (16):
                 closeTuto();
                 break;
             default:
@@ -187,8 +190,14 @@ public class TutorielActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
+    private void turnArrow() {
+        tutoriel.setText("Si tu arrives sur la ligne du fond avec une flèche, elle change de sens.");
+        game = new GameBoard("09o01d40o", getApplicationContext());
+    }
+
+    @SuppressLint("SetTextI18n")
     private void jumpArrow() {
-        tutoriel.setText("Si tu es bloqué par des pions adverses ou alliés sautez par dessus !");
+        tutoriel.setText("Si tu es bloqué par des pions adverses ou alliés saute par dessus !");
         game = new GameBoard("16o01b01d06o01b01d01b24o", getApplicationContext());
     }
 
@@ -206,7 +215,7 @@ public class TutorielActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void moveStar() {
-        tutoriel.setText("Les étoiles bougent différemment, essayez en cliquant dessus !");
+        tutoriel.setText("Les étoiles bougent différemment, essaye en cliquant dessus !");
         game = new GameBoard("25o01c25o", getApplicationContext());
         game.setHas_jumped((byte) 1);
         game.setJump(2);
@@ -222,7 +231,7 @@ public class TutorielActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void shootingStar() {
-        tutoriel.setText("Mais pour bouger vos étoiles il faut d'abord sauter par dessus un pion de l'adversaire avec une de vos flèches.");
+        tutoriel.setText("Mais pour bouger tes étoiles il faut d'abord sauter par dessus un pion de l'adversaire avec une de tes flèches.");
         game = new GameBoard("16o02b06o01b01d01b18o03c03o", getApplicationContext());
     }
 

@@ -68,11 +68,10 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                 Intent SettingsActivity = new Intent(MenuActivity.this, SettingsActivity.class);
                 startActivity(SettingsActivity);
                 break;
-                /*
             case 3:
-                Intent CreditsActivity = new Intent(MenuActivity.this, CreditsActivity.class);
-                startActivity(CreditsActivity);
-                break;*/
+                Intent HistoriqueActivity = new Intent(MenuActivity.this, HistoriqueActivity.class);
+                startActivity(HistoriqueActivity);
+                break;
             default:
                 // code block
         }

@@ -38,7 +38,7 @@ public class SettingsActivity extends AppCompatActivity {
         mcredits.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri myURI = Uri.parse("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+                Uri myURI = Uri.parse("https://youtu.be/O-MQC_G9jTU?t=24");
                 Intent i = new Intent(Intent.ACTION_VIEW, myURI);
                 startActivity(i);
             }
