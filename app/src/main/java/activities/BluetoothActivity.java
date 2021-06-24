@@ -3,6 +3,7 @@ package activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -15,7 +16,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.apadnom.R;
@@ -26,6 +30,7 @@ import java.util.UUID;
 
 import controller.BluetoothConnectionService;
 import controller.DeviceListAdapter;
+import controller.GameBoard;
 
 public class BluetoothActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
@@ -243,7 +248,9 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         mconnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 startConnection();
+
             }
         });
     }
@@ -303,6 +310,197 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
             mBTDevice = mBTDevices.get(i);
             mBluetoothConnection = new BluetoothConnectionService(BluetoothActivity.this);
+        }
+    }
+
+    /**
+     * Update the board display
+     */
+    @SuppressLint("UseCompatLoadingForDrawables")
+    public void update() {
+        // Cleaning the layout
+        removeImages(boardLayout);
+
+        // Debug
+        System.out.println("turn:" + turn);
+        System.out.println("gameboard toString : " + game.toString());
+
+        // Getting the display matrix
+        this.display_mat = game.display();
+
+        int y = 0;
+        int x = 0;
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 9; j++) {
+
+                // if the cell doesn't exist
+                if (display_mat[i][j] == null) {
+                    x += 100;
+                    continue;
+                }
+
+                // Creation of the ImageView needed to print the Cell
+                ImageView img = new ImageView(this);
+                // Setting the Cell image
+                img.setImageDrawable(getDrawable(display_mat[i][j].getImg()));
+
+                int finalI = i;
+                int finalJ = j;
+                // make the Cell clickable only if it contains a pawn that belongs to the player
+                if (display_mat[i][j].get_color() != -1) {
+                    img.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Clean the possibilites layout
+                            removeImages(possibilitiesLayout);
+
+                            sx = finalI;
+                            sy = finalJ;
+                            setSelected(sx, sy);
+
+                            // Debug
+                            System.out.println(sx + " " + sy + "0" + getSelected()[0] + " " + getSelected()[1]);
+
+                            // print the accessible cells if the pawn is able to move
+                            if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
+                                display_possibilities(getSelected()[0], getSelected()[1]);
+                            }
+
+                            // update display
+                            update();
+                        }
+                    });
+                }
+
+                // Set the direction of the image depending on the pawn's direction
+                if (display_mat[i][j].get_direction() == 0)
+                    img.setRotation(270);
+                else
+                    img.setRotation(90);
+
+                // Set the ImageView parameters and add it to the layout
+                RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(100, 100);
+                parms.setMargins(x - 50, y, 0, 0);
+                parms.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                parms.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                img.setLayoutParams(parms);
+                boardLayout.addView(img);
+
+                x += 100;
+
+                // Debug
+                getSelected();
+                String s = sx + ":" + selected[1];
+                TextView t = findViewById(R.id.selected);
+                t.setText(s);
+
+            }
+            y += 100;
+            x = 50 * ((i + 1) % 2);
+        }
+
+        // Print the number of jumps available
+        if ((turn % 2) == 0) {
+            nb_jump_b.setText("0");
+            nb_jump_w.setText(String.valueOf(game.getJump()));
+        } else if ((turn % 2) == 1) {
+            nb_jump_w.setText("0");
+            nb_jump_b.setText(String.valueOf(game.getJump()));
+        }
+    }
+
+    /**
+     * Display the accessible Cells of a specific pawn on the gameboard
+     *
+     * @param px x position
+     * @param py y position
+     */
+    @SuppressLint("UseCompatLoadingForDrawables")
+    public void display_possibilities(int px, int py) {
+        // Clean the posssibilities layout
+        removeImages(possibilitiesLayout);
+
+        // Check the existence of the specified pawn
+        if (game.getGameboard()[px][py] != null && game.getGameboard()[px][py].get_color() != -1) {
+            int[][] pos = null;
+
+            if (game.check_selection(px, py, turn, 1) != -1) {
+                pos = game.get_possibilities(game.getGameboard()[px][py], px, py);
+            }
+            // Check the existence of the possibilities
+            if (pos != null) {
+                // for each possibilities
+                for (int[] p : pos
+                ) {
+
+                    int[] tmp = getRelativePosition(p);
+
+                    int y = 0;
+                    int x = 0;
+                    for (int i = 0; i < 7; i++) {
+                        for (int j = 0; j < 9; j++) {
+
+                            if (i == tmp[0] && j == tmp[1]) {
+                                // Debug
+                                System.out.println(i + " " + j);
+
+                                // Creation of the ImageView needed to print the Cell
+                                ImageView img = new ImageView(this);
+                                img.setImageDrawable(getDrawable(R.drawable.hexagone_white));
+
+                                int finalI = p[0];
+                                int finalJ = p[1];
+
+                                // Set the onClickListener
+                                img.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        setSelected(finalI, finalJ);
+
+                                        // Debug
+                                        System.out.println("move depuis:" + getSelected()[0] + getSelected()[1] + "vers :" + finalI + finalJ);
+
+                                        game.move(finalI, finalJ);
+
+                                        // Check the end of the game or turn
+                                        if (game.checkEndTurn() || game.checkEndGame()) {
+                                            // Debug
+                                            System.out.println("fin de tour");
+
+                                            turn++;
+
+                                            //Debug
+                                            System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
+
+                                            game.end_turn();
+
+                                            if (game.checkEndGame()) {
+                                                System.out.println("Test");
+                                                game = new GameBoard(getApplicationContext());
+                                            }
+                                            update();
+                                        }
+                                        removeImages(possibilitiesLayout);
+                                        update();
+                                    }
+                                });
+
+                                // Set the ImageView parameters and add it to the layout
+                                RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(100, 100);
+                                parms.setMargins(x - 50, y, 0, 0);
+                                parms.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                                parms.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                                img.setLayoutParams(parms);
+                                possibilitiesLayout.addView(img);
+
+                            }
+                            x += 100;
+                        }
+                        y += 100;
+                        x = 50 * ((i + 1) % 2);
+                    }
+                }
+            }
         }
     }
 }

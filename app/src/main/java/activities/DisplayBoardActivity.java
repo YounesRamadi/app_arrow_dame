@@ -263,7 +263,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
 
                                 // Creation of the ImageView needed to print the Cell
                                 ImageView img = new ImageView(this);
-                                img.setImageDrawable(getDrawable(R.drawable.yellow_haxagone));
+                                img.setImageDrawable(getDrawable(R.drawable.hexagone_white));
 
                                 int finalI = p[0];
                                 int finalJ = p[1];
