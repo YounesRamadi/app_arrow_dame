@@ -37,19 +37,6 @@
         tools:layout_editor_absoluteY="-49dp">
 
         <Button
-            android:id="@+id/endTurn1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:rotation="180"
-            android:text="@string/end_turn"
-            android:textSize="25sp"
-            app:layout_constraintBottom_toTopOf="@+id/scoreB"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="NotSibling" />
-
-        <Button
             android:id="@+id/endTurn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -67,24 +54,9 @@
             android:layout_height="wrap_content"
             android:layout_x="187dp"
             android:layout_y="575dp"
-            android:text="selected"
+            android:text="@string/selected"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/nb_jump_b"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_x="187dp"
-            android:layout_y="654dp"
-            android:rotation="180"
-            android:text="nb_jump_b"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" />
 
         <TextView
             android:id="@+id/nb_jump_w"
@@ -92,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_x="500dp"
             android:layout_y="606dp"
-            android:text="nb_jump_w"
+            android:text="@string/nb_jump_w"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline3"
