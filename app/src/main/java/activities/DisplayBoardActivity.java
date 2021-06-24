@@ -18,45 +18,52 @@ import controller.Pion;
 
 public class DisplayBoardActivity extends AppCompatActivity {
 
+    public static final String BUNDLE_STATE_TURN = "currentTurn";
+    public static final String BUNDLE_STATE_GAMEBOARD = "currentGameboard";
     private GameBoard game;
     private RelativeLayout boardLayout;
     private RelativeLayout possibilitiesLayout;
     private Pion[][] display_mat = new Pion[7][9];
-    private int[] selected = new int[2];
+    private final int[] selected = new int[2];
     private int sx;
     private int sy;
     private Button btn;
     private TextView player;
     private TextView nb_jump_w;
     private TextView nb_jump_b;
+    private Button endTurnButton;
+    private Button endTurnButton1;
+
+
     private int turn = 0;
-    public static final String BUNDLE_STATE_TURN="currentTurn";
-    public static final String BUNDLE_STATE_GAMEBOARD="currentGameboard";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             turn = savedInstanceState.getInt(BUNDLE_STATE_TURN);
             game = savedInstanceState.getParcelable(BUNDLE_STATE_GAMEBOARD);
-        }
-        else {
+        } else {
             turn = 0;
             game = new GameBoard(getApplicationContext());
         }
 
         setContentView(R.layout.activity_display_board);
 
-        this.boardLayout = (RelativeLayout) findViewById(R.id.board);
-        this.possibilitiesLayout = (RelativeLayout) findViewById(R.id.possibilites);
+        // initialisation of the needed layouts
+        this.boardLayout = findViewById(R.id.board);
+        this.possibilitiesLayout = findViewById(R.id.possibilites);
 
-        nb_jump_w = (TextView) findViewById(R.id.nb_jump_w);
-        nb_jump_b = (TextView) findViewById(R.id.nb_jump_b);
+        // initialisation of the needed views
+        nb_jump_w = findViewById(R.id.nb_jump_w);
+        nb_jump_b = findViewById(R.id.nb_jump_b);
+        endTurnButton = findViewById(R.id.endTurn);
+        endTurnButton1 = findViewById(R.id.endTurn1);
 
-        Button btn1 = new Button(this);
-        btn1 = (Button) findViewById(R.id.endTurn);
-        btn1.setOnClickListener(new View.OnClickListener() {
+        // initialisation of the needed onClickListeners
+        endTurnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
@@ -66,9 +73,8 @@ public class DisplayBoardActivity extends AppCompatActivity {
                 update();
             }
         });
-        Button btn2 = new Button(this);
-        btn2 = (Button) findViewById(R.id.endTurn1);
-        btn2.setOnClickListener(new View.OnClickListener() {
+
+        endTurnButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
@@ -78,22 +84,32 @@ public class DisplayBoardActivity extends AppCompatActivity {
                 update();
             }
         });
+
         update();
-
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outstate){
+    protected void onSaveInstanceState(Bundle outstate) {
         super.onSaveInstanceState(outstate);
         outstate.putInt(BUNDLE_STATE_TURN, turn);
         outstate.putParcelable(BUNDLE_STATE_GAMEBOARD, game);
     }
 
+    /**
+     * Setter for the selected position
+     * @param a
+     * @param b
+     */
     public void setSelected(int a, int b) {
         this.selected[0] = a;
         this.selected[1] = b;
     }
 
+    /**
+     * Getter for the postion in the displayed matrix
+     *
+     * @return position in the displayed matrix
+     */
     public int[] getSelected() {
         selected[0] = sx;
 
@@ -114,72 +130,91 @@ public class DisplayBoardActivity extends AppCompatActivity {
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
+    /**
+     * Update the board display
+     */
     public void update() {
+        // Cleaning the layout
         removeImages(boardLayout);
 
+        // Debug
         System.out.println("turn:" + turn);
-        // faudrait peut etre trouver autre chose
-        //affichage du cadre
 
+        // Getting the display matrix
         this.display_mat = game.display();
 
         int y = 0;
         int x = 0;
-
         for (int i = 0; i < 7; i++) {
-
             for (int j = 0; j < 9; j++) {
 
+                // if the cell doesn't exist
                 if (display_mat[i][j] == null) {
                     x += 100;
                     continue;
                 }
-                //Marche bien ton programme en vrai
+
+                // Creation of the ImageView needed to print the Cell
                 ImageView img = new ImageView(this);
+                // Setting the Cell image
                 img.setImageDrawable(getDrawable(display_mat[i][j].getImg()));
 
                 int finalI = i;
                 int finalJ = j;
+                // make the Cell clickable only if it contains a pawn that belongs to the player
                 if (display_mat[i][j].get_color() != -1) {
                     img.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            // Clean the possibilites layout
                             removeImages(possibilitiesLayout);
-                            update();
+
                             sx = finalI;
                             sy = finalJ;
                             setSelected(sx, sy);
+
+                            // Debug
                             System.out.println(sx + " " + sy + "0" + getSelected()[0] + " " + getSelected()[1]);
+
+                            // print the accessible cells if the pawn is able to move
                             if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
                                 display_possibilities(getSelected()[0], getSelected()[1]);
                             }
+
+                            // update display
+                            update();
                         }
                     });
                 }
 
+                // Set the direction of the image depending on the pawn's direction
                 if (display_mat[i][j].get_direction() == 0)
                     img.setRotation(270);
                 else
                     img.setRotation(90);
 
+                // Set the ImageView parameters and add it to the layout
                 RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(100, 100);
                 parms.setMargins(x - 50, y, 0, 0);
                 parms.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
                 parms.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                 img.setLayoutParams(parms);
+                boardLayout.addView(img);
 
                 x += 100;
 
-                boardLayout.addView(img);
-
+                // Debug
                 getSelected();
                 String s = sx + ":" + selected[1];
-                TextView t = (TextView) findViewById(R.id.selected);
+                TextView t = findViewById(R.id.selected);
                 t.setText(s);
+
             }
             y += 100;
             x = 50 * ((i + 1) % 2);
         }
+
+        // Print the number of jumps available
         if ((turn % 2) == 0) {
             nb_jump_b.setText("0");
             nb_jump_w.setText(String.valueOf(game.getJump()));
@@ -189,70 +224,109 @@ public class DisplayBoardActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Display the accessible Cells of a specific pawn on the gameboard
+     *
+     * @param px    x position
+     * @param py    y position
+     */
     @SuppressLint("UseCompatLoadingForDrawables")
     public void display_possibilities(int px, int py) {
+        // Clean the posssibilities layout
         removeImages(possibilitiesLayout);
+
+        // Check the existence of the specified pawn
         if (game.getGameboard()[px][py] != null && game.getGameboard()[px][py].get_color() != -1) {
             int[][] pos = null;
+
             if (game.check_selection(px, py, turn, 1) != -1) {
                 pos = game.get_possibilities(game.getGameboard()[px][py], px, py);
             }
+            // Check the existence of the possibilities
             if (pos != null) {
+                // for each possibilities
                 for (int[] p : pos
                 ) {
-                    int[] tmp = getrelative_position(p);
+
+                    int[] tmp = getRelativePosition(p);
+
                     int y = 0;
                     int x = 0;
-
                     for (int i = 0; i < 7; i++) {
-
                         for (int j = 0; j < 9; j++) {
+
                             if (i == tmp[0] && j == tmp[1]) {
+                                // Debug
                                 System.out.println(i + " " + j);
+
+                                // Creation of the ImageView needed to print the Cell
                                 ImageView img = new ImageView(this);
                                 img.setImageDrawable(getDrawable(R.drawable.yellow_haxagone));
-                                RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(100, 100);
+
                                 int finalI = p[0];
                                 int finalJ = p[1];
+
+                                // Set the onClickListener
                                 img.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         setSelected(finalI, finalJ);
+
+                                        // Debug
                                         System.out.println("move depuis:" + getSelected()[0] + getSelected()[1] + "vers :" + finalI + finalJ);
+
                                         game.move(finalI, finalJ);
+
+                                        // Check the end of the game or turn
                                         if (game.checkEndTurn() || game.checkEndGame()) {
+                                            // Debug
                                             System.out.println("fin de tour");
+
                                             turn++;
-                                            update();
+
+                                            //Debug
                                             System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
+
                                             game.end_turn();
-                                            if(game.checkEndGame()) {
+
+                                            if (game.checkEndGame()) {
                                                 System.out.println("Test");
                                                 game = new GameBoard(getApplicationContext());
                                             }
+                                            update();
                                         }
                                         removeImages(possibilitiesLayout);
                                         update();
                                     }
                                 });
+
+                                // Set the ImageView parameters and add it to the layout
+                                RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(100, 100);
                                 parms.setMargins(x - 50, y, 0, 0);
                                 parms.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
                                 parms.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                                 img.setLayoutParams(parms);
-
                                 possibilitiesLayout.addView(img);
+
                             }
                             x += 100;
                         }
                         y += 100;
-                        x = 50 * ((i+1) % 2);
+                        x = 50 * ((i + 1) % 2);
                     }
                 }
             }
         }
     }
 
-    public int[] getrelative_position(int[] pos) {
+    /**
+     * Getter for the relative position of a displayed position
+     *
+     * @param pos position in the displayed matrix
+     *
+     * @return position in the relative matrix
+     */
+    public int[] getRelativePosition( int[] pos) {
         int[] new_pos = new int[2];
         new_pos[0] = pos[0];
 
@@ -272,11 +346,17 @@ public class DisplayBoardActivity extends AppCompatActivity {
         return new_pos;
     }
 
-    public void removeImages(RelativeLayout layout){
-        for(int k = 0; k < 10; k++){
-            for(int i=0;i<layout.getChildCount();i++){
-                View view=layout.getChildAt(i);
-                if(view.getId()!=R.id.possibilites){
+    /**
+     * Removes all chil view from a layout
+     * Created because Layout.removeAllViews doesn't work well
+     *
+     * @param layout
+     */
+    public void removeImages(RelativeLayout layout) {
+        for (int k = 0; k < 10; k++) {
+            for (int i = 0; i < layout.getChildCount(); i++) {
+                View view = layout.getChildAt(i);
+                if (view.getId() != R.id.possibilites) {
                     layout.removeViewAt(i);
                 }
             }
