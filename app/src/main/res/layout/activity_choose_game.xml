@@ -14,7 +14,7 @@
         android:layout_margin="20dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="@string/string_nouvelle_partie"
+        android:text="Nouvelle partie"
         android:textStyle="bold" />
 
     <Button

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.apadnom.R;
 
 import controller.GameBoard;
+import controller.History;
 import controller.Pion;
 
 
@@ -35,6 +36,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
     private Button endTurnButton1;
     private ImageView whiteScore;
     private ImageView blackScore;
+    private History history;
 
 
     private int turn = 0;
@@ -43,6 +45,8 @@ public class DisplayBoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        history = new History(this);
 
         if (savedInstanceState != null) {
             turn = savedInstanceState.getInt(BUNDLE_STATE_TURN);
@@ -279,6 +283,10 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                         System.out.println("move depuis:" + getSelected()[0] + getSelected()[1] + "vers :" + finalI + finalJ);
 
                                         game.move(finalI, finalJ);
+
+                                        //saving turn history
+                                        history.write(game.toString() + turn);
+                                        System.out.println(history.read());
 
                                         // Check the end of the game or turn
                                         if (game.checkEndTurn() || game.checkEndGame()) {
