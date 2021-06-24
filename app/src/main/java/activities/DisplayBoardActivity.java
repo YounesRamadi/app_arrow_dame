@@ -33,7 +33,8 @@ public class DisplayBoardActivity extends AppCompatActivity {
     private TextView nb_jump_b;
     private Button endTurnButton;
     private Button endTurnButton1;
-
+    private ImageView whiteScore;
+    private ImageView blackScore;
 
 
     private int turn = 0;
@@ -62,6 +63,8 @@ public class DisplayBoardActivity extends AppCompatActivity {
         nb_jump_b = findViewById(R.id.nb_jump_b);
         endTurnButton = findViewById(R.id.endTurn);
         endTurnButton1 = findViewById(R.id.endTurn1);
+        whiteScore = findViewById(R.id.scoreW);
+        blackScore = findViewById(R.id.scoreB);
 
         // initialisation of the needed onClickListeners
         endTurnButton.setOnClickListener(new View.OnClickListener() {
@@ -136,6 +139,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
      */
     @SuppressLint("UseCompatLoadingForDrawables")
     public void update() {
+        updateScores();
         // Cleaning the layout
         removeImages(boardLayout);
 
@@ -363,5 +367,43 @@ public class DisplayBoardActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    public void updateScores(){
+        switch (game.getNb_W_stars()) {
+            case 3:
+                whiteScore.setImageDrawable(getDrawable(R.drawable.point_empty));
+                break;
+            case 2:
+                whiteScore.setImageDrawable(getDrawable(R.drawable.point_blue_1));
+                break;
+            case 1:
+                whiteScore.setImageDrawable(getDrawable(R.drawable.point_blue_2));
+                break;
+            case 0:
+                whiteScore.setImageDrawable(getDrawable(R.drawable.point_blue_3));
+                break;
+            default:
+                break;
+        }
+        switch (game.getNb_B_stars()) {
+            case 3:
+                blackScore.setImageDrawable(getDrawable(R.drawable.point_empty));
+                break;
+            case 2:
+                blackScore.setImageDrawable(getDrawable(R.drawable.point_red_1));
+                break;
+            case 1:
+                blackScore.setImageDrawable(getDrawable(R.drawable.point_red_2));
+                break;
+            case 0:
+                blackScore.setImageDrawable(getDrawable(R.drawable.point_red_3));
+                break;
+            default:
+                break;
+        }
+
+
+
     }
 }

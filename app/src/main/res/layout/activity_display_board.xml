@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="activities.DisplayBoardActivity"
-    >
+    tools:context="activities.DisplayBoardActivity">
 
     <RelativeLayout
         android:id="@+id/board"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clipChildren="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:clipChildren="false">
+        app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
             android:id="@+id/possibilites"
@@ -48,7 +46,9 @@
         android:layout_height="wrap_content"
         android:layout_x="187dp"
         android:layout_y="575dp"
-        android:text="TextView"/>
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/nb_jump_b"
@@ -61,34 +61,25 @@
         app:layout_constraintBottom_toTopOf="@+id/board"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/endTurn1" />
+        app:layout_constraintTop_toBottomOf="@+id/scoreB" />
 
     <TextView
         android:id="@+id/nb_jump_w"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
         android:layout_x="185dp"
         android:layout_y="606dp"
         android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/endTurn"
+        app:layout_constraintBottom_toTopOf="@+id/scoreW"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/board" />
 
-    <TextView
-        android:id="@+id/playerTurn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_x="39dp"
-        android:layout_y="652dp"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="335dp"
-        tools:layout_editor_absoluteY="31dp" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="200dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintGuide_begin="196dp"
@@ -108,29 +99,50 @@
         android:id="@+id/endTurn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="25dp"
         android:layout_x="300dp"
         android:layout_y="600dp"
         android:text="Fin de tour"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline13"
-        app:layout_constraintVertical_bias="1" />
+        app:layout_constraintTop_toBottomOf="@+id/scoreW" />
 
     <Button
         android:id="@+id/endTurn1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="25dp"
         android:layout_x="285dp"
         android:layout_y="523dp"
         android:rotation="180"
         android:text="Fin de Tour"
+        app:layout_constraintBottom_toTopOf="@+id/scoreB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/scoreW"
+        android:layout_width="50dp"
+        android:layout_height="200dp"
+        android:rotation="90"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/board"
+        app:srcCompat="@drawable/point_empty" />
+
+    <ImageView
+        android:id="@+id/scoreB"
+        android:layout_width="50dp"
+        android:layout_height="200dp"
+        android:rotation="-90"
+        app:layout_constraintBottom_toTopOf="@+id/board"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0" />
+        app:srcCompat="@drawable/point_empty" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
