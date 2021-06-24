@@ -30,7 +30,6 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
     private Button btn;
     private TextView player;
     private TextView nb_jump_w;
-    private TextView nb_jump_b;
     private int turn = 0;
     public static final String BUNDLE_STATE_TURN="currentTurn";
     public static final String BUNDLE_STATE_GAMEBOARD="currentGameboard";
@@ -57,7 +56,6 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
         this.layout = (RelativeLayout) findViewById(R.id.possibilites);
 
         nb_jump_w = (TextView) findViewById(R.id.nb_jump_w);
-        nb_jump_b = (TextView) findViewById(R.id.nb_jump_b);
 
         Button btn1 = new Button(this);
         btn1 = (Button) findViewById(R.id.endTurn);
@@ -73,21 +71,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                 update();
             }
         });
-        Button btn2 = new Button(this);
-        btn2 = (Button) findViewById(R.id.endTurn1);
-        btn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
-
-                game.end_turn();
-                turn++;
-                //myLayout.removeAllViews();
-                update();
-            }
-        });
         update();
-
     }
 
     @Override
@@ -200,12 +184,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
             x = 50 * ((i + 1) % 2);
         }
         if((turn %2) == 0){
-            nb_jump_b.setText("0");
             nb_jump_w.setText(String.valueOf(game.getJump()));
-        }
-        else if((turn %2) == 1){
-            nb_jump_w.setText("0");
-            nb_jump_b.setText(String.valueOf(game.getJump()));
         }
     }
 
