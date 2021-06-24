@@ -11,11 +11,16 @@ import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.apadnom.R;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.UUID;
+
+import activities.BluetoothActivity;
+import activities.MainActivity;
 
 /**
  * Created by User on 12/21/2016.
@@ -107,7 +112,6 @@ public class BluetoothConnectionService {
                 Log.e(TAG, "cancel: Close of AcceptThread ServerSocket failed. " + e.getMessage() );
             }
         }
-
     }
 
     /**
@@ -257,10 +261,11 @@ public class BluetoothConnectionService {
                 try {
                     bytes = mmInStream.read(buffer);
                     String incomingMessage = new String(buffer, 0, bytes);
+
                     Log.d(TAG, "InputStream: " + incomingMessage);
                     System.out.println(incomingMessage);
-                    Intent incomingMessageIntent = new Intent("incomingMessage");
-                    incomingMessageIntent.putExtra("TheMessage",incomingMessage);
+                    Intent incomingMessageIntent = new Intent("send");
+                    incomingMessageIntent.putExtra("send",incomingMessage);
                     LocalBroadcastManager.getInstance(mContext).sendBroadcast(incomingMessageIntent);
                 } catch (IOException e) {
                     Log.e(TAG, "write: Error reading Input Stream. " + e.getMessage() );
