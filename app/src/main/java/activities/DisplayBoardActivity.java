@@ -20,11 +20,11 @@ public class DisplayBoardActivity extends AppCompatActivity {
 
     public static final String BUNDLE_STATE_TURN = "currentTurn";
     public static final String BUNDLE_STATE_GAMEBOARD = "currentGameboard";
+    private final int[] selected = new int[2];
     private GameBoard game;
     private RelativeLayout boardLayout;
     private RelativeLayout possibilitiesLayout;
     private Pion[][] display_mat = new Pion[7][9];
-    private final int[] selected = new int[2];
     private int sx;
     private int sy;
     private Button btn;
@@ -97,6 +97,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
 
     /**
      * Setter for the selected position
+     *
      * @param a
      * @param b
      */
@@ -129,10 +130,10 @@ public class DisplayBoardActivity extends AppCompatActivity {
         return selected;
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     /**
      * Update the board display
      */
+    @SuppressLint("UseCompatLoadingForDrawables")
     public void update() {
         // Cleaning the layout
         removeImages(boardLayout);
@@ -227,8 +228,8 @@ public class DisplayBoardActivity extends AppCompatActivity {
     /**
      * Display the accessible Cells of a specific pawn on the gameboard
      *
-     * @param px    x position
-     * @param py    y position
+     * @param px x position
+     * @param py y position
      */
     @SuppressLint("UseCompatLoadingForDrawables")
     public void display_possibilities(int px, int py) {
@@ -323,10 +324,9 @@ public class DisplayBoardActivity extends AppCompatActivity {
      * Getter for the relative position of a displayed position
      *
      * @param pos position in the displayed matrix
-     *
      * @return position in the relative matrix
      */
-    public int[] getRelativePosition( int[] pos) {
+    public int[] getRelativePosition(int[] pos) {
         int[] new_pos = new int[2];
         new_pos[0] = pos[0];
 
