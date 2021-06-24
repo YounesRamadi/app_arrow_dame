@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="activities.DisplayBoardActivity">
+    tools:context="activities.DisplayBoardActivity"
+    >
 
     <RelativeLayout
         android:id="@+id/board"
@@ -15,7 +16,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:clipChildren="false">
 
         <RelativeLayout
             android:id="@+id/possibilites"
@@ -44,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_x="187dp"
         android:layout_y="575dp"
-        android:text="TextView" />
+        android:text="TextView"/>
 
     <TextView
         android:id="@+id/nb_jump_b"

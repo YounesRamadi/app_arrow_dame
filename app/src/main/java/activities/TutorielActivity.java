@@ -365,7 +365,7 @@ public class TutorielActivity extends AppCompatActivity {
                         for (int j = 0; j < 9; j++) {
                             if (i == tmp[0] && j == tmp[1]) {
                                 ImageView img = new ImageView(this);
-                                img.setImageDrawable(getDrawable(R.drawable.yellow_haxagone));
+                                img.setImageDrawable(getDrawable(R.drawable.hexagone_white));
                                 RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(100, 100);
                                 int finalI = p[0];
                                 int finalJ = p[1];

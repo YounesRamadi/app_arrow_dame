@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="exampleToast">
+        <item name="stColorBackground">@color/brown</item>
+        <item name="stTextColor">@color/white</item>
+    </style>
+
+</resources>

@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Options"
+        android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -28,14 +29,15 @@
         app:layout_constraintHorizontal_bias="0.118"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.115" />
+        app:layout_constraintVertical_bias="0.115"
+        android:textSize="20sp"/>
 
     <EditText
         android:id="@+id/nomedit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:hint="Réalisé"
+        android:hint="Entrez votre prénom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.122"
@@ -45,7 +47,9 @@
         android:maxLines="1"
         android:minLines="1"
         android:maxLength="15"
-        android:inputType="text"/>
+        android:inputType="text"
+        android:backgroundTint="@color/white"
+        android:textSize="15dp"/>
 
     <TextView
         android:id="@+id/credits"

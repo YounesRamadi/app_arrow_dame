@@ -210,7 +210,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
                             if (i == tmp[0] && j == tmp[1]) {
                                 System.out.println(i + " " + j);
                                 ImageView img = new ImageView(this);
-                                img.setImageDrawable(getDrawable(R.drawable.yellow_haxagone));
+                                img.setImageDrawable(getDrawable(R.drawable.hexagone_white));
                                 RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(100, 100);
                                 int finalI = p[0];
                                 int finalJ = p[1];

@@ -18,7 +18,7 @@ public class Pion {
     }
 
     private @DrawableRes
-    int img = R.drawable.hexagone;
+    int img = R.drawable.hexagone_green;
 
     // 1 vers le sud / bas
     public Pion() {

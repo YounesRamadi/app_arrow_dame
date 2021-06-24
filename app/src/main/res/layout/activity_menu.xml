@@ -15,52 +15,39 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="Bienvenue !"
-        android:textColor="@color/black"
-        android:textSize="18sp"
         android:textStyle="bold" />
 
     <Button
         android:id="@+id/newgame"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="5dp"
+        android:layout_margin="20dp"
         android:layout_weight="1"
-        android:background="@color/white"
-        android:text="Nouvelle partie"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:text="Nouvelle partie" />
 
     <Button
         android:id="@+id/tutoriel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="5dp"
+        android:layout_margin="20dp"
         android:layout_weight="1"
-        android:background="@color/white"
         android:text="Tutoriel"
-        android:textColor="@color/black"
         android:textSize="20sp" />
 
     <Button
         android:id="@+id/history"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="5dp"
         android:layout_weight="1"
-        android:background="@color/white"
-        android:text="Historique"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:layout_margin="20dp"
+        android:text="Historique" />
 
     <Button
         android:id="@+id/options"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="5dp"
+        android:layout_margin="20dp"
         android:layout_weight="1"
-        android:background="@color/white"
-        android:text="Options"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:text="Options" />
 
 </LinearLayout>
