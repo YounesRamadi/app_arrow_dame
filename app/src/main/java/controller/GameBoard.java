@@ -48,10 +48,24 @@ public class GameBoard implements Parcelable{
     }
 
     private int[] lastPosition = new int[2];
+
+
+    public int[][] getJumpableEnnemies() {
+        return jumpableEnnemies;
+    }
+
     private int[][] jumpableEnnemies;
 
     private Context context;
     private Toast toast;
+
+    public ArrayList<int[][]> getJumpedPawn() {
+        return jumpedPawn;
+    }
+
+    public void setJumpedPawn(ArrayList<int[][]> jumpedPawn) {
+        this.jumpedPawn = (ArrayList) jumpedPawn.clone();
+    }
 
     private ArrayList<int[][]> jumpedPawn = new ArrayList<int[][]>();
     public GameBoard(GameBoard g, Context context){
@@ -154,6 +168,7 @@ public class GameBoard implements Parcelable{
         retour.setGameboard(p);
         retour.setSelection(this.selection[0], this.selection[1]);
         retour.set_movedPawn(movedPawn[0], movedPawn[1]);
+        retour.setJumpedPawn(jumpedPawn);
         return retour;
     }
 
@@ -162,7 +177,11 @@ public class GameBoard implements Parcelable{
     }
 
     public void setPossible_move(int[][] possible_move) {
-        this.possible_move = possible_move;
+        if(possible_move == null){
+            this.possible_move = null;
+        }else {
+            this.possible_move = possible_move.clone();
+        }
     }
 
     public int[][] getPossible_jump() {
@@ -173,7 +192,11 @@ public class GameBoard implements Parcelable{
     }
 
     public void setPossible_jump(int[][] possible_jump) {
-        this.possible_jump = possible_jump;
+        if(possible_jump == null){
+            this.possible_jump = null;
+        }else {
+            this.possible_jump = possible_jump.clone();
+        }
     }
 
     public void setNb_W_stars(int nb_W_stars) {
@@ -545,7 +568,7 @@ public class GameBoard implements Parcelable{
         selection[1] = y;
         //en fonction du pion on appelle une fonction differente
         // les mouvements sont differents
-        if(gameboard[x][y] instanceof Etoile){
+        if(gameboard[x][y] instanceof Etoile && jump > 0){
             return get_possibilitiesStar(gameboard[x][y], x, y);
         }else if(gameboard[x][y] instanceof Fleche){
             return get_possibilitiesArrow(gameboard[x][y], x, y);
@@ -890,13 +913,15 @@ public class GameBoard implements Parcelable{
             }
         }
         indexMove = arl.size();
+        possible_move= arl.toArray(new int[0][0]);
+        possible_jump = ar2.toArray(new int[0][0]);
         if(has_jumped == (byte) 1){
             indexMove = 0;
+            possible_move=null;
         }
         indexJump = ar2.size();
 
-        possible_move= arl.toArray(new int[0][0]);
-        possible_jump = ar2.toArray(new int[0][0]);
+
         int[][] retour = new int[indexJump+indexMove][2];
         for(int i=0; i<indexJump+indexMove;i++){
             if(i<indexMove && indexMove != 0){
@@ -1065,6 +1090,7 @@ public class GameBoard implements Parcelable{
                     possible_move = null;
                     if(gameboard[x][y] instanceof Etoile){
                         jump --;
+                        has_jumped = (byte) 0;
                     }
                     if((x==0 && gameboard[x][y].get_direction()==0) || (x==6 && gameboard[x][y].get_direction()==1)){
                         if (gameboard[x][y] instanceof Etoile)

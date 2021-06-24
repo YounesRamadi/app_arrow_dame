@@ -59,7 +59,6 @@ public class DisplayBoardActivity extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
 
                 game.end_turn();
                 turn++;
@@ -71,7 +70,6 @@ public class DisplayBoardActivity extends AppCompatActivity {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
 
                 game.end_turn();
                 turn++;
@@ -117,7 +115,6 @@ public class DisplayBoardActivity extends AppCompatActivity {
     public void update() {
         removeImages(boardLayout);
 
-        System.out.println("turn:" + turn);
         // faudrait peut etre trouver autre chose
         //affichage du cadre
 

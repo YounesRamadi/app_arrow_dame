@@ -2,6 +2,7 @@ package activities;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -246,13 +247,20 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                         if(game.checkEndTurn()){
                                             //System.out.println("fin de tour");
                                             if(game.end_turn() == (byte) 1){
+                                                update();
                                                 game = new GameBoard(getApplicationContext());
                                                 System.out.println("Fin du game");
                                             }
                                             turn ++;
                                             update();
+                                            update();
+                                            update();
+                                            update();
+                                            update();
+                                            update();
                                             //jump = 0
-                                            do {
+
+                                            do{
                                                 iaMove = ia.minMax((byte) (1), game.copy(), 2);
                                                 //System.out.println("Taking " + iaMove[0] + " : " + iaMove[1]);
                                                 //System.out.println("Going in " + iaMove[2] + " : " + iaMove[3]);
@@ -273,19 +281,24 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                                 game.setPossible_jump(setterjump);
                                                 game.setPossible_move(settermove);
 
-                                                if(iaMove[2] == -1 || iaMove[1] == -1){
+                                                if (iaMove[2] == -1 || iaMove[1] == -1) {
                                                     break;
                                                 }
-                                                System.out.println("Moving : " + game.move(iaMove[2], iaMove[3]));
-                                                game.set_movedPawn(iaMove[2],iaMove[3]);
+
+
+                                                    System.out.println("Moving : " + game.move(iaMove[2], iaMove[3]));
+
+                                                game.set_movedPawn(iaMove[2], iaMove[3]);
                                                 //System.out.println("Flags h_j :" + iaMove[4] + "/ j :" + iaMove[5]);
 
                                                 if(game.checkEndTurn()){
                                                     break;
                                                 }
+
                                                 update();
 
-                                            }while(iaMove[5] >= 1 || iaMove[4] == (byte)1);
+
+                                            }while(iaMove[4] == (byte)1 || iaMove[5] > 0);
 
 
                                             //game.add_turn();
