@@ -69,7 +69,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(SettingsActivity);
                 break;
             case 3:
-                Intent HistoriqueActivity = new Intent(MenuActivity.this, HistoriqueActivity.class);
+                Intent HistoriqueActivity = new Intent(MenuActivity.this, HistoryActivity.class);
                 startActivity(HistoriqueActivity);
                 break;
             default:
