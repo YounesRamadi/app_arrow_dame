@@ -27,27 +27,6 @@
 
 
     <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Apadnom"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.038" />
-
-    <TextView
-        android:id="@+id/selected"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_x="187dp"
-        android:layout_y="575dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints" />
-
-    <TextView
         android:id="@+id/nb_jump_w"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -84,5 +63,25 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="196dp" />
+
+    <ImageView
+        android:id="@+id/scoreB"
+        android:layout_width="50dp"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toTopOf="@+id/endTurn"
+        app:layout_constraintEnd_toStartOf="@+id/endTurn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/board"
+        app:srcCompat="@drawable/point_empty" />
+
+    <ImageView
+        android:id="@+id/scoreW"
+        android:layout_width="50dp"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toTopOf="@+id/endTurn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/endTurn"
+        app:layout_constraintTop_toBottomOf="@+id/board"
+        app:srcCompat="@drawable/point_empty" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -212,10 +212,6 @@ public class DisplayBoardActivity extends AppCompatActivity {
 
                 // Debug
                 getSelected();
-                String s = sx + ":" + selected[1];
-                TextView t = findViewById(R.id.selected);
-                t.setText(s);
-
             }
             y += 100;
             x = 50 * ((i + 1) % 2);
@@ -402,8 +398,5 @@ public class DisplayBoardActivity extends AppCompatActivity {
             default:
                 break;
         }
-
-
-
     }
 }

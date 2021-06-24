@@ -27,12 +27,13 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
     private int[] selected = new int[2];
     private int sx;
     private int sy;
-    private Button btn;
-    private TextView player;
     private TextView nb_jump_w;
     private int turn = 0;
     public static final String BUNDLE_STATE_TURN="currentTurn";
     public static final String BUNDLE_STATE_GAMEBOARD="currentGameboard";
+    private ImageView whiteScore;
+    private ImageView blackScore;
+
 
     private int[]  iaMove = new int[4];
     private Ia ia = new Ia();
@@ -56,6 +57,8 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
         this.layout = (RelativeLayout) findViewById(R.id.possibilites);
 
         nb_jump_w = (TextView) findViewById(R.id.nb_jump_w);
+        whiteScore = findViewById(R.id.scoreW);
+        blackScore = findViewById(R.id.scoreB);
 
         Button btn1 = new Button(this);
         btn1 = (Button) findViewById(R.id.endTurn);
@@ -107,6 +110,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public void update() {
+        updateScores();
         //System.out.println("turn:" + turn);
         // faudrait peut etre trouver autre chose
         removeImages(myLayout);
@@ -176,9 +180,6 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                 myLayout.addView(img);
 
                 getSelected();
-                String s = sx + ":" + selected[1];
-                TextView t = (TextView) findViewById(R.id.selected);
-                t.setText(s);
             }
             y += 100;
             x = 50 * ((i + 1) % 2);
@@ -328,5 +329,39 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
         }
     }
 
+    public void updateScores(){
+        switch (game.getNb_W_stars()) {
+            case 3:
+                whiteScore.setImageDrawable(getDrawable(R.drawable.point_empty));
+                break;
+            case 2:
+                whiteScore.setImageDrawable(getDrawable(R.drawable.point_blue_1));
+                break;
+            case 1:
+                whiteScore.setImageDrawable(getDrawable(R.drawable.point_blue_2));
+                break;
+            case 0:
+                whiteScore.setImageDrawable(getDrawable(R.drawable.point_blue_3));
+                break;
+            default:
+                break;
+        }
+        switch (game.getNb_B_stars()) {
+            case 3:
+                blackScore.setImageDrawable(getDrawable(R.drawable.point_empty));
+                break;
+            case 2:
+                blackScore.setImageDrawable(getDrawable(R.drawable.point_red_1));
+                break;
+            case 1:
+                blackScore.setImageDrawable(getDrawable(R.drawable.point_red_2));
+                break;
+            case 0:
+                blackScore.setImageDrawable(getDrawable(R.drawable.point_red_3));
+                break;
+            default:
+                break;
+        }
+    }
 
 }

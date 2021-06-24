@@ -33,8 +33,8 @@
         android:text="@string/nb_jump_w"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/endTurn"
+        app:layout_constraintEnd_toStartOf="@+id/endTurn"
+        app:layout_constraintStart_toEndOf="@+id/board"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -59,28 +59,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="NotSibling" />
 
-    <ImageView
-        android:id="@+id/scoreB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/black_score"
-        app:layout_constraintBottom_toTopOf="@+id/board"
-        app:layout_constraintEnd_toStartOf="@+id/endTurn"
-        app:layout_constraintStart_toEndOf="@+id/board"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <ImageView
-        android:id="@+id/scoreW"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/white_score"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/endTurn"
-        app:layout_constraintStart_toEndOf="@+id/board"
-        app:layout_constraintTop_toBottomOf="@+id/board"
-        tools:srcCompat="@tools:sample/avatars" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
@@ -94,6 +72,28 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="196dp" />
+
+    <ImageView
+        android:id="@+id/scoreW"
+        android:layout_width="50dp"
+        android:layout_height="200dp"
+        android:rotation="90"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="@+id/guideline5"
+        app:srcCompat="@drawable/point_empty" />
+
+    <ImageView
+        android:id="@+id/scoreB"
+        android:layout_width="50dp"
+        android:layout_height="200dp"
+        android:rotation="90"
+        app:layout_constraintBottom_toTopOf="@+id/guideline5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/point_empty" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
