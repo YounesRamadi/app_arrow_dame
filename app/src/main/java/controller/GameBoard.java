@@ -10,9 +10,11 @@ package controller;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.renderscript.ScriptIntrinsicYuvToRGB;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GameBoard implements Parcelable{
 
@@ -280,9 +282,9 @@ public class GameBoard implements Parcelable{
     public Pion[][] makeGameBoard(String ch) {
         int[] tab = new int[63];
         int i=0;
+        int j=0;
         int oc = 0;
         int val=0;
-        int j=0;
         int p=0;
         String tmp = new String();
         Pion[][] tempgameboard = new Pion[7][9];
@@ -1127,7 +1129,6 @@ public class GameBoard implements Parcelable{
         return (nb_W_stars == 0 || nb_B_stars == 0);
     }
 
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(turn);
@@ -1175,5 +1176,127 @@ public class GameBoard implements Parcelable{
     public void set_movedPawn(int x, int y) {
         movedPawn[0] = x;
         movedPawn[1] = y;
+    }
+
+    @Override
+    public String toString() {
+        String board = "";
+
+        // a -> null
+        // b -> pion noir haut
+        // c -> pion noir bas
+        // d -> etoile noire
+        // e -> pion blanc haut
+        // f -> pion blanc bas
+        // g -> etoile blanche
+        // h -> case vide
+
+        for(int i=0; i<gameboard.length;i++){
+            for(int j=0;j<gameboard[i].length;j++){
+                // Cell doesn't exists
+                if(gameboard[i][j] == null){
+                    board += 'a';
+                }
+                // No pawn in the cell
+                else if(gameboard[i][j].get_color() == -1){
+                    board += 'h';
+                }
+                else if(gameboard[i][j] instanceof Etoile){
+                    if(gameboard[i][j].get_color() == 1){
+                        board += 'd';
+                    }
+                    else{
+                        board += 'g';
+                    }
+                }
+                else{
+                    if(gameboard[i][j].get_color() == 1){
+                        if(gameboard[i][j].get_direction() == 0){
+                            board += 'b';
+                        }
+                        else{
+                            board += 'c';
+                        }
+                    }
+                    else{
+                        if(gameboard[i][j].get_direction() == 0){
+                            board += 'e';
+                        }
+                        else{
+                            board += 'f';
+                        }
+                    }
+                }
+            }
+        }
+
+        String s = "";
+        int count = 0;
+
+        for(int i = 0; i + 1 < board.length(); i ++){
+            char tmp = board.charAt(i);
+
+            if(board.charAt(i + 1) == tmp){
+                count ++;
+                continue;
+            }
+            else{
+                s += Integer.toString(count + 1);
+                s += board.charAt(i);
+                count = 0;
+            }
+        }
+        return s;
+    }
+
+    public void setGameboard(String s){
+        int n;
+        char p;
+        int x = 0;
+        int y = 0;
+        int count = 0;
+        // parcourt de la string
+        for(int i = 0; i < s.length(); i += 2){
+            n = Character.getNumericValue(s.charAt(i));
+            p = s.charAt(i +1);
+            System.out.println(n + " " + p);
+
+            for(int j = 0; j < n ; j ++, count ++){
+
+                if(y+1 == 9){
+                    x ++;
+                }
+                y = count % 9;
+                switch (p){
+                    case 'a':
+                        gameboard[x][y] = null;
+                        break;
+                    case 'b':
+                        gameboard[x][y] = new Fleche((byte) 1, (byte) 0);
+                        break;
+                    case 'c':
+                        gameboard[x][y] = new Fleche((byte) 1, (byte) 1);
+                        break;
+                    case 'd':
+                        gameboard[x][y] = new Etoile((byte) 1, (byte) 1);
+                        break;
+                    case 'e':
+                        gameboard[x][y] = new Fleche((byte) 0, (byte) 1);
+                        break;
+                    case 'f':
+                        gameboard[x][y] = new Fleche((byte) 0, (byte) 1);
+                        break;
+
+                    case 'g':
+                        gameboard[x][y] = new Etoile((byte) 1, (byte) 1);
+                        break;
+                    case 'h':
+                        gameboard[x][y] = new Pion();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
     }
 }

@@ -67,7 +67,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
-
+                game.setGameboard("3c3d3a7c2a8h1a9h1a8h2a7e3a3g");
                 game.end_turn();
                 turn++;
                 update();
@@ -140,6 +140,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
 
         // Debug
         System.out.println("turn:" + turn);
+        System.out.println("gameboard toString : " + game.toString());
 
         // Getting the display matrix
         this.display_mat = game.display();
