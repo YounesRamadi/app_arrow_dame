@@ -246,6 +246,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                         if(game.checkEndTurn()){
                                             //System.out.println("fin de tour");
                                             if(game.end_turn() == (byte) 1){
+                                                game = new GameBoard(getApplicationContext());
                                                 System.out.println("Fin du game");
                                             }
                                             turn ++;

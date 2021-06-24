@@ -220,20 +220,16 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                         setSelected(finalI, finalJ);
                                         System.out.println("move depuis:" + getSelected()[0] + getSelected()[1] + "vers :" + finalI + finalJ);
                                         game.move(finalI, finalJ);
-                                        if (game.checkEndTurn()) {
+                                        if (game.checkEndTurn() || game.checkEndGame()) {
                                             System.out.println("fin de tour");
                                             turn++;
                                             update();
                                             System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
                                             game.end_turn();
-                                            game.add_turn();
-                                            /*
-                                            if(game.end_turn()==(byte)1) {
+                                            if(game.checkEndGame()) {
                                                 System.out.println("Test");
-                                                game.initGameBoard();
+                                                game = new GameBoard(getApplicationContext());
                                             }
-                                            */
-
                                         }
                                         removeImages(possibilitiesLayout);
                                         update();

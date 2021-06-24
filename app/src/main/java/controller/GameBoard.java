@@ -1117,10 +1117,16 @@ public class GameBoard implements Parcelable{
         return false;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
     }
+
+    public boolean checkEndGame(){
+        return (nb_W_stars == 0 || nb_B_stars == 0);
+    }
+
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
