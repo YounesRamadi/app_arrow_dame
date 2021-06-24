@@ -17,4 +17,9 @@
     <string name="nb_jump_w">nb_jump_w</string>
     <string name="selected">selected</string>
     <string name="nb_jump_b">nb_jump_b</string>
+    <string name="textview">TextView</string>
+    <string name="suivant">Suivant</string>
+    <string name="quitter">Quitter</string>
+    <string name="tuto">tuto</string>
+    <string name="precedent">Precedent</string>
 </resources>
