@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -36,6 +37,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
     public static final String BUNDLE_STATE_GAMEBOARD="currentGameboard";
     private ImageView whiteScore;
     private ImageView blackScore;
+    private Toast toast;
 
 
     private int[]  iaMove = new int[4];
@@ -66,18 +68,22 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
 
 
 
-        Button btn1 = new Button(this);
-        btn1 = (Button) findViewById(R.id.endTurn);
-        btn1.setOnClickListener(new View.OnClickListener() {
+        Button endTurnBtn = new Button(this);
+        endTurnBtn = (Button) findViewById(R.id.endTurn);
+        endTurnBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
-
-                game.end_turn();
-                turn++;
-                //myLayout.removeAllViews();
-                turn = 0;
-                update();
+                if((game.getHas_jumped() == (byte)1) && (game.getJump() <1)){
+                    System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
+                    game.end_turn();
+                    turn++;
+                    turn = 0;
+                    update();
+                }
+                else{
+                    toast = Toast.makeText(getApplicationContext(), "You can't pass your turn", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
         });
         update();
@@ -239,6 +245,8 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                             }
                                             removeImages(possibilitiesLayout);
                                             update();
+
+
                                             //jump = 0
                                             do {
                                                 updateTurn();
@@ -269,8 +277,13 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                                 game.set_movedPawn(iaMove[2],iaMove[3]);
                                                 //System.out.println("Flags h_j :" + iaMove[4] + "/ j :" + iaMove[5]);
 
-                                                if(game.checkEndTurn()){
+                                                if(game.checkEndTurn()) {
                                                     game.end_turn();
+                                                    break;
+                                                }
+                                                if(game.checkEndGame()){
+                                                    game = new GameBoard(getApplicationContext());
+                                                    System.out.println("Fin du game");
                                                     break;
                                                 }
                                                 update();

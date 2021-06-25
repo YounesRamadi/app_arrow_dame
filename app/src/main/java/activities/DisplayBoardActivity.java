@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -37,6 +38,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
     private Button endTurnButton1;
     private ImageView whiteScore;
     private ImageView blackScore;
+    private Toast toast;
 
 
     private int turn = 0;
@@ -75,9 +77,16 @@ public class DisplayBoardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
 
-                game.end_turn();
-                turn++;
-                update();
+                if((game.getHas_jumped() == (byte)1) && (game.getJump() <1)){
+                    System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
+                    game.end_turn();
+                    turn++;
+                    update();
+                }
+                else{
+                    toast = Toast.makeText(getApplicationContext(), "You can't pass your turn", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
         });
 
@@ -86,9 +95,17 @@ public class DisplayBoardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
 
-                game.end_turn();
-                turn++;
-                update();
+                if((game.getHas_jumped() == (byte)1) && (game.getJump() <1)){
+                    System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
+                    game.end_turn();
+                    turn++;
+                    turn = 0;
+                    update();
+                }
+                else{
+                    toast = Toast.makeText(getApplicationContext(), "You can't pass your turn", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
         });
 
@@ -287,6 +304,10 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                         // Check the end of the game or turn
                                         if (game.checkEndTurn() || game.checkEndGame()) {
                                             // Debug
+                                            if (game.checkEndGame()) {
+                                                System.out.println("Fin de partie");
+                                                game = new GameBoard(getApplicationContext());
+                                            }
                                             System.out.println("fin de tour");
 
                                             turn++;
@@ -296,10 +317,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
 
                                             game.end_turn();
 
-                                            if (game.checkEndGame()) {
-                                                System.out.println("Fin de partie");
-                                                game = new GameBoard(getApplicationContext());
-                                            }
+
                                             update();
                                         }
                                         removeImages(possibilitiesLayout);

@@ -57,6 +57,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
     private TextView nb_jump;
     private ImageView whiteScore;
     private ImageView blackScore;
+    private Toast toast;
 
     public void runGame(){
 
@@ -73,10 +74,17 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
             @Override
             public void onClick(View v) {
                 System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
-                game.end_turn();
-                turn++;
-                turn = 0;
-                update();
+                if((game.getHas_jumped() == (byte)1) && (game.getJump() <1)){
+                    System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
+                    game.end_turn();
+                    turn++;
+                    turn = 0;
+                    update();
+                }
+                else{
+                    toast = Toast.makeText(getApplicationContext(), "You can't pass your turn", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
         });
         update();
