@@ -157,16 +157,20 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                     img.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            removeImages(possibilitiesLayout);
+
                             sx = finalI;
                             sy = finalJ;
                             setSelected(sx, sy);
-                            removeImages(possibilitiesLayout);
+
                             if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
                                 display_possibilities(getSelected()[0], getSelected()[1]);
                             }
                             else if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 1) {
                                 display_possibilities(game.getMustJump()[0], game.getMustJump()[1]);
                             }
+
+                            update();
                         }
                     });
                 }
@@ -222,10 +226,11 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                 img.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
+                                        update();
                                         setSelected(finalI, finalJ);
                                         //System.out.println("move depuis:" + getSelected()[0] + getSelected()[1] + "vers :" + finalI + finalJ);
                                         game.move(finalI, finalJ);
-
+                                        removeImages(possibilitiesLayout);
                                         if (game.checkEndTurn() || game.checkEndGame()) {
                                             // System.out.println("fin de tour");
                                             turn ++;
@@ -237,7 +242,6 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                                 System.out.println("Fin du game");
                                             }
 
-                                            removeImages(possibilitiesLayout);
                                             update();
 
                                             runIa();
@@ -295,9 +299,12 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
     }
 
     public void removeImages(RelativeLayout layout) {
-        for (int pos = 0; pos < layout.getChildCount(); pos++) {
-            if (layout.getChildAt(pos) instanceof ImageView) {
-                layout.removeView(layout.getChildAt(pos));
+        for (int k = 0; k < 10; k++) {
+            for (int i = 0; i < layout.getChildCount(); i++) {
+                View view = layout.getChildAt(i);
+                if (view.getId() != R.id.possibilites) {
+                    layout.removeViewAt(i);
+                }
             }
         }
     }
