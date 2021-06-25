@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -45,6 +46,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
     private int turn;
     private Pion[][] display_mat = new Pion[7][9];
 
+    private LinearLayout layout;
     private RelativeLayout boardLayout;
     private RelativeLayout possibilitiesLayout;
     private int[] selected = new int[2];
@@ -52,12 +54,18 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
     private int sy;
     private Button btn;
     private TextView player;
-    private TextView nb_jump_w;
+    private TextView nb_jump;
+    private ImageView whiteScore;
+    private ImageView blackScore;
 
     public void runGame(){
+
+        this.layout = findViewById(R.id.layout);
         this.boardLayout = (RelativeLayout) findViewById(R.id.board);
         this.possibilitiesLayout = (RelativeLayout) findViewById(R.id.possibilites);
-        nb_jump_w = (TextView) findViewById(R.id.nb_jump_w);
+        whiteScore = findViewById(R.id.scoreW);
+        blackScore = findViewById(R.id.scoreB);
+        nb_jump = (TextView) findViewById(R.id.nb_jump_w);
 
         Button btn1 = new Button(this);
         btn1 = (Button) findViewById(R.id.endTurn);
@@ -65,7 +73,6 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
             @Override
             public void onClick(View v) {
                 System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
-
                 game.end_turn();
                 turn++;
                 turn = 0;
@@ -236,6 +243,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         mhost = (Button) findViewById(R.id.host);
         mconnect = (Button) findViewById(R.id.connect);
         lvNewDevices = (ListView) findViewById(R.id.lvNewDevices);
+
         mBTDevices = new ArrayList<>();
 
         //Broadcasts when bond state changes (ie:pairing)
@@ -286,6 +294,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
                 setContentView(R.layout.activity_display_board_ia);
                 runGame();
                 playerT = 1;
+
                 turn = 0;
                 update();
                 StyleableToast.makeText(BluetoothActivity.this,"Waiting for connection...", Toast.LENGTH_SHORT,R.style.exampleToast).show();
@@ -381,6 +390,8 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
      */
     @SuppressLint("UseCompatLoadingForDrawables")
     public void update() {
+        updateTurn();
+        updateScores();
         // Cleaning the layout
         removeImages(boardLayout);
 
@@ -452,20 +463,16 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
                 // Debug
                 getSelected();
-                String s = sx + ":" + selected[1];
-                TextView t = findViewById(R.id.selected);
-                t.setText(s);
-
             }
             y += 100;
             x = 50 * ((i + 1) % 2);
         }
 
         // Print the number of jumps available
-        if ((turn % 2) == 0) {
-            nb_jump_w.setText(String.valueOf(game.getJump()));
+        if ((turn % 2) == playerT) {
+            nb_jump.setText(String.valueOf(game.getJump()));
         } else if ((turn % 2) == 1) {
-            nb_jump_w.setText("0");
+            nb_jump.setText("0");
         }
     }
 
@@ -544,7 +551,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
                                         }
 
                                         else{
-                                            gameString = game.toString() + "1";
+                                            gameString = game.toString() + "0";
                                             msg = gameString.getBytes(Charset.defaultCharset());
                                             System.out.println(msg);
 
@@ -636,4 +643,49 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         }
         return new_pos;
     }
+
+    public void updateTurn(){
+        if(turn%2 == 0){
+            layout.setBackground(getDrawable(R.drawable.white_border));
+        }
+        else{
+            layout.setBackground(getDrawable(R.drawable.black_border));
+        }
+    }
+
+    public void updateScores(){
+        switch (game.getNb_W_stars()) {
+            case 3:
+                whiteScore.setImageDrawable(getDrawable(R.drawable.point_empty));
+                break;
+            case 2:
+                whiteScore.setImageDrawable(getDrawable(R.drawable.point_blue_1));
+                break;
+            case 1:
+                whiteScore.setImageDrawable(getDrawable(R.drawable.point_blue_2));
+                break;
+            case 0:
+                whiteScore.setImageDrawable(getDrawable(R.drawable.point_blue_3));
+                break;
+            default:
+                break;
+        }
+        switch (game.getNb_B_stars()) {
+            case 3:
+                blackScore.setImageDrawable(getDrawable(R.drawable.point_empty));
+                break;
+            case 2:
+                blackScore.setImageDrawable(getDrawable(R.drawable.point_red_1));
+                break;
+            case 1:
+                blackScore.setImageDrawable(getDrawable(R.drawable.point_red_2));
+                break;
+            case 0:
+                blackScore.setImageDrawable(getDrawable(R.drawable.point_red_3));
+                break;
+            default:
+                break;
+        }
+    }
+
 }
