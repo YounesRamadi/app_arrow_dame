@@ -4,13 +4,21 @@ import controller.Etoile;
 import controller.Fleche;
 import controller.GameBoard;
 import controller.Pion;
+import java.util.Random;
+
 
 
 public class Ia {
     int jumpB=0;
     int jumpW=0;
-    public int valuation(GameBoard j,byte color) {
 
+    /**
+     * calculate the score for the current game state for the IA
+     * @param j the game state at the end of the algorithm
+     * @param color the color of the last pawn wich has moved
+     * @return the score of the current game state for the IA
+     */
+    public int valuation(GameBoard j,byte color) {
         int fEtoile=3;
         int score=5000;
         if(j.getNb_B_stars()==0)
@@ -26,7 +34,7 @@ public class Ia {
         if(color==0) {
             if (jumpW >= 1)
                 score-=jumpW*90;
-            if (jumpW >= 3)
+            if (jumpW >= 4)
                 return 0;
         }
         jumpW=0;
@@ -56,18 +64,28 @@ public class Ia {
                                 }
                             }
                         }
+                        if(color==0) {
+                            score+=j.getPossible_jump().length*6;
+                        }
                     }
                     else{
                         score-=j.getPossible_jump().length*4;
                         score-=j.getPossible_move().length*3;
+                        if(color==1)
+                            score-=j.getPossible_jump().length*2;
                     }
                     //color 1 ceux qui sont haut
                     //color 0 ceux qui sont en bas
                     if(j.getGameboard()[lig][col].get_direction()!=1 && j.getGameboard()[lig][col].get_color()==1)
                         score+=10;
-                    if(j.getGameboard()[lig][col].get_color()==1 && j.getGameboard()[lig][col] instanceof Etoile) {
-                        score += lig*85;
-                    }
+                    if(lig+2<=6 && col+2<9)
+                        if(j.getGameboard()[lig+1][col]!=null && j.getGameboard()[lig+2][col]!=null && j.getGameboard()[lig+1][col+1]!=null && j.getGameboard()[lig+2][col+2]!=null) {
+                            if (j.getGameboard()[lig][col].get_color() == 1 && j.getGameboard()[lig][col] instanceof Etoile) {
+                                score += lig * 85;
+                                if ((j.getGameboard()[lig + 1][col].get_color() != -1 && j.getGameboard()[lig + 2][col].get_color() == -1) || (j.getGameboard()[lig + 1][col + 1].get_color() != -1 && j.getGameboard()[lig + 2][col + 2].get_color() == -1))
+                                    score += 20;
+                            }
+                        }
                     if(j.getGameboard()[lig][col].get_color()==0 && j.getGameboard()[lig][col] instanceof Etoile){
                         score-=(6-lig)*84;
                     }
@@ -79,6 +97,17 @@ public class Ia {
         }
         return score;
     }
+
+    /**
+     * keep the best choice for the IA
+     * @param j current gamestate
+     * @param ligne row of the last pawn moved
+     * @param colonne colomn of the last pawn moved
+     * @param lim   the limite in depth of the algorithm
+     * @param sameColor true if the pawn moved before is the same color
+     * @param lim2 the second limit for the depth of the jump
+     * @return the best choice for the IA
+     */
     public int max(GameBoard j, int ligne, int colonne, int lim, boolean sameColor, int lim2){
         if(!sameColor)
             j.setHas_jumped((byte) 0);
@@ -211,7 +240,16 @@ public class Ia {
 
         return max;
     }
-
+    /**
+     * keep the badest choice for the IA
+     * @param j current gamestate
+     * @param ligne row of the last pawn moved
+     * @param colonne colomn of the last pawn moved
+     * @param lim   the limite in depth of the algorithm
+     * @param sameColor true if the pawn moved before is the same color
+     * @param lim2 the second limit for the depth of the jump
+     * @return the badest choice for the IA
+     */
     public int min(GameBoard j, int ligne, int colonne, int lim, boolean sameColor, int lim2) {
         if(!sameColor)
             j.setHas_jumped((byte) 0);
@@ -331,6 +369,13 @@ public class Ia {
         return min;
     }
 
+    /**
+     * calcul the best score against the best player
+     * @param couleur color of the Ia in game
+     * @param j current state of the game
+     * @param lim limit of depth
+     * @return  the best score against the best player
+     */
     public int[] minMax(byte couleur, GameBoard j, int lim) {
         //System.out.println("fonction : " + j.getJump()+"\n");
         int lim2= 6;
@@ -339,6 +384,7 @@ public class Ia {
         int[][] possible_jump = {{-1,-1}};
         int[][] possible_move = {{-1,-1}};
         int[][] poss;
+        Random rand= new Random();
         int obl=0;
         int max=0;
         int inter=0;
@@ -453,6 +499,7 @@ public class Ia {
                             if (j.getPossible_move() != null) {
                                 for (int s = 0; s < j.getPossible_move().length; s++) {
                                     inter = min(j.copy(), j.getPossible_move()[s][0], j.getPossible_move()[s][1], lim - 1, false, lim2-1);
+                                    inter+= rand.nextInt(10);
                                     if (max < inter) {
                                         max = inter;
                                         pos[0] = ligne;
@@ -469,6 +516,7 @@ public class Ia {
                                             if (obl == 0)
                                                 max = 0;
                                             inter = max(j.copy(), j.getPossible_jump()[s][0], j.getPossible_jump()[s][1], lim, true, lim2-1);
+                                            inter+= rand.nextInt(10);
                                             if (max < inter) {
                                                 max = inter;
                                                 pos[0] = ligne;
@@ -479,6 +527,7 @@ public class Ia {
                                                 possible_move = j.getPossible_move();
                                             }
                                             inter = min(j.copy(), j.getPossible_jump()[s][0], j.getPossible_jump()[s][1], lim-1, false, lim2-1);
+                                            inter+= rand.nextInt(10);
                                             if (max < inter) {
                                                 max = inter;
                                                 pos[0] = ligne;
@@ -491,6 +540,7 @@ public class Ia {
                                             obl = 1;
                                         } else if (obl == 0) {
                                             inter = max(j.copy(), j.getPossible_jump()[s][0], j.getPossible_jump()[s][1], lim, true, lim2-1);
+                                            inter+= rand.nextInt(10);
                                             if (max < inter) {
                                                 max = inter;
                                                 pos[0] = ligne;
@@ -501,6 +551,7 @@ public class Ia {
                                                 possible_move = j.getPossible_move();
                                             }
                                             inter = min(j.copy(), j.getPossible_jump()[s][0], j.getPossible_jump()[s][1], lim -1, false, lim2-1);
+                                            inter+= rand.nextInt(10);
                                             if (max < inter) {
                                                 max = inter;
                                                 pos[0] = ligne;
