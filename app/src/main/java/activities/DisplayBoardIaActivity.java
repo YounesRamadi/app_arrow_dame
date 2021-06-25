@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import android.util.*;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.apadnom.R;
@@ -39,6 +38,8 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
     private ImageView whiteScore;
     private ImageView blackScore;
     private Toast toast;
+    private String[] iaMoves = new String[15];
+    private int iaMovesIndex;
 
 
 
@@ -68,7 +69,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
         whiteScore = findViewById(R.id.scoreW);
         blackScore = findViewById(R.id.scoreB);
 
-
+        initIaMoves();
 
         Button endTurnBtn = new Button(this);
         endTurnBtn = (Button) findViewById(R.id.endTurn);
@@ -245,6 +246,9 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                             update();
 
                                             runIa();
+
+                                            displayIaMoves();
+
                                             update();
 
                                             //game.add_turn();
@@ -383,6 +387,8 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
             game.set_movedPawn(iaMove[2], iaMove[3]);
             //System.out.println("Flags h_j :" + iaMove[4] + "/ j :" + iaMove[5]);
 
+            newIaMove();
+
             if (game.checkEndTurn()) {
                 game.end_turn();
                 break;
@@ -393,5 +399,31 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                 break;
             }
         }while(iaMove[5] >= 1 || iaMove[4] == (byte)1);
+    }
+
+    public void initIaMoves(){
+        for(int i = 0; i < 15; i++){
+            iaMoves[i] = "";
+        }
+        iaMovesIndex = 0;
+    }
+    public void newIaMove(){
+        iaMoves[iaMovesIndex] = game.toString();
+        iaMovesIndex ++;
+    }
+    public void displayIaMoves(){
+        Handler handler = new Handler();
+        layout.setBackground(getDrawable(R.drawable.black_border));
+        for(int i = 0; i < iaMovesIndex; i++){
+            System.out.println();
+            game.setGameboard(iaMoves[i]);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    update();
+                }
+            }, 10000);
+        }
+        initIaMoves();
     }
 }
