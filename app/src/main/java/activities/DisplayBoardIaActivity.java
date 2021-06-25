@@ -38,6 +38,8 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
     private ImageView whiteScore;
     private ImageView blackScore;
     private Toast toast;
+    private String[] iaMoves = new String[15];
+    private int iaMovesIndex;
 
 
 
@@ -67,7 +69,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
         whiteScore = findViewById(R.id.scoreW);
         blackScore = findViewById(R.id.scoreB);
 
-
+        // initIaMoves();
 
         Button endTurnBtn = new Button(this);
         endTurnBtn = (Button) findViewById(R.id.endTurn);
@@ -75,10 +77,17 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if((game.getHas_jumped() == (byte)1) && (game.getJump() <1)){
-                    System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
+                    // System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
                     game.end_turn();
                     turn++;
-                    turn = 0;
+                    runIa();
+                    game.end_turn();
+
+                    if(game.checkEndGame()){
+                        game = new GameBoard(getApplicationContext());
+                        System.out.println("Fin du game");
+                    }
+
                     update();
                 }
                 else{
@@ -156,13 +165,20 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                     img.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            removeImages(possibilitiesLayout);
+
                             sx = finalI;
                             sy = finalJ;
                             setSelected(sx, sy);
-                            removeImages(possibilitiesLayout);
+
                             if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
                                 display_possibilities(getSelected()[0], getSelected()[1]);
                             }
+                            else if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 1) {
+                                display_possibilities(game.getMustJump()[0], game.getMustJump()[1]);
+                            }
+
+                            update();
                         }
                     });
                 }
@@ -218,10 +234,11 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                 img.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
+                                        update();
                                         setSelected(finalI, finalJ);
                                         //System.out.println("move depuis:" + getSelected()[0] + getSelected()[1] + "vers :" + finalI + finalJ);
                                         game.move(finalI, finalJ);
-
+                                        removeImages(possibilitiesLayout);
                                         if (game.checkEndTurn() || game.checkEndGame()) {
                                             // System.out.println("fin de tour");
                                             turn ++;
@@ -233,14 +250,18 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                                 System.out.println("Fin du game");
                                             }
 
-                                            removeImages(possibilitiesLayout);
                                             update();
 
                                             runIa();
+
+
                                             update();
+
+                                            // displayIaMoves();
 
                                             //game.add_turn();
                                             turn ++;
+                                            game.end_turn();
 
                                             if(game.checkEndGame()){
                                                 game = new GameBoard(getApplicationContext());
@@ -290,9 +311,12 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
     }
 
     public void removeImages(RelativeLayout layout) {
-        for (int pos = 0; pos < layout.getChildCount(); pos++) {
-            if (layout.getChildAt(pos) instanceof ImageView) {
-                layout.removeView(layout.getChildAt(pos));
+        for (int k = 0; k < 10; k++) {
+            for (int i = 0; i < layout.getChildCount(); i++) {
+                View view = layout.getChildAt(i);
+                if (view.getId() != R.id.possibilites) {
+                    layout.removeViewAt(i);
+                }
             }
         }
     }
@@ -345,8 +369,8 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
         do {
             updateTurn();
             iaMove = ia.minMax((byte) (1), game.copy(), 2);
-            //System.out.println("Taking " + iaMove[0] + " : " + iaMove[1]);
-            //System.out.println("Going in " + iaMove[2] + " : " + iaMove[3]);
+            // System.out.println("Taking " + iaMove[0] + " : " + iaMove[1]);
+            // System.out.println("Going in " + iaMove[2] + " : " + iaMove[3]);
 
             game.setSelection(iaMove[0], iaMove[1]);
             //jump = 0
@@ -369,7 +393,9 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
             }
             System.out.println("Moving : " + game.move(iaMove[2], iaMove[3]));
             game.set_movedPawn(iaMove[2], iaMove[3]);
-            //System.out.println("Flags h_j :" + iaMove[4] + "/ j :" + iaMove[5]);
+            // System.out.println("Flags h_j :" + iaMove[4] + "/ j :" + iaMove[5]);
+
+            // newIaMove();
 
             if (game.checkEndTurn()) {
                 game.end_turn();
@@ -377,9 +403,37 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
             }
             if (game.checkEndGame()) {
                 game = new GameBoard(getApplicationContext());
-                System.out.println("Fin du game");
+                // System.out.println("Fin du game");
                 break;
             }
         }while(iaMove[5] >= 1 || iaMove[4] == (byte)1);
     }
+    /*
+    public void initIaMoves(){
+        for(int i = 0; i < 15; i++){
+            iaMoves[i] = "";
+        }
+        iaMovesIndex = 0;
+    }
+    public void newIaMove(){
+        iaMoves[iaMovesIndex] = game.toString();
+        iaMovesIndex ++;
+    }
+    public void displayIaMoves()  {
+        Handler handler = new Handler();
+        layout.setBackground(getDrawable(R.drawable.black_border));
+        for(int i = 0; i < iaMovesIndex; i++){
+            System.out.println(iaMoves[i]);
+            game.setGameboard(iaMoves[i]);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e){
+
+            }
+
+            update();
+        }
+        initIaMoves();
+    }
+    */
 }
