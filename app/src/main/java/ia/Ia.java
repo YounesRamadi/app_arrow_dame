@@ -34,7 +34,7 @@ public class Ia {
         if(color==0) {
             if (jumpW >= 1)
                 score-=jumpW*90;
-            if (jumpW >= 4)
+            if (jumpW >= 3)
                 return 0;
         }
         jumpW=0;
