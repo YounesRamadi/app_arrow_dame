@@ -134,18 +134,6 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
         removeImages(boardLayout);
         removeImages(boardLayout);
 
-        //affichage du cadre
-/*
-        ImageView imgTurn = new ImageView(this);
-        imgTurn.setImageDrawable(getDrawable(R.drawable.yellow_haxagone));
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(1000, 1000);
-        params.setMargins(0, -200, 0, 0);
-        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        imgTurn.setLayoutParams(params);
-        imgTurn.setRotation(90);
-        myLayout.addView(imgTurn);
-*/
         this.display_mat = game.display();
 
         int y = 0;

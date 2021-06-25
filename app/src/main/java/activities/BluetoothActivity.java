@@ -88,7 +88,6 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
             }
         });
         update();
-
     }
 
     private static final String TAG = "BluetoothActitivty";

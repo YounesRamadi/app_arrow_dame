@@ -37,6 +37,17 @@ public class GameBoard implements Parcelable{
     private int[] selection = new int[2]; // le pion selectionne
     private int[] movedPawn = new int[2]; // le dernier pion
 
+    public int[] getMustJump() {
+        return mustJump;
+    }
+
+    public void setMustJump(int a, int b) {
+        this.mustJump[0] = a;
+        this.mustJump[1] = b;
+    }
+
+    private int[] mustJump = new int[2];
+
 
 
     public int[] getMovedPawn() {
@@ -445,8 +456,9 @@ public class GameBoard implements Parcelable{
 
                                 // on regarde si il peut jump un ennemi et que cest une fleche
                                 if (gameboard[i][j] instanceof Fleche && canJumpEnnemy(i, j) && !canJumpEnnemy(x, y)) {
-                                    //System.err.println("An other pawn can jump, impossible to move this arrow");
-                                    return -1;
+                                    System.err.println("An other pawn can jump, impossible to move this arrow");
+                                    setMustJump(i, j);
+                                    return 1;
                                 }
                             }
                         }
