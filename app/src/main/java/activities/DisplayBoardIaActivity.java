@@ -87,7 +87,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                         game = new GameBoard(getApplicationContext());
                         System.out.println("Fin du game");
                     }
-
+                    turn ++;
                     update();
                 }
                 else{

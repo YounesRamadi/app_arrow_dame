@@ -61,7 +61,6 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
     public void runGame(){
 
-        this.layout = findViewById(R.id.layout);
         this.boardLayout = (RelativeLayout) findViewById(R.id.board);
         this.possibilitiesLayout = (RelativeLayout) findViewById(R.id.possibilites);
         whiteScore = findViewById(R.id.scoreW);
@@ -317,6 +316,8 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
             @Override
             public void onClick(View v) {
                 setContentView(R.layout.activity_display_board_ia);
+                layout = findViewById(R.id.layout);
+
                 runGame();
                 playerT = 1;
 
@@ -332,6 +333,8 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
                 startConnection();
                 setContentView(R.layout.activity_display_board_ia);
+                layout = findViewById(R.id.layout);
+
                 playerT = 0;
                 turn = 0;
                 runGame();
