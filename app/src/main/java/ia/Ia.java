@@ -115,9 +115,9 @@ public class Ia {
         int inter=0;
         int obl=0;
         int[][] poss;
-        // System.out.println("max jump color: " + ligne + "le move : " + colonne+ "le flag : "+ j.getJump() + "selected" +j.getSelection()[0]+"//"+j.getSelection()[1]+" Daronne de pierre ? "+ (j.getGameboard()[ligne][colonne] instanceof Etoile)+"  " +(j.getGameboard()[ligne][colonne].get_color()));
+        System.out.println("max jump color: " + ligne + "le move : " + colonne+ "le flag : "+ j.getJump() + "selected" +j.getSelection()[0]+"//"+j.getSelection()[1]+" Daronne de pierre ? "+ (j.getGameboard()[ligne][colonne] instanceof Etoile)+"  " +(j.getGameboard()[ligne][colonne].get_color()));
         if(j.getHas_jumped()==(byte)1 && sameColor && lim2>0){
-            //System.out.println("Zebi:"+j.getJump());
+            System.out.println("Zebi:"+j.getJump());
             poss=j.get_possibilities(j.getGameboard()[ligne][colonne], ligne, colonne);
             if(poss!=null){
                 for(int i=0; i<poss.length; i++){
@@ -235,7 +235,7 @@ public class Ia {
                 }
             }
         }
-        //System.out.println("max : " + max + " - lim : " + lim);
+        System.out.println("max : " + max + " - lim : " + lim);
 
         return max;
     }
@@ -253,14 +253,14 @@ public class Ia {
         if(!sameColor)
             j.setHas_jumped((byte) 0);
         int lemove=j.move(ligne, colonne);
-        // System.out.println("lemove : "+ j.getJump()+"\n");
+        System.out.println("lemove : "+ j.getJump()+"\n");
         int min=50000;
         int inter=0;
         int obl=0;
         int[][] poss;
-        //System.out.println("max jump color: " + ligne + "le move : " + colonne+ "le flag : "+ j.getJump() + "selected" +j.getSelection()[0]+"//"+j.getSelection()[1]+" Daronne de pierre ? "+ (j.getGameboard()[ligne][colonne] instanceof Fleche)+"  ");
+        System.out.println("max jump color: " + ligne + "le move : " + colonne+ "le flag : "+ j.getJump() + "selected" +j.getSelection()[0]+"//"+j.getSelection()[1]+" Daronne de pierre ? "+ (j.getGameboard()[ligne][colonne] instanceof Fleche)+"  ");
         if(j.getHas_jumped()==(byte)1 && sameColor && lim2>0){
-            //System.out.println("Zebi:"+j.getJump());
+            System.out.println("Zebi:"+j.getJump());
 
             poss=j.get_possibilities(j.getGameboard()[ligne][colonne], ligne, colonne);
             if(poss!=null){
@@ -336,7 +336,7 @@ public class Ia {
                                             min = inter;
                                         obl = 1;
                                     } else if (obl == 0) {
-                                        //System.out.println("la ligne "+ lig +" la colonne "+ col+" [0]: "+j.getPossible_jump()[n][0] +" ||  et [1]"+ j.getPossible_jump()[n][1]);
+                                        System.out.println("la ligne "+ lig +" la colonne "+ col+" [0]: "+j.getPossible_jump()[n][0] +" ||  et [1]"+ j.getPossible_jump()[n][1]);
                                         inter = min(j.copy(), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim, true, lim2-1);
                                         if (min > inter)
                                             min = inter;
@@ -348,9 +348,9 @@ public class Ia {
                                 }
                             }
                         }
-                        //System.out.println("Getpossiblemove : " + j.getPossible_move()[0] + " / " + j.getPossible_move()[1]);
+                        // System.out.println("Getpossiblemove : " + j.getPossible_move()[0] + " / " + j.getPossible_move()[1]);
                         if (j.getPossible_move() != null && obl == 0) {
-                            //System.out.println("le nombre de move possible d'après pierre :" + j.getPossible_move().length+"\n");
+                            System.out.println("le nombre de move possible d'après pierre :" + j.getPossible_move().length+"\n");
                             for (int n = 0; n < j.getPossible_move().length; n++) {
                                 //System.out.println(inter+"\n");
                                 inter = max(j.copy(), j.getPossible_move()[n][0], j.getPossible_move()[n][0], lim - 1, false, lim2-1);
@@ -376,7 +376,7 @@ public class Ia {
      * @return  the best score against the best player
      */
     public int[] minMax(byte couleur, GameBoard j, int lim) {
-        //System.out.println("fonction : " + j.getJump()+"\n");
+        System.out.println("fonction : " + j.getJump()+"\n");
         int lim2= 6;
         Pion[][] plateau = j.getGameboard();
         int[] pos= {-1,-1,-1,-1,0,0};
@@ -573,7 +573,7 @@ public class Ia {
         j.setPossible_jump(possible_jump);
         j.setSelection(pos[0],pos[1]);
 
-        // System.out.println("Mverenvoi : " +j.move(pos[2],pos[3]) + " pos[0]/ pos1 :" + pos[0] + pos[1]+" va en "+pos[2]+pos[3]);
+        System.out.println("Mverenvoi : " +j.move(pos[2],pos[3]) + " pos[0]/ pos1 :" + pos[0] + pos[1]+" va en "+pos[2]+pos[3]);
         pos[4]=j.getHas_jumped();
         pos[5]=j.getJump();
         return pos;
