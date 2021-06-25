@@ -61,7 +61,6 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
     public void runGame(){
 
-        this.layout = findViewById(R.id.layout);
         this.boardLayout = (RelativeLayout) findViewById(R.id.board);
         this.possibilitiesLayout = (RelativeLayout) findViewById(R.id.possibilites);
         whiteScore = findViewById(R.id.scoreW);
@@ -76,9 +75,12 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
                 System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
                 if((game.getHas_jumped() == (byte)1) && (game.getJump() <1)){
                     System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
+                    gameString = game.toString() + "1";
+                    turn ++;
+                    msg = gameString.getBytes(Charset.defaultCharset());
+                    System.out.println(msg);
+                    mBluetoothConnection.write(msg);
                     game.end_turn();
-                    turn++;
-                    turn = 0;
                     update();
                 }
                 else{
@@ -239,6 +241,11 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         //unregisterReceiver(mBroadcastReceiver4);
         //mBluetoothAdapter.cancelDiscovery();
         //unregisterReceiver(mReceiver);
+        mBluetoothAdapter.disable();
+        IntentFilter enableBtIntent = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(mBroadcastReceiver1, enableBtIntent);
+
+
     }
 
     @Override
@@ -254,11 +261,20 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
         mBTDevices = new ArrayList<>();
 
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        mBluetoothAdapter.enable();
+        IntentFilter enableBtIntent = new IntentFilter(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        registerReceiver(mBroadcastReceiver1, enableBtIntent);
+
+        while(!mBluetoothAdapter.isEnabled()){
+            mBluetoothAdapter.enable();
+            registerReceiver(mBroadcastReceiver1, enableBtIntent);
+        }
+
         //Broadcasts when bond state changes (ie:pairing)
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
         registerReceiver(mBroadcastReceiver4, filter);
-
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         lvNewDevices.setOnItemClickListener(BluetoothActivity.this);
 
@@ -300,6 +316,8 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
             @Override
             public void onClick(View v) {
                 setContentView(R.layout.activity_display_board_ia);
+                layout = findViewById(R.id.layout);
+
                 runGame();
                 playerT = 1;
 
@@ -315,6 +333,8 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
                 startConnection();
                 setContentView(R.layout.activity_display_board_ia);
+                layout = findViewById(R.id.layout);
+
                 playerT = 0;
                 turn = 0;
                 runGame();

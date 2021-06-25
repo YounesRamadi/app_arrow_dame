@@ -398,7 +398,7 @@ public class GameBoard implements Parcelable{
     }
 
     public int getNb_B_stars() {
-        System.out.println("b_stars :" + nb_B_stars);
+        // System.out.println("b_stars :" + nb_B_stars);
         return nb_B_stars;
     }
 
@@ -1292,8 +1292,8 @@ public class GameBoard implements Parcelable{
         }
         s += Integer.toString(count);
         s += tmp;
-        System.out.println(board);
-        System.out.println(count);
+        // System.out.println(board);
+        // System.out.println(count);
         return s;
     }
 
