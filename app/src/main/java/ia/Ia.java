@@ -48,7 +48,7 @@ public class Ia {
                     j.get_possibilities(j.getGameboard()[lig][col], lig, col);
                     if(j.getGameboard()[lig][col].get_color()==1){
                         if(lig==0 && j.getGameboard()[lig][col].get_color()==1 && !(j.getGameboard()[lig][col] instanceof Etoile))
-                            score+=50;
+                            score+=60;
                         if(lig>0 && col>0 && lig<6 && col<8) {
                             if(j.getGameboard()[lig - 1][col - 1]!=null && j.getGameboard()[lig - 1][col]!=null && j.getGameboard()[lig + 1][col]!=null && j.getGameboard()[lig + 1][col + 1]!=null && j.getGameboard()[lig + 1][col-1]!=null) {
                                 if (j.getGameboard()[lig - 1][col - 1].get_color() == 1 && j.getGameboard()[lig - 1][col].get_color() == 1) {
