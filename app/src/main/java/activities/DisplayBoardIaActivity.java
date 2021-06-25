@@ -391,7 +391,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
             if (iaMove[2] == -1 || iaMove[1] == -1) {
                 break;
             }
-            // System.out.println("Moving : " + game.move(iaMove[2], iaMove[3]));
+            System.out.println("Moving : " + game.move(iaMove[2], iaMove[3]));
             game.set_movedPawn(iaMove[2], iaMove[3]);
             // System.out.println("Flags h_j :" + iaMove[4] + "/ j :" + iaMove[5]);
 
