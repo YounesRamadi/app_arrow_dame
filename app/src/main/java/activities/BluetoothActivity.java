@@ -76,9 +76,12 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
                 System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
                 if((game.getHas_jumped() == (byte)1) && (game.getJump() <1)){
                     System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
+                    gameString = game.toString() + "1";
+                    turn ++;
+                    msg = gameString.getBytes(Charset.defaultCharset());
+                    System.out.println(msg);
+                    mBluetoothConnection.write(msg);
                     game.end_turn();
-                    turn++;
-                    turn = 0;
                     update();
                 }
                 else{
