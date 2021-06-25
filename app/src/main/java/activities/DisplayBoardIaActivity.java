@@ -69,7 +69,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
         whiteScore = findViewById(R.id.scoreW);
         blackScore = findViewById(R.id.scoreB);
 
-        initIaMoves();
+        // initIaMoves();
 
         Button endTurnBtn = new Button(this);
         endTurnBtn = (Button) findViewById(R.id.endTurn);
@@ -247,9 +247,10 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
 
                                             runIa();
 
-                                            displayIaMoves();
 
                                             update();
+
+                                            // displayIaMoves();
 
                                             //game.add_turn();
                                             turn ++;
@@ -361,8 +362,8 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
         do {
             updateTurn();
             iaMove = ia.minMax((byte) (1), game.copy(), 2);
-            //System.out.println("Taking " + iaMove[0] + " : " + iaMove[1]);
-            //System.out.println("Going in " + iaMove[2] + " : " + iaMove[3]);
+            // System.out.println("Taking " + iaMove[0] + " : " + iaMove[1]);
+            // System.out.println("Going in " + iaMove[2] + " : " + iaMove[3]);
 
             game.setSelection(iaMove[0], iaMove[1]);
             //jump = 0
@@ -385,9 +386,9 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
             }
             System.out.println("Moving : " + game.move(iaMove[2], iaMove[3]));
             game.set_movedPawn(iaMove[2], iaMove[3]);
-            //System.out.println("Flags h_j :" + iaMove[4] + "/ j :" + iaMove[5]);
+            // System.out.println("Flags h_j :" + iaMove[4] + "/ j :" + iaMove[5]);
 
-            newIaMove();
+            // newIaMove();
 
             if (game.checkEndTurn()) {
                 game.end_turn();
@@ -400,7 +401,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
             }
         }while(iaMove[5] >= 1 || iaMove[4] == (byte)1);
     }
-
+    /*
     public void initIaMoves(){
         for(int i = 0; i < 15; i++){
             iaMoves[i] = "";
@@ -411,19 +412,21 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
         iaMoves[iaMovesIndex] = game.toString();
         iaMovesIndex ++;
     }
-    public void displayIaMoves(){
+    public void displayIaMoves()  {
         Handler handler = new Handler();
         layout.setBackground(getDrawable(R.drawable.black_border));
         for(int i = 0; i < iaMovesIndex; i++){
-            System.out.println();
+            System.out.println(iaMoves[i]);
             game.setGameboard(iaMoves[i]);
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    update();
-                }
-            }, 10000);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e){
+
+            }
+
+            update();
         }
         initIaMoves();
     }
+    */
 }
