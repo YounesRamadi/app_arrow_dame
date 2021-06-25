@@ -77,10 +77,17 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if((game.getHas_jumped() == (byte)1) && (game.getJump() <1)){
-                    System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
+                    // System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
                     game.end_turn();
                     turn++;
-                    turn = 0;
+                    runIa();
+                    game.end_turn();
+
+                    if(game.checkEndGame()){
+                        game = new GameBoard(getApplicationContext());
+                        System.out.println("Fin du game");
+                    }
+
                     update();
                 }
                 else{
@@ -384,7 +391,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
             if (iaMove[2] == -1 || iaMove[1] == -1) {
                 break;
             }
-            System.out.println("Moving : " + game.move(iaMove[2], iaMove[3]));
+            // System.out.println("Moving : " + game.move(iaMove[2], iaMove[3]));
             game.set_movedPawn(iaMove[2], iaMove[3]);
             // System.out.println("Flags h_j :" + iaMove[4] + "/ j :" + iaMove[5]);
 
@@ -396,7 +403,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
             }
             if (game.checkEndGame()) {
                 game = new GameBoard(getApplicationContext());
-                System.out.println("Fin du game");
+                // System.out.println("Fin du game");
                 break;
             }
         }while(iaMove[5] >= 1 || iaMove[4] == (byte)1);
