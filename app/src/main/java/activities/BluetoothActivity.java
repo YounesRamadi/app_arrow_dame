@@ -239,6 +239,11 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         //unregisterReceiver(mBroadcastReceiver4);
         //mBluetoothAdapter.cancelDiscovery();
         //unregisterReceiver(mReceiver);
+        mBluetoothAdapter.disable();
+        IntentFilter enableBtIntent = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(mBroadcastReceiver1, enableBtIntent);
+
+
     }
 
     @Override
@@ -254,11 +259,20 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
         mBTDevices = new ArrayList<>();
 
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        mBluetoothAdapter.enable();
+        IntentFilter enableBtIntent = new IntentFilter(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        registerReceiver(mBroadcastReceiver1, enableBtIntent);
+
+        while(!mBluetoothAdapter.isEnabled()){
+            mBluetoothAdapter.enable();
+            registerReceiver(mBroadcastReceiver1, enableBtIntent);
+        }
+
         //Broadcasts when bond state changes (ie:pairing)
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
         registerReceiver(mBroadcastReceiver4, filter);
-
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         lvNewDevices.setOnItemClickListener(BluetoothActivity.this);
 
