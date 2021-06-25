@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
     private GameBoard game;
     private RelativeLayout boardLayout;
     private RelativeLayout possibilitiesLayout;
+    private LinearLayout layout;
     private Pion[][] display_mat = new Pion[7][9];
     private int sx;
     private int sy;
@@ -55,6 +57,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_display_board);
 
         // initialisation of the needed layouts
+        this.layout = findViewById(R.id.layout);
         this.boardLayout = findViewById(R.id.board);
         this.possibilitiesLayout = findViewById(R.id.possibilites);
 
@@ -140,6 +143,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
     @SuppressLint("UseCompatLoadingForDrawables")
     public void update() {
         updateScores();
+        updateTurn();
         // Cleaning the layout
         removeImages(boardLayout);
 
@@ -397,6 +401,15 @@ public class DisplayBoardActivity extends AppCompatActivity {
                 break;
             default:
                 break;
+        }
+    }
+
+    public void updateTurn(){
+        if(turn%2 == 0){
+            layout.setBackground(getDrawable(R.drawable.white_border));
+        }
+        else{
+            layout.setBackground(getDrawable(R.drawable.black_border));
         }
     }
 }

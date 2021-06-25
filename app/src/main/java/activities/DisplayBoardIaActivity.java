@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,8 +22,9 @@ import controller.Pion;
 public class DisplayBoardIaActivity extends AppCompatActivity {
 
     private GameBoard game;
-    private RelativeLayout myLayout;
-    private RelativeLayout layout;
+    private LinearLayout layout;
+    private RelativeLayout boardLayout;
+    private RelativeLayout possibilitiesLayout;
     private Pion[][] display_mat = new Pion[7][9];
     private int[] selected = new int[2];
     private int sx;
@@ -53,8 +55,9 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_display_board_ia);
 
-        this.myLayout = (RelativeLayout) findViewById(R.id.board);
-        this.layout = (RelativeLayout) findViewById(R.id.possibilites);
+        this.layout = (LinearLayout) findViewById(R.id.layout);
+        this.boardLayout = (RelativeLayout) findViewById(R.id.board);
+        this.possibilitiesLayout = (RelativeLayout) findViewById(R.id.possibilites);
 
         nb_jump_w = (TextView) findViewById(R.id.nb_jump_w);
         whiteScore = findViewById(R.id.scoreW);
@@ -111,15 +114,16 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
     @SuppressLint("UseCompatLoadingForDrawables")
     public void update() {
         updateScores();
+        updateTurn();
         //System.out.println("turn:" + turn);
         // faudrait peut etre trouver autre chose
-        removeImages(myLayout);
-        removeImages(myLayout);
-        removeImages(myLayout);
-        removeImages(myLayout);
-        removeImages(myLayout);
-        removeImages(myLayout);
-        removeImages(myLayout);
+        removeImages(boardLayout);
+        removeImages(boardLayout);
+        removeImages(boardLayout);
+        removeImages(boardLayout);
+        removeImages(boardLayout);
+        removeImages(boardLayout);
+        removeImages(boardLayout);
 
         //affichage du cadre
 /*
@@ -157,7 +161,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                             sx = finalI;
                             sy = finalJ;
                             setSelected(sx, sy);
-                            removeImages(layout);
+                            removeImages(possibilitiesLayout);
                             if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
                                 display_possibilities(getSelected()[0], getSelected()[1]);
                             }
@@ -177,7 +181,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
 
                 x += 100;
 
-                myLayout.addView(img);
+                boardLayout.addView(img);
 
                 getSelected();
             }
@@ -191,7 +195,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public void display_possibilities(int px, int py) {
-        layout.removeAllViews();
+        possibilitiesLayout.removeAllViews();
         if (game.getGameboard()[px][py] != null && game.getGameboard()[px][py].get_color() != -1) {
             int[][] pos = null;
             if(game.check_selection(px, py, turn, 1) != -1) {
@@ -220,9 +224,9 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                         //System.out.println("move depuis:" + getSelected()[0] + getSelected()[1] + "vers :" + finalI + finalJ);
                                         game.move(finalI, finalJ);
                                         update();
-                                        layout.removeAllViews();
-                                        removeImages(myLayout);
-                                        removeImages(myLayout);
+                                        possibilitiesLayout.removeAllViews();
+                                        removeImages(boardLayout);
+                                        removeImages(boardLayout);
                                         if(game.checkEndTurn()){
                                             //System.out.println("fin de tour");
                                             if(game.end_turn() == (byte) 1){
@@ -288,7 +292,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                 parms.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                                 img.setLayoutParams(parms);
 
-                                layout.addView(img);
+                                possibilitiesLayout.addView(img);
                             }
                             x += 100;
                         }
@@ -364,4 +368,12 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
         }
     }
 
+    public void updateTurn(){
+        if(turn%2 == 0){
+            layout.setBackground(getDrawable(R.drawable.white_border));
+        }
+        else{
+            layout.setBackground(getDrawable(R.drawable.black_border));
+        }
+    }
 }

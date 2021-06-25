@@ -10,4 +10,6 @@
     <color name="brown">#312d2a</color>
     <color name = "green">#86a94b</color>
     <color name = "lightgreen">#eeeed2</color>
+    <color name="blue">#33F9FF</color>
+    <color name="red">#FF3333</color>
 </resources>

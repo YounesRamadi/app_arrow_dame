@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="activities.DisplayBoardActivity"
     android:orientation="vertical"
-    android:background="@drawable/border"
+    android:background="@drawable/white_border"
     android:id="@+id/layout"
     >
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
