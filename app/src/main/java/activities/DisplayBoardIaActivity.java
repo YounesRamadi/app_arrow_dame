@@ -164,6 +164,9 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                             if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
                                 display_possibilities(getSelected()[0], getSelected()[1]);
                             }
+                            else if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 1) {
+                                display_possibilities(game.getMustJump()[0], game.getMustJump()[1]);
+                            }
                         }
                     });
                 }
@@ -242,6 +245,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
 
                                             //game.add_turn();
                                             turn ++;
+                                            game.end_turn();
 
                                             if(game.checkEndGame()){
                                                 game = new GameBoard(getApplicationContext());

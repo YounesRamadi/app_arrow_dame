@@ -446,6 +446,9 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
                             if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
                                 display_possibilities(getSelected()[0], getSelected()[1]);
                             }
+                            else if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 1) {
+                                display_possibilities(game.getMustJump()[0], game.getMustJump()[1]);
+                            }
 
                             // update display
                             update();
