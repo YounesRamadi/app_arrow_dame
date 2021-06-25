@@ -17,6 +17,7 @@ public class ChooseGameActivity extends AppCompatActivity implements View.OnClic
     private Button mlocalGame;
     private Button mComputerGame;
     private Button mOnlineGame;
+    private int menuIndex = 0;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -42,7 +43,7 @@ public class ChooseGameActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        int menuIndex = (int) v.getTag();
+        menuIndex = (int) v.getTag();
 
         switch (menuIndex) {
             case 0:
