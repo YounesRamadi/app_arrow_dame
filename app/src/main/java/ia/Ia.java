@@ -34,7 +34,7 @@ public class Ia {
         if(color==0) {
             if (jumpW >= 1)
                 score-=jumpW*90;
-            if (jumpW >= 4)
+            if (jumpW >= 3)
                 return 0;
         }
         jumpW=0;
@@ -47,7 +47,7 @@ public class Ia {
                 if (j.getGameboard()[lig][col] != null){
                     j.get_possibilities(j.getGameboard()[lig][col], lig, col);
                     if(j.getGameboard()[lig][col].get_color()==1){
-                        score+=j.getPossible_move().length*2;
+
                         if(lig>0 && col>0 && lig<6 && col<8) {
                             if(j.getGameboard()[lig - 1][col - 1]!=null && j.getGameboard()[lig - 1][col]!=null && j.getGameboard()[lig + 1][col]!=null && j.getGameboard()[lig + 1][col + 1]!=null && j.getGameboard()[lig + 1][col-1]!=null) {
                                 if (j.getGameboard()[lig - 1][col - 1].get_color() == 1 && j.getGameboard()[lig - 1][col].get_color() == 1) {
@@ -69,10 +69,9 @@ public class Ia {
                         }
                     }
                     else{
-                        score-=j.getPossible_jump().length*4;
-                        score-=j.getPossible_move().length*3;
+                        score-=j.getPossible_jump().length*3;
                         if(color==1)
-                            score-=j.getPossible_jump().length*2;
+                            score-=(j.getPossible_move().length-j.getPossible_jump().length)*3;
                     }
                     //color 1 ceux qui sont haut
                     //color 0 ceux qui sont en bas
