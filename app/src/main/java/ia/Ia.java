@@ -47,7 +47,7 @@ public class Ia {
                 if (j.getGameboard()[lig][col] != null){
                     j.get_possibilities(j.getGameboard()[lig][col], lig, col);
                     if(j.getGameboard()[lig][col].get_color()==1){
-                        score+=j.getPossible_move().length*2;
+
                         if(lig>0 && col>0 && lig<6 && col<8) {
                             if(j.getGameboard()[lig - 1][col - 1]!=null && j.getGameboard()[lig - 1][col]!=null && j.getGameboard()[lig + 1][col]!=null && j.getGameboard()[lig + 1][col + 1]!=null && j.getGameboard()[lig + 1][col-1]!=null) {
                                 if (j.getGameboard()[lig - 1][col - 1].get_color() == 1 && j.getGameboard()[lig - 1][col].get_color() == 1) {
@@ -69,10 +69,9 @@ public class Ia {
                         }
                     }
                     else{
-                        score-=j.getPossible_jump().length*4;
-                        score-=j.getPossible_move().length*3;
+                        score-=j.getPossible_jump().length*3;
                         if(color==1)
-                            score-=j.getPossible_jump().length*2;
+                            score-=(j.getPossible_move().length-j.getPossible_jump().length)*3;
                     }
                     //color 1 ceux qui sont haut
                     //color 0 ceux qui sont en bas
@@ -516,7 +515,7 @@ public class Ia {
                                             if (obl == 0)
                                                 max = 0;
                                             inter = max(j.copy(), j.getPossible_jump()[s][0], j.getPossible_jump()[s][1], lim, true, lim2-1);
-                                            inter+= rand.nextInt(10);
+                                            inter+= rand.nextInt(30);
                                             if (max < inter) {
                                                 max = inter;
                                                 pos[0] = ligne;
@@ -527,7 +526,7 @@ public class Ia {
                                                 possible_move = j.getPossible_move();
                                             }
                                             inter = min(j.copy(), j.getPossible_jump()[s][0], j.getPossible_jump()[s][1], lim-1, false, lim2-1);
-                                            inter+= rand.nextInt(10);
+                                            inter+= rand.nextInt(20);
                                             if (max < inter) {
                                                 max = inter;
                                                 pos[0] = ligne;
@@ -540,7 +539,7 @@ public class Ia {
                                             obl = 1;
                                         } else if (obl == 0) {
                                             inter = max(j.copy(), j.getPossible_jump()[s][0], j.getPossible_jump()[s][1], lim, true, lim2-1);
-                                            inter+= rand.nextInt(10);
+                                            inter+= rand.nextInt(20);
                                             if (max < inter) {
                                                 max = inter;
                                                 pos[0] = ligne;
@@ -551,7 +550,7 @@ public class Ia {
                                                 possible_move = j.getPossible_move();
                                             }
                                             inter = min(j.copy(), j.getPossible_jump()[s][0], j.getPossible_jump()[s][1], lim -1, false, lim2-1);
-                                            inter+= rand.nextInt(10);
+                                            inter+= rand.nextInt(20);
                                             if (max < inter) {
                                                 max = inter;
                                                 pos[0] = ligne;
