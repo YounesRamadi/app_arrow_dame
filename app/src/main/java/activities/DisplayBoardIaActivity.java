@@ -2,6 +2,7 @@ package activities;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -55,13 +56,15 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_display_board_ia);
 
-        this.layout = (LinearLayout) findViewById(R.id.layout);
+        this.layout = findViewById(R.id.layout);
         this.boardLayout = (RelativeLayout) findViewById(R.id.board);
         this.possibilitiesLayout = (RelativeLayout) findViewById(R.id.possibilites);
 
         nb_jump_w = (TextView) findViewById(R.id.nb_jump_w);
         whiteScore = findViewById(R.id.scoreW);
         blackScore = findViewById(R.id.scoreB);
+
+
 
         Button btn1 = new Button(this);
         btn1 = (Button) findViewById(R.id.endTurn);
@@ -223,20 +226,22 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                         setSelected(finalI, finalJ);
                                         //System.out.println("move depuis:" + getSelected()[0] + getSelected()[1] + "vers :" + finalI + finalJ);
                                         game.move(finalI, finalJ);
-                                        update();
-                                        possibilitiesLayout.removeAllViews();
-                                        removeImages(boardLayout);
-                                        removeImages(boardLayout);
-                                        if(game.checkEndTurn()){
-                                            //System.out.println("fin de tour");
-                                            if(game.end_turn() == (byte) 1){
+
+                                        if (game.checkEndTurn() || game.checkEndGame()) {
+                                            // System.out.println("fin de tour");
+                                            turn ++;
+                                            game.end_turn();
+                                            layout.setBackground(getDrawable(R.drawable.black_border));
+
+                                            if(game.checkEndGame()){
                                                 game = new GameBoard(getApplicationContext());
                                                 System.out.println("Fin du game");
                                             }
-                                            turn ++;
+                                            removeImages(possibilitiesLayout);
                                             update();
                                             //jump = 0
                                             do {
+                                                updateTurn();
                                                 iaMove = ia.minMax((byte) (1), game.copy(), 2);
                                                 //System.out.println("Taking " + iaMove[0] + " : " + iaMove[1]);
                                                 //System.out.println("Going in " + iaMove[2] + " : " + iaMove[3]);
@@ -265,6 +270,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                                 //System.out.println("Flags h_j :" + iaMove[4] + "/ j :" + iaMove[5]);
 
                                                 if(game.checkEndTurn()){
+                                                    game.end_turn();
                                                     break;
                                                 }
                                                 update();
@@ -275,15 +281,13 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                             //game.add_turn();
 
                                             turn ++;
-                                            if(game.end_turn()==(byte)1) {
 
-                                                //System.out.println("Test");
+                                            if(game.checkEndGame()){
                                                 game = new GameBoard(getApplicationContext());
-                                                //game.initGameBoard();
+                                                System.out.println("Fin du game");
                                             }
-
-                                            update();
                                         }
+                                        removeImages(possibilitiesLayout);
                                         update();
                                     }
                                 });

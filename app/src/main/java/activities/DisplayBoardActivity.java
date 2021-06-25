@@ -297,7 +297,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                             game.end_turn();
 
                                             if (game.checkEndGame()) {
-                                                System.out.println("Test");
+                                                System.out.println("Fin de partie");
                                                 game = new GameBoard(getApplicationContext());
                                             }
                                             update();
