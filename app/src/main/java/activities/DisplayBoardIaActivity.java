@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -241,6 +242,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                         //System.out.println("move depuis:" + getSelected()[0] + getSelected()[1] + "vers :" + finalI + finalJ);
                                         game.move(finalI, finalJ);
                                         update();
+
                                         layout.removeAllViews();
                                         removeImages(myLayout);
                                         removeImages(myLayout);
@@ -286,7 +288,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                                 }
 
 
-                                                    System.out.println("Moving : " + game.move(iaMove[2], iaMove[3]));
+                                                System.out.println("Moving : " + game.move(iaMove[2], iaMove[3]));
 
                                                 game.set_movedPawn(iaMove[2], iaMove[3]);
                                                 //System.out.println("Flags h_j :" + iaMove[4] + "/ j :" + iaMove[5]);
@@ -294,9 +296,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                                 if(game.checkEndTurn()){
                                                     break;
                                                 }
-
                                                 update();
-
 
                                             }while(iaMove[4] == (byte)1 || iaMove[5] > 0);
 
