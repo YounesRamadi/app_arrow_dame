@@ -33,7 +33,7 @@ public class Ia {
             score+=jumpB*90;
         if(color==0) {
             if (jumpW >= 1)
-                score-=jumpW*90;
+                score-=jumpW*70;
             if (jumpW >= 3)
                 return 0;
         }
@@ -47,7 +47,8 @@ public class Ia {
                 if (j.getGameboard()[lig][col] != null){
                     j.get_possibilities(j.getGameboard()[lig][col], lig, col);
                     if(j.getGameboard()[lig][col].get_color()==1){
-
+                        if(lig==0 && j.getGameboard()[lig][col].get_color()==1 && !(j.getGameboard()[lig][col] instanceof Etoile))
+                            score+=50;
                         if(lig>0 && col>0 && lig<6 && col<8) {
                             if(j.getGameboard()[lig - 1][col - 1]!=null && j.getGameboard()[lig - 1][col]!=null && j.getGameboard()[lig + 1][col]!=null && j.getGameboard()[lig + 1][col + 1]!=null && j.getGameboard()[lig + 1][col-1]!=null) {
                                 if (j.getGameboard()[lig - 1][col - 1].get_color() == 1 && j.getGameboard()[lig - 1][col].get_color() == 1) {
@@ -64,19 +65,21 @@ public class Ia {
                                 }
                             }
                         }
-                        if(color==0) {
-                            score+=j.getPossible_jump().length*6;
-                        }
+                        if(j.getGameboard()[lig][col] instanceof Etoile)
+                            score+=(j.getPossible_move().length-j.getPossible_jump().length)*6;
+                        else
+                            score+=(j.getPossible_move().length-j.getPossible_jump().length)*6;
                     }
                     else{
-                        score-=j.getPossible_jump().length*3;
-                        if(color==1)
-                            score-=(j.getPossible_move().length-j.getPossible_jump().length)*3;
+                        if(j.getGameboard()[lig][col] instanceof Etoile)
+                            score-=(j.getPossible_move().length-j.getPossible_jump().length)*7;
+                        else
+                            score-=(j.getPossible_move().length-j.getPossible_jump().length)*7;
                     }
                     //color 1 ceux qui sont haut
                     //color 0 ceux qui sont en bas
                     if(j.getGameboard()[lig][col].get_direction()!=1 && j.getGameboard()[lig][col].get_color()==1)
-                        score+=10;
+                        score+=30;
                     if(lig+2<=6 && col+2<9)
                         if(j.getGameboard()[lig+1][col]!=null && j.getGameboard()[lig+2][col]!=null && j.getGameboard()[lig+1][col+1]!=null && j.getGameboard()[lig+2][col+2]!=null) {
                             if (j.getGameboard()[lig][col].get_color() == 1 && j.getGameboard()[lig][col] instanceof Etoile) {
@@ -254,7 +257,7 @@ public class Ia {
             j.setHas_jumped((byte) 0);
         int lemove=j.move(ligne, colonne);
         System.out.println("lemove : "+ j.getJump()+"\n");
-        int min=50000;
+        int min=5000000;
         int inter=0;
         int obl=0;
         int[][] poss;
@@ -330,7 +333,7 @@ public class Ia {
                                 for (int n = 0; n < j.getPossible_jump().length; n++) {
                                     if ((j.getGameboard()[lig + (j.getPossible_jump()[n][0] - lig) / 2][col + (j.getPossible_jump()[n][1] - col) / 2].get_color()) != j.getGameboard()[lig][col].get_color() && (j.getGameboard()[lig + (j.getPossible_jump()[n][0] - lig) / 2][col + (j.getPossible_jump()[n][1] - col) / 2].get_color()) != -1) {
                                         if (obl == 0)
-                                            min = 50000;
+                                            min = 5000000;
                                         inter = min(j.copy(), j.getPossible_jump()[n][0], j.getPossible_jump()[n][1], lim, true, lim2-1);
                                         if (min > inter)
                                             min = inter;
