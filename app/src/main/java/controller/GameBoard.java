@@ -426,7 +426,7 @@ public class GameBoard implements Parcelable{
         }
         // est ce que le pion choisi est de la bonne couleur
         if (gameboard[x][y].get_color() != turn % 2) {
-            toast = Toast.makeText(context, "That's not your pawn!", Toast.LENGTH_SHORT);
+            toast = Toast.makeText(context, "That's not your turn!", Toast.LENGTH_SHORT);
             toast.show();
             //System.err.println("That's not your pawn!");
             return -1;
