@@ -40,6 +40,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
     private Toast toast;
 
 
+
     private int[]  iaMove = new int[4];
     private Ia ia = new Ia();
 
@@ -231,56 +232,14 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                                 game = new GameBoard(getApplicationContext());
                                                 System.out.println("Fin du game");
                                             }
+
                                             removeImages(possibilitiesLayout);
                                             update();
 
-
-                                            //jump = 0
-                                            do {
-                                                updateTurn();
-                                                iaMove = ia.minMax((byte) (1), game.copy(), 2);
-                                                //System.out.println("Taking " + iaMove[0] + " : " + iaMove[1]);
-                                                //System.out.println("Going in " + iaMove[2] + " : " + iaMove[3]);
-
-                                                game.setSelection(iaMove[0], iaMove[1]);
-                                                //jump = 0
-                                                int[][] setterjump = new int[1][2];
-                                                setterjump[0][0] = iaMove[2];
-                                                setterjump[0][1] = iaMove[3];
-
-                                                int[][] settermove = new int[1][2];
-                                                settermove[0][0] = iaMove[2];
-                                                settermove[0][1] = iaMove[3];
-
-                                                game.setHas_jumped((byte) iaMove[4]);
-                                                //System.out.println("quil est bete : " + iaMove[5]);
-
-                                                game.setPossible_jump(setterjump);
-                                                game.setPossible_move(settermove);
-
-                                                if(iaMove[2] == -1 || iaMove[1] == -1){
-                                                    break;
-                                                }
-                                                System.out.println("Moving : " + game.move(iaMove[2], iaMove[3]));
-                                                game.set_movedPawn(iaMove[2],iaMove[3]);
-                                                //System.out.println("Flags h_j :" + iaMove[4] + "/ j :" + iaMove[5]);
-
-                                                if(game.checkEndTurn()) {
-                                                    game.end_turn();
-                                                    break;
-                                                }
-                                                if(game.checkEndGame()){
-                                                    game = new GameBoard(getApplicationContext());
-                                                    System.out.println("Fin du game");
-                                                    break;
-                                                }
-                                                update();
-
-                                            }while(iaMove[5] >= 1 || iaMove[4] == (byte)1);
-
+                                            runIa();
+                                            update();
 
                                             //game.add_turn();
-
                                             turn ++;
 
                                             if(game.checkEndGame()){
@@ -380,5 +339,47 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
         else{
             layout.setBackground(getDrawable(R.drawable.black_border));
         }
+    }
+
+    public void runIa() {
+        do {
+            updateTurn();
+            iaMove = ia.minMax((byte) (1), game.copy(), 2);
+            //System.out.println("Taking " + iaMove[0] + " : " + iaMove[1]);
+            //System.out.println("Going in " + iaMove[2] + " : " + iaMove[3]);
+
+            game.setSelection(iaMove[0], iaMove[1]);
+            //jump = 0
+            int[][] setterjump = new int[1][2];
+            setterjump[0][0] = iaMove[2];
+            setterjump[0][1] = iaMove[3];
+
+            int[][] settermove = new int[1][2];
+            settermove[0][0] = iaMove[2];
+            settermove[0][1] = iaMove[3];
+
+            game.setHas_jumped((byte) iaMove[4]);
+            //System.out.println("quil est bete : " + iaMove[5]);
+
+            game.setPossible_jump(setterjump);
+            game.setPossible_move(settermove);
+
+            if (iaMove[2] == -1 || iaMove[1] == -1) {
+                break;
+            }
+            System.out.println("Moving : " + game.move(iaMove[2], iaMove[3]));
+            game.set_movedPawn(iaMove[2], iaMove[3]);
+            //System.out.println("Flags h_j :" + iaMove[4] + "/ j :" + iaMove[5]);
+
+            if (game.checkEndTurn()) {
+                game.end_turn();
+                break;
+            }
+            if (game.checkEndGame()) {
+                game = new GameBoard(getApplicationContext());
+                System.out.println("Fin du game");
+                break;
+            }
+        }while(iaMove[5] >= 1 || iaMove[4] == (byte)1);
     }
 }
