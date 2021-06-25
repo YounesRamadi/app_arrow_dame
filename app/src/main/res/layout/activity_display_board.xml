@@ -47,15 +47,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
-        <TextView
-            android:id="@+id/selected"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_x="187dp"
-            android:layout_y="575dp"
-            android:text="@string/textview"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/nb_jump_b"
