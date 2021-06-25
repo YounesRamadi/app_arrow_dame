@@ -1237,23 +1237,27 @@ public class GameBoard implements Parcelable{
                 }
             }
         }
-
         String s = "";
-        int count = 0;
-
-        for(int i = 0; i + 1 < board.length(); i ++){
+        int count = 1;
+        for(int i = 0; i < 63; i ++){
             char tmp = board.charAt(i);
-
-            if(board.charAt(i + 1) == tmp){
+            if(i + 1 == 63){
+                System.out.println("BREAK " + i);
+                break;
+            }
+            else if(board.charAt(i + 1) == tmp){
                 count ++;
                 continue;
             }
             else{
-                s += Integer.toString(count + 1);
+                System.out.println(count+1 + " " + board.charAt(i));
+                s += Integer.toString(count);
                 s += board.charAt(i);
                 count = 0;
             }
         }
+        System.out.println(board);
+        System.out.println(count);
         return s;
     }
 
