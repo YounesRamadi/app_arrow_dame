@@ -17,11 +17,11 @@
         android:id="@+id/nomjeu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_marginTop="50dp"
         android:gravity="center_horizontal"
         android:text="SHOOTING STARS"
-        android:textSize="50sp"
-        android:layout_marginTop="50dp"
-        android:layout_margin="20dp"/>
+        android:textSize="50sp" />
 
 
 </LinearLayout>

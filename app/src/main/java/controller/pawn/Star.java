@@ -4,7 +4,7 @@ import com.example.apadnom.R;
 
 public class Star extends Pawn {
 
-    public Star(){
+    public Star() {
         super();
     }
 
@@ -17,7 +17,7 @@ public class Star extends Pawn {
             super.setImg(R.drawable.red_star);
     }
 
-    public Star copy(){
+    public Star copy() {
         Star retour = new Star();
         retour.color = color;
         retour.direction = direction;

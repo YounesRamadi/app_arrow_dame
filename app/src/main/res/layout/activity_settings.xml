@@ -24,45 +24,45 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Changer de prénom"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.118"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.115"
-        android:textSize="20sp"/>
+        app:layout_constraintVertical_bias="0.115" />
 
     <EditText
         android:id="@+id/nomedit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
         android:gravity="center"
         android:hint="Entrez votre prénom"
+        android:inputType="text"
+        android:maxLength="15"
+        android:maxLines="1"
+        android:minLines="1"
+        android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.122"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.176"
-        android:maxLines="1"
-        android:minLines="1"
-        android:maxLength="15"
-        android:inputType="text"
-        android:backgroundTint="@color/white"
-        android:textSize="15dp"/>
+        app:layout_constraintVertical_bias="0.176" />
 
     <TextView
         android:id="@+id/credits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:text="Réalisé par Pierre Mauger, Younes Ramadi, Gabriel Pithon, Antonin Guichard et Anthony Laperche"
+        android:textSize="9dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.447"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.992"
-        android:textSize="9dp"
-        android:gravity="center_horizontal"/>
+        app:layout_constraintVertical_bias="0.992" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

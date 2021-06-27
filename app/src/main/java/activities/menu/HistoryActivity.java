@@ -1,8 +1,9 @@
 package activities.menu;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
 import com.example.apadnom.R;
 
 public class HistoryActivity extends AppCompatActivity {

@@ -1,8 +1,8 @@
 package activities;
 
 import android.annotation.SuppressLint;
-import android.content.SharedPreferences;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -40,7 +40,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         preferences = getSharedPreferences("firstname", MODE_PRIVATE);
         firstname = preferences.getString("firstname", null);
 
-        mName.setText("Bienvenue "  + firstname + " !");
+        mName.setText("Bienvenue " + firstname + " !");
 
         mNewGame.setTag(0);
         mTutoriel.setTag(1);
@@ -79,12 +79,13 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                 // code block
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         preferences = getSharedPreferences("firstname", MODE_PRIVATE);
         firstname = preferences.getString("firstname", null);
 
-        mName.setText("Bienvenue "  + firstname + " !");
+        mName.setText("Bienvenue " + firstname + " !");
     }
 }

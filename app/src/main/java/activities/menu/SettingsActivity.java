@@ -1,7 +1,5 @@
 package activities.menu;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -10,14 +8,16 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.apadnom.R;
 
 import controller.services.User;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private EditText mChangeName;
     public User mUser = new User();
+    private EditText mChangeName;
     private SharedPreferences preferences;
     private TextView mcredits;
 

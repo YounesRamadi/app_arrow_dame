@@ -16,8 +16,8 @@ public class Pawn {
     // 1 -> bottom
     protected byte direction;
 
-    private @DrawableRes int img = R.drawable.hexagone_green;
-
+    private @DrawableRes
+    int img = R.drawable.hexagone_green;
 
 
     /**
@@ -31,7 +31,7 @@ public class Pawn {
     /**
      * Constructor
      *
-     * @param pColor color of the pawn
+     * @param pColor     color of the pawn
      * @param pDirection direction of the pawn
      */
     public Pawn(byte pColor, byte pDirection) {
@@ -44,35 +44,36 @@ public class Pawn {
      *
      * @return a copy of the pawn
      */
-    public Pawn copy(){
+    public Pawn copy() {
         Pawn retour = new Pawn();
         retour.color = color;
         retour.direction = direction;
         return retour;
     }
 
+    public byte getColor() {
+        return this.color;
+    }
+
     public void setColor(byte color) {
         this.color = color;
     }
 
-    public byte getColor(){
-        return this.color;
+    public @DrawableRes
+    int getImg() {
+        return img;
     }
 
     public void setImg(@DrawableRes int img) {
         this.img = img;
     }
 
-    public @DrawableRes int getImg() {
-        return img;
+    public byte getDirection() {
+        return this.direction;
     }
 
     public void setDirection(byte direction) {
         this.direction = direction;
-    }
-
-    public byte getDirection() {
-        return this.direction;
     }
 
     public void changeDirection() {

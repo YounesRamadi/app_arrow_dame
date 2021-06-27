@@ -284,6 +284,7 @@ public class TutorielActivity extends AppCompatActivity {
         }
         return selected;
     }
+
     @SuppressLint("UseCompatLoadingForDrawables")
     public void update() {
         removeImages(boardLayout);
@@ -404,7 +405,7 @@ public class TutorielActivity extends AppCompatActivity {
                                         update();
                                     }
                                 });
-                                parms.setMargins(x -50, y, 0, 0);
+                                parms.setMargins(x - 50, y, 0, 0);
                                 parms.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
                                 parms.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                                 img.setLayoutParams(parms);
@@ -414,7 +415,7 @@ public class TutorielActivity extends AppCompatActivity {
                             x += 100;
                         }
                         y += 100;
-                        x = 50 * ((i+1) % 2);
+                        x = 50 * ((i + 1) % 2);
                     }
                 }
             }
@@ -441,11 +442,11 @@ public class TutorielActivity extends AppCompatActivity {
         return new_pos;
     }
 
-    public void removeImages(RelativeLayout layout){
-        for(int k = 0; k < 10; k++){
-            for(int i=0;i<layout.getChildCount();i++){
-                View view=layout.getChildAt(i);
-                if(view.getId()!=R.id.possibilites){
+    public void removeImages(RelativeLayout layout) {
+        for (int k = 0; k < 10; k++) {
+            for (int i = 0; i < layout.getChildCount(); i++) {
+                View view = layout.getChildAt(i);
+                if (view.getId() != R.id.possibilites) {
                     layout.removeViewAt(i);
                 }
             }

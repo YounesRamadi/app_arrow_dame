@@ -15,9 +15,9 @@ import controller.services.User;
 
 public class MainActivity extends AppCompatActivity {
 
+    public User mUser = new User();
     private TextView mGameName;
     private ImageView mLogo;
-    public User mUser = new User();
     private SharedPreferences preferences;
 
     @Override
@@ -34,11 +34,10 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 preferences = getSharedPreferences("firstname", MODE_PRIVATE);
                 String firstname = preferences.getString("firstname", null);
-                if (firstname !=null) {
+                if (firstname != null) {
                     mUser.setFirstName(firstname);
                     startActivity(new Intent(MainActivity.this, MenuActivity.class));
-                }
-                else{
+                } else {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 }
                 finish();

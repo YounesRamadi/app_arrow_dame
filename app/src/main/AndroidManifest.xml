@@ -17,7 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Apadnom">
-        <activity android:name="activities.menu.HistoryActivity"/>
+        <activity android:name="activities.menu.HistoryActivity" />
         <activity android:name="activities.game.BluetoothActivity" />
         <activity android:name="activities.menu.ChooseGameActivity" />
         <activity android:name="activities.game.DisplayBoardActivity" />

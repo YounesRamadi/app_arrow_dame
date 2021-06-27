@@ -56,7 +56,8 @@ public class ChooseGameActivity extends AppCompatActivity implements View.OnClic
                 break;
             case 2:
                 Intent BluetoothActivity = new Intent(ChooseGameActivity.this, activities.game.BluetoothActivity.class);
-                startActivity(BluetoothActivity);;
+                startActivity(BluetoothActivity);
+                ;
                 break;
             default:
                 break;

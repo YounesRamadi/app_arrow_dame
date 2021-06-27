@@ -22,8 +22,7 @@
         <RelativeLayout
             android:id="@+id/possibilites"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </RelativeLayout>
+            android:layout_height="wrap_content"></RelativeLayout>
 
     </RelativeLayout>
 

@@ -16,10 +16,10 @@ import controller.services.User;
 
 public class LoginActivity extends AppCompatActivity {
 
+    public User mUser = new User();
     private TextView mAskingName;
     private EditText mNameInput;
     private Button mValidateButton;
-    public User mUser = new User();
     private SharedPreferences preferences;
 
     @Override

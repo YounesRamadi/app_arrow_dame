@@ -1,8 +1,5 @@
 package activities.game;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
@@ -24,6 +21,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.example.apadnom.R;
 import com.muddzdev.styleabletoast.StyleableToast;
 
@@ -31,108 +31,15 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import controller.services.BluetoothConnectionService;
-import controller.services.DeviceListAdapter;
 import controller.gameboard.GameBoard;
 import controller.pawn.Pawn;
+import controller.services.BluetoothConnectionService;
+import controller.services.DeviceListAdapter;
 
-public class BluetoothActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
-    private GameBoard game;
-    private String gameString = "";
-    private byte[] msg;
-    private Button mhost;
-    private Button mconnect;
-    private int playerT;
-    private int turn;
-    private Pawn[][] display_mat = new Pawn[7][9];
-
-    private LinearLayout layout;
-    private RelativeLayout boardLayout;
-    private RelativeLayout possibilitiesLayout;
-    private int[] selected = new int[2];
-    private int sx;
-    private int sy;
-    private Button btn;
-    private TextView player;
-    private TextView nb_jump;
-    private ImageView whiteScore;
-    private ImageView blackScore;
-    private Toast toast;
-
-    public void runGame(){
-
-        this.boardLayout = (RelativeLayout) findViewById(R.id.board);
-        this.possibilitiesLayout = (RelativeLayout) findViewById(R.id.possibilites);
-        whiteScore = findViewById(R.id.scoreW);
-        blackScore = findViewById(R.id.scoreB);
-        nb_jump = (TextView) findViewById(R.id.nb_jump_w);
-
-        Button btn1 = new Button(this);
-        btn1 = (Button) findViewById(R.id.endTurn);
-        btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
-                if((game.getHasJumped() == (byte)1) && (game.getJump() <1)){
-                    System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
-                    gameString = game.toString() + "1";
-                    turn ++;
-                    msg = gameString.getBytes(Charset.defaultCharset());
-                    System.out.println(msg);
-                    mBluetoothConnection.write(msg);
-                    game.end_turn();
-                    update();
-                }
-                else{
-                    toast = Toast.makeText(getApplicationContext(), "You can't pass your turn", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-            }
-        });
-        update();
-    }
-
+public class BluetoothActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private static final String TAG = "BluetoothActitivty";
-
-    BluetoothAdapter mBluetoothAdapter;
-    BluetoothConnectionService mBluetoothConnection;
-
     private static final UUID MY_UUID_INSECURE =
             UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
-
-    BluetoothDevice mBTDevice;
-
-    public ArrayList<BluetoothDevice> mBTDevices = new ArrayList<>();
-
-    public DeviceListAdapter mDeviceListAdapter;
-
-    private ListView lvNewDevices;
-
-    // Create a BroadcastReceiver for ACTION_FOUND
-    private final BroadcastReceiver mBroadcastReceiver1 = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-        String action = intent.getAction();
-        // When discovery finds a device
-        if (action.equals(mBluetoothAdapter.ACTION_STATE_CHANGED)) {
-            final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, mBluetoothAdapter.ERROR);
-            switch(state){
-                case BluetoothAdapter.STATE_OFF:
-                    Log.d(TAG, "onReceive: STATE OFF");
-                    break;
-                case BluetoothAdapter.STATE_TURNING_OFF:
-                    Log.d(TAG, "mBroadcastReceiver1: STATE TURNING OFF");
-                    break;
-                case BluetoothAdapter.STATE_ON:
-                    Log.d(TAG, "mBroadcastReceiver1: STATE ON");
-                    break;
-                case BluetoothAdapter.STATE_TURNING_ON:
-                    Log.d(TAG, "mBroadcastReceiver1: STATE TURNING ON");
-                    break;
-            }
-        }
-        }
-    };
-
     /**
      * Broadcast Receiver for changes made to bluetooth states such as:
      * 1) Discoverability mode on/off or expire.
@@ -170,38 +77,35 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
             }
         }
     };
-
-
-
-
-    /**
-     * Broadcast Receiver for listing devices that are not yet paired
-     * -Executed by btnDiscover() method.
-     */
-    private BroadcastReceiver mBroadcastReceiver3 = new BroadcastReceiver() {
-        @Override
+    public ArrayList<BluetoothDevice> mBTDevices = new ArrayList<>();
+    public DeviceListAdapter mDeviceListAdapter;
+    BluetoothAdapter mBluetoothAdapter;
+    // Create a BroadcastReceiver for ACTION_FOUND
+    private final BroadcastReceiver mBroadcastReceiver1 = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            Log.d(TAG, "onReceive: ACTION FOUND.");
-            int tmp =1;
-            if (action.equals(BluetoothDevice.ACTION_FOUND)){
-                BluetoothDevice device = intent.getParcelableExtra (BluetoothDevice.EXTRA_DEVICE);
-                for(int i=0;i < mBTDevices.size();i++){
-                    if(mBTDevices.get(i).getAddress().compareTo(device.getAddress())==0){
-                        tmp = 0;
-                    }
+            String action = intent.getAction();
+            // When discovery finds a device
+            if (action.equals(mBluetoothAdapter.ACTION_STATE_CHANGED)) {
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, mBluetoothAdapter.ERROR);
+                switch (state) {
+                    case BluetoothAdapter.STATE_OFF:
+                        Log.d(TAG, "onReceive: STATE OFF");
+                        break;
+                    case BluetoothAdapter.STATE_TURNING_OFF:
+                        Log.d(TAG, "mBroadcastReceiver1: STATE TURNING OFF");
+                        break;
+                    case BluetoothAdapter.STATE_ON:
+                        Log.d(TAG, "mBroadcastReceiver1: STATE ON");
+                        break;
+                    case BluetoothAdapter.STATE_TURNING_ON:
+                        Log.d(TAG, "mBroadcastReceiver1: STATE TURNING ON");
+                        break;
                 }
-                if(tmp==1 && device.getName()!=null){
-                    mBTDevices.add(device);
-                }
-
-                Log.d(TAG, "onReceive: " + device.getName() + ": " + device.getAddress());
-                mDeviceListAdapter = new DeviceListAdapter(context, R.layout.device_adapter_view, mBTDevices);
-                lvNewDevices.setAdapter(mDeviceListAdapter);
             }
         }
     };
-
+    BluetoothConnectionService mBluetoothConnection;
+    BluetoothDevice mBTDevice;
     /**
      * Broadcast Receiver that detects bond state changes (Pairing status changes)
      */
@@ -210,11 +114,11 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
 
-            if(action.equals(BluetoothDevice.ACTION_BOND_STATE_CHANGED)){
+            if (action.equals(BluetoothDevice.ACTION_BOND_STATE_CHANGED)) {
                 BluetoothDevice mDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 //3 cases:
                 //case1: bonded already
-                if (mDevice.getBondState() == BluetoothDevice.BOND_BONDED){
+                if (mDevice.getBondState() == BluetoothDevice.BOND_BONDED) {
                     Log.d(TAG, "BroadcastReceiver: BOND_BONDED.");
                     //inside BroadcastReceiver4
                     mBTDevice = mDevice;
@@ -230,6 +134,98 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
             }
         }
     };
+    private GameBoard game;
+    private String gameString = "";
+    private byte[] msg;
+    private Button mhost;
+    private Button mconnect;
+    private int playerT;
+    private int turn;
+    private Pawn[][] display_mat = new Pawn[7][9];
+    private LinearLayout layout;
+    private RelativeLayout boardLayout;
+    private RelativeLayout possibilitiesLayout;
+    private int[] selected = new int[2];
+    private int sx;
+    private int sy;
+    private Button btn;
+    private TextView player;
+    private TextView nb_jump;
+    private ImageView whiteScore;
+    private ImageView blackScore;
+    BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String text = intent.getStringExtra("send");
+            Log.d(TAG, "DANS LE MAIN : " + text);
+            game.setGameboard(text);
+            if (text.charAt(text.length() - 1) == '1') {
+                turn++;
+            }
+            update();
+        }
+    };
+    private Toast toast;
+    private ListView lvNewDevices;
+    /**
+     * Broadcast Receiver for listing devices that are not yet paired
+     * -Executed by btnDiscover() method.
+     */
+    private BroadcastReceiver mBroadcastReceiver3 = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            Log.d(TAG, "onReceive: ACTION FOUND.");
+            int tmp = 1;
+            if (action.equals(BluetoothDevice.ACTION_FOUND)) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                for (int i = 0; i < mBTDevices.size(); i++) {
+                    if (mBTDevices.get(i).getAddress().compareTo(device.getAddress()) == 0) {
+                        tmp = 0;
+                    }
+                }
+                if (tmp == 1 && device.getName() != null) {
+                    mBTDevices.add(device);
+                }
+
+                Log.d(TAG, "onReceive: " + device.getName() + ": " + device.getAddress());
+                mDeviceListAdapter = new DeviceListAdapter(context, R.layout.device_adapter_view, mBTDevices);
+                lvNewDevices.setAdapter(mDeviceListAdapter);
+            }
+        }
+    };
+
+    public void runGame() {
+
+        this.boardLayout = (RelativeLayout) findViewById(R.id.board);
+        this.possibilitiesLayout = (RelativeLayout) findViewById(R.id.possibilites);
+        whiteScore = findViewById(R.id.scoreW);
+        blackScore = findViewById(R.id.scoreB);
+        nb_jump = (TextView) findViewById(R.id.nb_jump_w);
+
+        Button btn1 = new Button(this);
+        btn1 = (Button) findViewById(R.id.endTurn);
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
+                if ((game.getHasJumped() == (byte) 1) && (game.getJump() < 1)) {
+                    System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
+                    gameString = game.toString() + "1";
+                    turn++;
+                    msg = gameString.getBytes(Charset.defaultCharset());
+                    System.out.println(msg);
+                    mBluetoothConnection.write(msg);
+                    game.end_turn();
+                    update();
+                } else {
+                    toast = Toast.makeText(getApplicationContext(), "You can't pass your turn", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        });
+        update();
+    }
 
     @Override
     protected void onDestroy() {
@@ -267,7 +263,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         IntentFilter enableBtIntent = new IntentFilter(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         registerReceiver(mBroadcastReceiver1, enableBtIntent);
 
-        while(!mBluetoothAdapter.isEnabled()){
+        while (!mBluetoothAdapter.isEnabled()) {
             mBluetoothAdapter.enable();
             registerReceiver(mBroadcastReceiver1, enableBtIntent);
         }
@@ -285,11 +281,11 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         startActivity(discoverableIntent);
 
         IntentFilter intentFilter = new IntentFilter(mBluetoothAdapter.ACTION_SCAN_MODE_CHANGED);
-        registerReceiver(mBroadcastReceiver2,intentFilter);
+        registerReceiver(mBroadcastReceiver2, intentFilter);
 
         Log.d(TAG, "btnDiscover: Looking for unpaired devices.");
 
-        if(mBluetoothAdapter.isDiscovering()){
+        if (mBluetoothAdapter.isDiscovering()) {
             mBluetoothAdapter.cancelDiscovery();
             Log.d(TAG, "btnDiscover: Canceling discovery.");
 
@@ -300,7 +296,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
             IntentFilter discoverDevicesIntent = new IntentFilter(BluetoothDevice.ACTION_FOUND);
             registerReceiver(mBroadcastReceiver3, discoverDevicesIntent);
         }
-        if(!mBluetoothAdapter.isDiscovering()){
+        if (!mBluetoothAdapter.isDiscovering()) {
 
             //check BT permissions in manifest
             checkBTPermissions();
@@ -311,7 +307,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         }
 
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver,new IntentFilter("send"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("send"));
         mhost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -323,7 +319,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
                 turn = 0;
                 update();
-                StyleableToast.makeText(BluetoothActivity.this,"Waiting for connection...", Toast.LENGTH_SHORT,R.style.exampleToast).show();
+                StyleableToast.makeText(BluetoothActivity.this, "Waiting for connection...", Toast.LENGTH_SHORT, R.style.exampleToast).show();
             }
         });
 
@@ -343,49 +339,38 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
             }
         });
     }
-    BroadcastReceiver mReceiver = new BroadcastReceiver() {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        String text = intent.getStringExtra("send");
-        Log.d(TAG,"DANS LE MAIN : " + text);
-        game.setGameboard(text);
-        if(text.charAt(text.length() - 1) == '1'){
-            turn ++;
-        }
-        update();
-    }
-    };
+
     //create method for starting connection
 //***remember the conncction will fail and app will crash if you haven't paired first
-    public void startConnection(){
-        startBTConnection(mBTDevice,MY_UUID_INSECURE);
+    public void startConnection() {
+        startBTConnection(mBTDevice, MY_UUID_INSECURE);
     }
 
     /**
      * starting chat service method
      */
-    public void startBTConnection(BluetoothDevice device, UUID uuid){
+    public void startBTConnection(BluetoothDevice device, UUID uuid) {
         Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
 
-        mBluetoothConnection.startClient(device,uuid);
+        mBluetoothConnection.startClient(device, uuid);
     }
 
     /**
      * This method is required for all devices running API23+
      * Android must programmatically check the permissions for bluetooth. Putting the proper permissions
      * in the manifest is not enough.
-     *
+     * <p>
      * NOTE: This will only execute on versions > LOLLIPOP because it is not needed otherwise.
      */
     private void checkBTPermissions() {
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             int permissionCheck = this.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
             permissionCheck += this.checkSelfPermission("Manifest.permission.ACCESS_COARSE_LOCATION");
             if (permissionCheck != 0) {
 
                 this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001); //Any number
             }
-        }else{
+        } else {
             Log.d(TAG, "checkBTPermissions: No need to check permissions. SDK version < LOLLIPOP.");
         }
     }
@@ -401,10 +386,10 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
 
         Log.d(TAG, "onItemClick: deviceName = " + deviceName);
         Log.d(TAG, "onItemClick: deviceAddress = " + deviceAddress);
-        StyleableToast.makeText(this,"You selected " + deviceName, Toast.LENGTH_SHORT,R.style.exampleToast).show();
+        StyleableToast.makeText(this, "You selected " + deviceName, Toast.LENGTH_SHORT, R.style.exampleToast).show();
         //create the bond.
         //NOTE: Requires API 17+? I think this is JellyBean
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2){
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
             Log.d(TAG, "Trying to pair with " + deviceName);
             mBTDevices.get(i).createBond();
 
@@ -465,8 +450,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
                             // print the accessible cells if the pawn is able to move
                             if (game.checkSelection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
                                 display_possibilities(getSelected()[0], getSelected()[1]);
-                            }
-                            else if (game.checkSelection(getSelected()[0], getSelected()[1], turn, 1) == 1) {
+                            } else if (game.checkSelection(getSelected()[0], getSelected()[1], turn, 1) == 1) {
                                 display_possibilities(game.getMustJump()[0], game.getMustJump()[1]);
                             }
 
@@ -565,7 +549,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
                                             // Debug
                                             System.out.println("fin de tour");
                                             gameString = game.toString() + "1";
-                                            turn ++;
+                                            turn++;
                                             msg = gameString.getBytes(Charset.defaultCharset());
                                             System.out.println(msg);
                                             mBluetoothConnection.write(msg);
@@ -579,9 +563,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
                                                 game = new GameBoard(getApplicationContext());
                                             }
                                             update();
-                                        }
-
-                                        else{
+                                        } else {
                                             gameString = game.toString() + "0";
                                             msg = gameString.getBytes(Charset.defaultCharset());
                                             System.out.println(msg);
@@ -675,16 +657,15 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         return new_pos;
     }
 
-    public void updateTurn(){
-        if(turn%2 == 0){
+    public void updateTurn() {
+        if (turn % 2 == 0) {
             layout.setBackground(getDrawable(R.drawable.white_border));
-        }
-        else{
+        } else {
             layout.setBackground(getDrawable(R.drawable.black_border));
         }
     }
 
-    public void updateScores(){
+    public void updateScores() {
         switch (game.getNb_W_stars()) {
             case 3:
                 whiteScore.setImageDrawable(getDrawable(R.drawable.point_empty));

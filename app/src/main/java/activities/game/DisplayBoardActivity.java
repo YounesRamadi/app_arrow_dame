@@ -77,13 +77,12 @@ public class DisplayBoardActivity extends AppCompatActivity {
                 // Debug
                 // System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
 
-                if((game.getHasJumped() == (byte)1) && (game.getJump() <1)){
+                if ((game.getHasJumped() == (byte) 1) && (game.getJump() < 1)) {
                     System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
                     game.end_turn();
                     turn++;
                     updateDisplay();
-                }
-                else{
+                } else {
                     toast = Toast.makeText(getApplicationContext(), "You can't pass your turn", Toast.LENGTH_SHORT);
                     toast.show();
                 }
@@ -94,14 +93,13 @@ public class DisplayBoardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
 
-                if((game.getHasJumped() == (byte)1) && (game.getJump() <1)){
+                if ((game.getHasJumped() == (byte) 1) && (game.getJump() < 1)) {
                     System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
                     game.end_turn();
                     turn++;
                     turn = 0;
                     updateDisplay();
-                }
-                else{
+                } else {
                     toast = Toast.makeText(getApplicationContext(), "You can't pass your turn", Toast.LENGTH_SHORT);
                     toast.show();
                 }
@@ -205,8 +203,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
                             // display the accessible cells if the pawn is able to move
                             if (game.checkSelection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
                                 display_possibilities(getSelected()[0], getSelected()[1]);
-                            }
-                            else if (game.checkSelection(getSelected()[0], getSelected()[1], turn, 1) == 1) {
+                            } else if (game.checkSelection(getSelected()[0], getSelected()[1], turn, 1) == 1) {
                                 display_possibilities(game.getMustJump()[0], game.getMustJump()[1]);
                             }
                             updateDisplay();
@@ -387,7 +384,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
     /**
      * Used to update the score display
      */
-    public void updateScores(){
+    public void updateScores() {
         switch (game.getNb_W_stars()) {
             case 3:
                 whiteScore.setImageDrawable(getDrawable(R.drawable.point_empty));
@@ -423,13 +420,12 @@ public class DisplayBoardActivity extends AppCompatActivity {
     }
 
     /**
-     *  Used to update the border color (depending on the player turn
+     * Used to update the border color (depending on the player turn
      */
-    public void updateTurn(){
-        if(turn%2 == 0){
+    public void updateTurn() {
+        if (turn % 2 == 0) {
             layout.setBackground(getDrawable(R.drawable.white_border));
-        }
-        else{
+        } else {
             layout.setBackground(getDrawable(R.drawable.black_border));
         }
     }

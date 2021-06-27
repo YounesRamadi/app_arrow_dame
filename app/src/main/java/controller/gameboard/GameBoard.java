@@ -32,6 +32,7 @@ public class GameBoard implements Parcelable {
             return new GameBoard[size];
         }
     };
+    private final int[] mustJump = new int[2];
     private Pawn[][] gameboard;
     private int nb_W_stars;
     private int nb_B_stars;
@@ -42,9 +43,6 @@ public class GameBoard implements Parcelable {
     private int[][] possibleMove;
     private int[] selection = new int[2]; // le pion selectionne
     private int[] movedPawn = new int[2]; // le dernier pion
-
-    private final int[] mustJump = new int[2];
-
     private int[][] jumpableEnnemies;
     private int[] lastPosition = new int[2];
     private Context context;
@@ -484,14 +482,12 @@ public class GameBoard implements Parcelable {
     }
 
 
-
-
     /**
      * Check if a pawn can be selected
      *
-     * @param x position of the pawn
-     * @param y position of the pawn
-     * @param turn the turn index
+     * @param x            position of the pawn
+     * @param y            position of the pawn
+     * @param turn         the turn index
      * @param checkforjump flag (default 1)
      * @return
      */
@@ -576,11 +572,10 @@ public class GameBoard implements Parcelable {
     /**
      * Compares two pawns
      *
-     * @param posPionx position en x du pion A
-     * @param posPiony position en y du pion A
+     * @param posPionx  position en x du pion A
+     * @param posPiony  position en y du pion A
      * @param posFinalx position en x du pion B
      * @param posFinaly position en y du pion B
-     *
      * @return 0 si une des cases Pion est vide, 1 si c'est la meme couleur, 2 si elle est differente et -1 en cas d'erreur
      */
     private int check_specified_pawn(int posPionx, int posPiony, int posFinalx, int posFinaly) {
@@ -615,7 +610,6 @@ public class GameBoard implements Parcelable {
      * @param p Fleche a verifier
      * @param x sa position en x
      * @param y sa position en y
-     *
      * @return liste de possibilites de mouvement (null si aucun mouvement)
      */
     public int[][] getPossibilities(Pawn p, int x, int y) {
@@ -640,7 +634,6 @@ public class GameBoard implements Parcelable {
      * @param p Etoile à verifier
      * @param x sa position en x
      * @param y sa position en y
-     *
      * @return liste de possibilites de mouvement
      */
     private int[][] getPossibilitiesStar(Pawn p, int x, int y) {
@@ -792,7 +785,6 @@ public class GameBoard implements Parcelable {
      * @param p Fleche a verifier
      * @param x sa position en x
      * @param y sa position en y
-     *
      * @return liste de possibilites de mouvement
      */
     private int[][] getPossibilitiesArrow(Pawn p, int x, int y) {
@@ -1015,7 +1007,6 @@ public class GameBoard implements Parcelable {
      *
      * @param x position en X du pion
      * @param y position en Y du pion
-     *
      * @return vrai si il peut jump un ennemi 0 sinon
      */
     private boolean canJumpEnnemy(int x, int y) {
@@ -1080,7 +1071,6 @@ public class GameBoard implements Parcelable {
      *
      * @param x Position en x du pion
      * @param y Position en y du pion
-     *
      * @return Renvoi 1 ou 0 si il a bougé -1 sinon
      */
     public int move(int x, int y) {
@@ -1225,6 +1215,7 @@ public class GameBoard implements Parcelable {
 
     /**
      * Permet de finir un tour et de savoir si c'est la fin de la partie
+     *
      * @return 1 si c'est la fin de la partie 0 sinon
      */
     public byte end_turn() {

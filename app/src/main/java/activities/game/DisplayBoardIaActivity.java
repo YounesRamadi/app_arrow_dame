@@ -14,14 +14,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.apadnom.R;
 
-import controller.ia.Ia;
-
 import controller.gameboard.GameBoard;
+import controller.ia.Ia;
 import controller.pawn.Pawn;
 
 
 public class DisplayBoardIaActivity extends AppCompatActivity {
 
+    public static final String BUNDLE_STATE_TURN = "currentTurn";
+    public static final String BUNDLE_STATE_GAMEBOARD = "currentGameboard";
     private GameBoard game;
     private LinearLayout layout;
     private RelativeLayout boardLayout;
@@ -32,8 +33,6 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
     private int sy;
     private TextView nb_jump_w;
     private int turn = 0;
-    public static final String BUNDLE_STATE_TURN="currentTurn";
-    public static final String BUNDLE_STATE_GAMEBOARD="currentGameboard";
     private ImageView whiteScore;
     private ImageView blackScore;
     private Button endTurnBtn;
@@ -47,11 +46,10 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             turn = savedInstanceState.getInt(BUNDLE_STATE_TURN);
             game = savedInstanceState.getParcelable(BUNDLE_STATE_GAMEBOARD);
-        }
-        else {
+        } else {
             turn = 0;
             game = new GameBoard(getApplicationContext());
         }
@@ -77,7 +75,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
         endTurnBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if((game.getHasJumped() == (byte)1) && (game.getJump() <1)){
+                if ((game.getHasJumped() == (byte) 1) && (game.getJump() < 1)) {
                     // Debug
                     // System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
 
@@ -87,7 +85,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
 
                     runIa();
 
-                    if(game.checkEndGame()){
+                    if (game.checkEndGame()) {
                         game = new GameBoard(getApplicationContext());
                         // Debug
                         // System.out.println("Fin du game");
@@ -95,10 +93,9 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
 
                     // End the ia's turn
                     game.end_turn();
-                    turn ++;
+                    turn++;
                     updateDisplay();
-                }
-                else{
+                } else {
                     toast = Toast.makeText(getApplicationContext(), "You can't pass your turn", Toast.LENGTH_SHORT);
                     toast.show();
                 }
@@ -108,7 +105,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outstate){
+    protected void onSaveInstanceState(Bundle outstate) {
         super.onSaveInstanceState(outstate);
         outstate.putInt(BUNDLE_STATE_TURN, turn);
         outstate.putParcelable(BUNDLE_STATE_GAMEBOARD, game);
@@ -196,8 +193,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                             // display the accessible cells if the pawn is able to move
                             if (game.checkSelection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
                                 display_possibilities(getSelected()[0], getSelected()[1]);
-                            }
-                            else if (game.checkSelection(getSelected()[0], getSelected()[1], turn, 1) == 1) {
+                            } else if (game.checkSelection(getSelected()[0], getSelected()[1], turn, 1) == 1) {
                                 display_possibilities(game.getMustJump()[0], game.getMustJump()[1]);
                             }
                             updateDisplay();
@@ -228,7 +224,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
             x = 50 * ((i + 1) % 2);
         }
         // Display the number of jumps available
-        if((turn %2) == 0){
+        if ((turn % 2) == 0) {
             nb_jump_w.setText(String.valueOf(game.getJump()));
         }
     }
@@ -249,11 +245,11 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
         if (game.getGameboard()[px][py] != null && game.getGameboard()[px][py].getColor() != -1) {
             int[][] pos = null;
 
-            if(game.checkSelection(px, py, turn, 1) != -1) {
+            if (game.checkSelection(px, py, turn, 1) != -1) {
                 pos = game.getPossibilities(game.getGameboard()[px][py], px, py);
             }
             // Check the existence of the possibilities
-            if(pos != null) {
+            if (pos != null) {
                 // for each possibilities
                 for (int[] p : pos
                 ) {
@@ -290,10 +286,10 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                             // System.out.println("fin de tour");
 
                                             // End of the player's
-                                            turn ++;
+                                            turn++;
                                             game.end_turn();
 
-                                            if(game.checkEndGame()){
+                                            if (game.checkEndGame()) {
                                                 game = new GameBoard(getApplicationContext());
                                                 // Debug
                                                 // System.out.println("Fin du game");
@@ -302,10 +298,10 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                                             runIa();
 
                                             // End of the ia's turn
-                                            turn ++;
+                                            turn++;
                                             game.end_turn();
 
-                                            if(game.checkEndGame()){
+                                            if (game.checkEndGame()) {
                                                 game = new GameBoard(getApplicationContext());
                                                 // Debug
                                                 // System.out.println("Fin du game");
@@ -327,7 +323,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                             x += 100;
                         }
                         y += 100;
-                        x = 50 * ((i+1) % 2);
+                        x = 50 * ((i + 1) % 2);
                     }
                 }
             }
@@ -380,7 +376,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
     /**
      * Used to update the score display
      */
-    public void updateScores(){
+    public void updateScores() {
         switch (game.getNb_W_stars()) {
             case 3:
                 whiteScore.setImageDrawable(getDrawable(R.drawable.point_empty));
@@ -416,20 +412,19 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
     }
 
     /**
-     *  Used to update the border color (depending on the player turn
+     * Used to update the border color (depending on the player turn
      */
 
-    public void updateTurn(){
-        if(turn%2 == 0){
+    public void updateTurn() {
+        if (turn % 2 == 0) {
             layout.setBackground(getDrawable(R.drawable.white_border));
-        }
-        else{
+        } else {
             layout.setBackground(getDrawable(R.drawable.black_border));
         }
     }
 
     /**
-     *  Used to make the ia play
+     * Used to make the ia play
      */
     public void runIa() {
         do {
@@ -472,7 +467,7 @@ public class DisplayBoardIaActivity extends AppCompatActivity {
                 // System.out.println("Fin du game");
                 break;
             }
-        }while(iaMove[5] >= 1 || iaMove[4] == (byte)1);
+        } while (iaMove[5] >= 1 || iaMove[4] == (byte) 1);
     }
 
 

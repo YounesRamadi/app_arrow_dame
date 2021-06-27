@@ -19,15 +19,15 @@ public class Arrow extends Pawn {
             super.setImg(R.drawable.red_arrow);
     }
 
-    public Arrow copy(){
+    public Arrow copy() {
         Arrow retour = new Arrow();
         retour.color = color;
         retour.direction = direction;
         return retour;
     }
 
-    public String toString(){
-        if(this.color == 0){
+    public String toString() {
+        if (this.color == 0) {
             return "Fb";
         }
         return "Fn";
