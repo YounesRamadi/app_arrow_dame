@@ -1,10 +1,14 @@
-package controller;
+package controller.pawn;
 
 import com.example.apadnom.R;
 
-public class Etoile extends Pion {
+public class Star extends Pawn {
 
-    public Etoile(byte pCouleur, byte direction) {
+    public Star(){
+        super();
+    }
+
+    public Star(byte pCouleur, byte direction) {
 
         super(pCouleur, direction);
         if (color == 0)
@@ -12,14 +16,12 @@ public class Etoile extends Pion {
         else
             super.setImg(R.drawable.red_star);
     }
-    public Etoile copy(){
-        Etoile retour = new Etoile();
+
+    public Star copy(){
+        Star retour = new Star();
         retour.color = color;
         retour.direction = direction;
         return retour;
-    }
-    public Etoile(){
-        super();
     }
 
     public String toString() {

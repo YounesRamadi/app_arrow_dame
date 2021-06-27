@@ -1,4 +1,4 @@
-package activities;
+package activities.menu;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -9,12 +9,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.apadnom.R;
 
-import controller.GameBoard;
-import controller.Pion;
+import controller.gameboard.GameBoard;
+import controller.pawn.Pawn;
 
 
 public class TutorielActivity extends AppCompatActivity {
@@ -22,7 +21,7 @@ public class TutorielActivity extends AppCompatActivity {
     private GameBoard game;
     private RelativeLayout boardLayout;
     private RelativeLayout possibilitiesLayout;
-    private Pion[][] display_mat = new Pion[7][9];
+    private Pawn[][] display_mat = new Pawn[7][9];
     private int[] selected = new int[2];
     private int sx;
     private int sy;
@@ -217,7 +216,7 @@ public class TutorielActivity extends AppCompatActivity {
     private void moveStar() {
         tutoriel.setText("Les étoiles bougent différemment, essaye en cliquant dessus !");
         game = new GameBoard("25o01c25o", getApplicationContext());
-        game.setHas_jumped((byte) 1);
+        game.setHasJumped((byte) 1);
         game.setJump(2);
     }
 
@@ -225,7 +224,7 @@ public class TutorielActivity extends AppCompatActivity {
     private void jumpStar() {
         tutoriel.setText("Tu peux aussi sauter avec les étoiles !");
         game = new GameBoard("16o02b06o01b01c01b24o", getApplicationContext());
-        game.setHas_jumped((byte) 1);
+        game.setHasJumped((byte) 1);
         game.setJump(1);
     }
 
@@ -312,7 +311,7 @@ public class TutorielActivity extends AppCompatActivity {
                 int finalI = i;
                 int finalJ = j;
 
-                if (display_mat[i][j].get_color() != -1) {
+                if (display_mat[i][j].getColor() != -1) {
                     img.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -320,14 +319,14 @@ public class TutorielActivity extends AppCompatActivity {
                             sx = finalI;
                             sy = finalJ;
                             setSelected(sx, sy);
-                            if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
+                            if (game.checkSelection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
                                 display_possibilities(getSelected()[0], getSelected()[1]);
                             }
                         }
                     });
                 }
 
-                if (display_mat[i][j].get_direction() == 0)
+                if (display_mat[i][j].getDirection() == 0)
                     img.setRotation(270);
                 else
                     img.setRotation(90);
@@ -357,10 +356,10 @@ public class TutorielActivity extends AppCompatActivity {
     @SuppressLint("UseCompatLoadingForDrawables")
     public void display_possibilities(int px, int py) {
         removeImages(possibilitiesLayout);
-        if (game.getGameboard()[px][py] != null && game.getGameboard()[px][py].get_color() != -1) {
+        if (game.getGameboard()[px][py] != null && game.getGameboard()[px][py].getColor() != -1) {
             int[][] pos = null;
-            if (game.check_selection(px, py, turn, 1) != -1) {
-                pos = game.get_possibilities(game.getGameboard()[px][py], px, py);
+            if (game.checkSelection(px, py, turn, 1) != -1) {
+                pos = game.getPossibilities(game.getGameboard()[px][py], px, py);
             }
             if (pos != null) {
                 for (int[] p : pos

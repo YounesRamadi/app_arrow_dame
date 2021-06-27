@@ -1,4 +1,4 @@
-package activities;
+package activities.menu;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -47,15 +47,15 @@ public class ChooseGameActivity extends AppCompatActivity implements View.OnClic
 
         switch (menuIndex) {
             case 0:
-                Intent DisplayBoardActivity = new Intent(ChooseGameActivity.this, DisplayBoardActivity.class);
+                Intent DisplayBoardActivity = new Intent(ChooseGameActivity.this, activities.game.DisplayBoardActivity.class);
                 startActivity(DisplayBoardActivity);
                 break;
             case 1:
-                Intent DisplayBoardIaActivity = new Intent(ChooseGameActivity.this, DisplayBoardIaActivity.class);
+                Intent DisplayBoardIaActivity = new Intent(ChooseGameActivity.this, activities.game.DisplayBoardIaActivity.class);
                 startActivity(DisplayBoardIaActivity);
                 break;
             case 2:
-                Intent BluetoothActivity = new Intent(ChooseGameActivity.this, BluetoothActivity.class);
+                Intent BluetoothActivity = new Intent(ChooseGameActivity.this, activities.game.BluetoothActivity.class);
                 startActivity(BluetoothActivity);;
                 break;
             default:

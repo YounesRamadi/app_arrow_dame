@@ -1,4 +1,4 @@
-package controller;
+package controller.services;
 
 public class User {
 

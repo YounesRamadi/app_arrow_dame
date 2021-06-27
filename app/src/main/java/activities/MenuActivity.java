@@ -12,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.apadnom.R;
 
+import activities.menu.ChooseGameActivity;
+import activities.menu.HistoryActivity;
+
 public class MenuActivity extends AppCompatActivity implements View.OnClickListener {
 
     public TextView mName;
@@ -61,11 +64,11 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(DisplayBoardActivity);
                 break;
             case 1:
-                Intent TutorielActivity = new Intent(MenuActivity.this, TutorielActivity.class);
+                Intent TutorielActivity = new Intent(MenuActivity.this, activities.menu.TutorielActivity.class);
                 startActivity(TutorielActivity);
                 break;
             case 2:
-                Intent SettingsActivity = new Intent(MenuActivity.this, SettingsActivity.class);
+                Intent SettingsActivity = new Intent(MenuActivity.this, activities.menu.SettingsActivity.class);
                 startActivity(SettingsActivity);
                 break;
             case 3:

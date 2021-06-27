@@ -1,4 +1,4 @@
-package controller;
+package controller.services;
 
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -11,16 +11,11 @@ import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.example.apadnom.R;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.UUID;
-
-import activities.BluetoothActivity;
-import activities.MainActivity;
 
 /**
  * Created by User on 12/21/2016.

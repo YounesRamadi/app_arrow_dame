@@ -1,4 +1,4 @@
-package activities;
+package activities.menu;
 
 import androidx.appcompat.app.AppCompatActivity;
 

@@ -1,4 +1,4 @@
-package controller;
+package controller.services;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;

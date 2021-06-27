@@ -1,4 +1,4 @@
-package activities;
+package activities.game;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -31,10 +31,10 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import controller.BluetoothConnectionService;
-import controller.DeviceListAdapter;
-import controller.GameBoard;
-import controller.Pion;
+import controller.services.BluetoothConnectionService;
+import controller.services.DeviceListAdapter;
+import controller.gameboard.GameBoard;
+import controller.pawn.Pawn;
 
 public class BluetoothActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
     private GameBoard game;
@@ -44,7 +44,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
     private Button mconnect;
     private int playerT;
     private int turn;
-    private Pion[][] display_mat = new Pion[7][9];
+    private Pawn[][] display_mat = new Pawn[7][9];
 
     private LinearLayout layout;
     private RelativeLayout boardLayout;
@@ -73,7 +73,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
             @Override
             public void onClick(View v) {
                 System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
-                if((game.getHas_jumped() == (byte)1) && (game.getJump() <1)){
+                if((game.getHasJumped() == (byte)1) && (game.getJump() <1)){
                     System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
                     gameString = game.toString() + "1";
                     turn ++;
@@ -448,7 +448,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
                 int finalI = i;
                 int finalJ = j;
                 // make the Cell clickable only if it contains a pawn that belongs to the player
-                if (display_mat[i][j].get_color() == playerT) {
+                if (display_mat[i][j].getColor() == playerT) {
                     img.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -463,10 +463,10 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
                             System.out.println(sx + " " + sy + "0" + getSelected()[0] + " " + getSelected()[1]);
 
                             // print the accessible cells if the pawn is able to move
-                            if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
+                            if (game.checkSelection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
                                 display_possibilities(getSelected()[0], getSelected()[1]);
                             }
-                            else if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 1) {
+                            else if (game.checkSelection(getSelected()[0], getSelected()[1], turn, 1) == 1) {
                                 display_possibilities(game.getMustJump()[0], game.getMustJump()[1]);
                             }
 
@@ -477,7 +477,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
                 }
 
                 // Set the direction of the image depending on the pawn's direction
-                if (display_mat[i][j].get_direction() == 0)
+                if (display_mat[i][j].getDirection() == 0)
                     img.setRotation(270);
                 else
                     img.setRotation(90);
@@ -519,11 +519,11 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         removeImages(possibilitiesLayout);
 
         // Check the existence of the specified pawn
-        if (game.getGameboard()[px][py] != null && game.getGameboard()[px][py].get_color() != -1) {
+        if (game.getGameboard()[px][py] != null && game.getGameboard()[px][py].getColor() != -1) {
             int[][] pos = null;
 
-            if (game.check_selection(px, py, turn, 1) != -1) {
-                pos = game.get_possibilities(game.getGameboard()[px][py], px, py);
+            if (game.checkSelection(px, py, turn, 1) != -1) {
+                pos = game.getPossibilities(game.getGameboard()[px][py], px, py);
             }
             // Check the existence of the possibilities
             if (pos != null) {

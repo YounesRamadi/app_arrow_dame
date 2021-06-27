@@ -1,4 +1,4 @@
-package activities;
+package activities.menu;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.example.apadnom.R;
 
-import controller.User;
+import controller.services.User;
 
 public class SettingsActivity extends AppCompatActivity {
 

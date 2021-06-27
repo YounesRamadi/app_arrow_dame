@@ -1,4 +1,4 @@
-package activities;
+package activities.game;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -14,8 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.apadnom.R;
 
-import controller.GameBoard;
-import controller.Pion;
+import controller.gameboard.GameBoard;
+import controller.pawn.Pawn;
 
 
 public class DisplayBoardActivity extends AppCompatActivity {
@@ -27,7 +27,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
     private RelativeLayout boardLayout;
     private RelativeLayout possibilitiesLayout;
     private LinearLayout layout;
-    private Pion[][] display_mat = new Pion[7][9];
+    private Pawn[][] display_mat = new Pawn[7][9];
     private int sx;
     private int sy;
     private Button btn;
@@ -39,8 +39,6 @@ public class DisplayBoardActivity extends AppCompatActivity {
     private ImageView whiteScore;
     private ImageView blackScore;
     private Toast toast;
-
-
     private int turn = 0;
 
     @Override
@@ -59,9 +57,9 @@ public class DisplayBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_display_board);
 
         // initialisation of the needed layouts
-        this.layout = findViewById(R.id.layout);
-        this.boardLayout = findViewById(R.id.board);
-        this.possibilitiesLayout = findViewById(R.id.possibilites);
+        this.layout = (LinearLayout) findViewById(R.id.layout);
+        this.boardLayout = (RelativeLayout) findViewById(R.id.board);
+        this.possibilitiesLayout = (RelativeLayout) findViewById(R.id.possibilites);
 
         // initialisation of the needed views
         nb_jump_w = findViewById(R.id.nb_jump_w);
@@ -71,17 +69,19 @@ public class DisplayBoardActivity extends AppCompatActivity {
         whiteScore = findViewById(R.id.scoreW);
         blackScore = findViewById(R.id.scoreB);
 
+
         // initialisation of the needed onClickListeners
         endTurnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
+                // Debug
+                // System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
 
-                if((game.getHas_jumped() == (byte)1) && (game.getJump() <1)){
+                if((game.getHasJumped() == (byte)1) && (game.getJump() <1)){
                     System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
                     game.end_turn();
                     turn++;
-                    update();
+                    updateDisplay();
                 }
                 else{
                     toast = Toast.makeText(getApplicationContext(), "You can't pass your turn", Toast.LENGTH_SHORT);
@@ -89,18 +89,17 @@ public class DisplayBoardActivity extends AppCompatActivity {
                 }
             }
         });
-
         endTurnButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
 
-                if((game.getHas_jumped() == (byte)1) && (game.getJump() <1)){
+                if((game.getHasJumped() == (byte)1) && (game.getJump() <1)){
                     System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
                     game.end_turn();
                     turn++;
                     turn = 0;
-                    update();
+                    updateDisplay();
                 }
                 else{
                     toast = Toast.makeText(getApplicationContext(), "You can't pass your turn", Toast.LENGTH_SHORT);
@@ -108,8 +107,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
                 }
             }
         });
-
-        update();
+        updateDisplay();
     }
 
     @Override
@@ -158,7 +156,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
      * Update the board display
      */
     @SuppressLint("UseCompatLoadingForDrawables")
-    public void update() {
+    public void updateDisplay() {
         updateScores();
         updateTurn();
         // Cleaning the layout
@@ -190,7 +188,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
                 int finalI = i;
                 int finalJ = j;
                 // make the Cell clickable only if it contains a pawn that belongs to the player
-                if (display_mat[i][j].get_color() != -1) {
+                if (display_mat[i][j].getColor() != -1) {
                     img.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -204,20 +202,20 @@ public class DisplayBoardActivity extends AppCompatActivity {
                             // Debug
                             System.out.println(sx + " " + sy + "0" + getSelected()[0] + " " + getSelected()[1]);
 
-                            // print the accessible cells if the pawn is able to move
-                            if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
+                            // display the accessible cells if the pawn is able to move
+                            if (game.checkSelection(getSelected()[0], getSelected()[1], turn, 1) == 0) {
                                 display_possibilities(getSelected()[0], getSelected()[1]);
                             }
-                            else if (game.check_selection(getSelected()[0], getSelected()[1], turn, 1) == 1) {
+                            else if (game.checkSelection(getSelected()[0], getSelected()[1], turn, 1) == 1) {
                                 display_possibilities(game.getMustJump()[0], game.getMustJump()[1]);
                             }
-                            update();
+                            updateDisplay();
                         }
                     });
                 }
 
                 // Set the direction of the image depending on the pawn's direction
-                if (display_mat[i][j].get_direction() == 0)
+                if (display_mat[i][j].getDirection() == 0)
                     img.setRotation(270);
                 else
                     img.setRotation(90);
@@ -239,7 +237,7 @@ public class DisplayBoardActivity extends AppCompatActivity {
             x = 50 * ((i + 1) % 2);
         }
 
-        // Print the number of jumps available
+        // Display the number of jumps available
         if ((turn % 2) == 0) {
             nb_jump_b.setText("0");
             nb_jump_w.setText(String.valueOf(game.getJump()));
@@ -261,25 +259,23 @@ public class DisplayBoardActivity extends AppCompatActivity {
         removeImages(possibilitiesLayout);
 
         // Check the existence of the specified pawn
-        if (game.getGameboard()[px][py] != null && game.getGameboard()[px][py].get_color() != -1) {
+        if (game.getGameboard()[px][py] != null && game.getGameboard()[px][py].getColor() != -1) {
             int[][] pos = null;
 
-            if (game.check_selection(px, py, turn, 1) != -1) {
-                pos = game.get_possibilities(game.getGameboard()[px][py], px, py);
+            if (game.checkSelection(px, py, turn, 1) != -1) {
+                pos = game.getPossibilities(game.getGameboard()[px][py], px, py);
             }
             // Check the existence of the possibilities
             if (pos != null) {
                 // for each possibilities
                 for (int[] p : pos
                 ) {
-
                     int[] tmp = getRelativePosition(p);
 
                     int y = 0;
                     int x = 0;
                     for (int i = 0; i < 7; i++) {
                         for (int j = 0; j < 9; j++) {
-
                             if (i == tmp[0] && j == tmp[1]) {
                                 // Debug
                                 System.out.println(i + " " + j);
@@ -298,31 +294,32 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                         setSelected(finalI, finalJ);
 
                                         // Debug
-                                        System.out.println("move depuis:" + getSelected()[0] + getSelected()[1] + "vers :" + finalI + finalJ);
+                                        // System.out.println("move depuis:" + getSelected()[0] + getSelected()[1] + "vers :" + finalI + finalJ);
 
+                                        // move the pawn
                                         game.move(finalI, finalJ);
 
                                         // Check the end of the game or turn
                                         if (game.checkEndTurn() || game.checkEndGame()) {
-                                            // Debug
+
                                             if (game.checkEndGame()) {
-                                                System.out.println("Fin de partie");
+                                                // Debug
+                                                // System.out.println("Fin de partie");
                                                 game = new GameBoard(getApplicationContext());
                                             }
-                                            System.out.println("fin de tour");
+                                            // Debug
+                                            // System.out.println("fin de tour");
 
+                                            // next turn
                                             turn++;
 
-                                            //Debug
-                                            System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
+                                            // Debug
+                                            // System.out.println("white : " + game.getNb_B_stars() + " black " + game.getNb_W_stars());
 
                                             game.end_turn();
-
-
-                                            update();
                                         }
                                         removeImages(possibilitiesLayout);
-                                        update();
+                                        updateDisplay();
                                     }
                                 });
 
@@ -333,7 +330,6 @@ public class DisplayBoardActivity extends AppCompatActivity {
                                 parms.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                                 img.setLayoutParams(parms);
                                 possibilitiesLayout.addView(img);
-
                             }
                             x += 100;
                         }
@@ -388,6 +384,9 @@ public class DisplayBoardActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Used to update the score display
+     */
     public void updateScores(){
         switch (game.getNb_W_stars()) {
             case 3:
@@ -423,6 +422,9 @@ public class DisplayBoardActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     *  Used to update the border color (depending on the player turn
+     */
     public void updateTurn(){
         if(turn%2 == 0){
             layout.setBackground(getDrawable(R.drawable.white_border));

@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.apadnom.R;
 
-import controller.User;
+import controller.services.User;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -41,6 +41,5 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(MenuActivity);
             }
         });
-
     }
 }

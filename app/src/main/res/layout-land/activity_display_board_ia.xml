@@ -6,7 +6,7 @@
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="activities.DisplayBoardIaActivity"
+    tools:context="activities.game.DisplayBoardIaActivity"
     android:background="@drawable/white_border"
     android:orientation="horizontal">
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,7 +14,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="activities.DisplayBoardIaActivity">
+    tools:context="activities.game.DisplayBoardIaActivity">
 
 
     <RelativeLayout

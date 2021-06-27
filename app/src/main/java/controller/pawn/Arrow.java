@@ -1,9 +1,17 @@
-package controller;
+package controller.pawn;
 
 import com.example.apadnom.R;
 
-public class Fleche extends Pion {
-    public Fleche(byte pCouleur, byte direction) {
+public class Arrow extends Pawn {
+
+    /**
+     * Default constructor
+     */
+    public Arrow() {
+        super();
+    }
+
+    public Arrow(byte pCouleur, byte direction) {
         super(pCouleur, direction);
         if (color == 0)
             super.setImg(R.drawable.blue_arrow);
@@ -11,16 +19,13 @@ public class Fleche extends Pion {
             super.setImg(R.drawable.red_arrow);
     }
 
-    public Fleche() {
-        super();
-    }
-
-    public Fleche copy(){
-        Fleche retour = new Fleche();
+    public Arrow copy(){
+        Arrow retour = new Arrow();
         retour.color = color;
         retour.direction = direction;
         return retour;
     }
+
     public String toString(){
         if(this.color == 0){
             return "Fb";
